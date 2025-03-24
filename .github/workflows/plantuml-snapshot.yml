@@ -1,4 +1,4 @@
-name: plantuml-snapshot CI
+name: plantuml4e-snapshot CI
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
-          distribution: 'adopt'
+          distribution: 'temurin'
       - name: Cache maven packages
         uses: actions/cache@v2
         with:
@@ -23,8 +23,8 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Install with maven
-        run: mvn --batch-mode --update-snapshots install -f releng/net.sourceforge.plantuml.composite/pom.xml
+        run: mvn --batch-mode --update-snapshots install -f plantuml4eclipse/releng/net.sourceforge.plantuml.composite/pom.xml
       - uses: actions/upload-artifact@v2
         with:
           name: Repository
-          path: releng/net.sourceforge.plantuml.composite/target/gh-pages
+          path: plantuml4eclipse/releng/net.sourceforge.plantuml.composite/target/gh-pages
