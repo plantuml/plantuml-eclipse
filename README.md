@@ -20,17 +20,23 @@ Each diagram intent provider may support properties that affect details of how d
 
 # License
 
-This repo uses the [EPL license](net.sourceforge.plantuml.feature/epl-v10.html). 
+This repo uses the [EPL license vers. 1.0](plantuml4eclipse/features/net.sourceforge.plantuml.feature/epl-v10.html).
 
 # Community
 
-We use [Issues](https://github.com/hallvard/plantuml/issues) for issue tracking, so head there concerning bugs or suggest features (check if they already exist before adding).
+We use [Issues](https://github.com/plantuml/plantuml-eclipse/issues) for issue tracking,
+so head there concerning bugs or suggest features (check if they already exist before adding).
 
-However, we have now (September 2021) started using [Discussions](https://github.com/hallvard/plantuml/discussions), so please consider it, before use Issues, as the dialog may resolve the issue before it is even raised! Of course, you can also ask questions about how to use PlantUML, tell us about how you use it, comment on where the plug-in should be heading, etc.
+We also use [Discussions](https://github.com/plantuml/plantuml-eclipse/discussions),
+so please consider it, before using issues, as the dialog may resolve the issue before it is even raised!
+Of course, you can also ask questions about how to use PlantUML, tell us about how you use it, comment on where the plug-in should be heading, etc.
+
+*Originally, this repository was created and hosted by [Hallvard Trætteberg](https://github.com/hallvard). You'll find previous issues and discussions in the [original repository](https://github.com/hallvard/plantuml).*
 
 # Installation
 
-We use github pages @ [https://plantuml.github.io/plantuml-eclipse/](https://plantuml.github.io/plantuml-eclipse/) as the update site URL, in the Help > Install New Software... dialog.
+We use github pages at [https://plantuml.github.io/plantuml-eclipse/](https://plantuml.github.io/plantuml-eclipse/) as the update site URL.
+Just install the plug-ins in Eclipse via the Help > Install New Software... dialog using that URL.
 
 # For developers / contributors
 
