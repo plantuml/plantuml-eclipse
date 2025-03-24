@@ -39,6 +39,7 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.7</version>
 				<executions>
+				
 					<!-- copy repository folder -->
 					<execution>
 						<id>copy-composite-files</id>
@@ -58,24 +59,7 @@
 							<encoding>UTF-8</encoding>
 						</configuration>
 					</execution>
-					<execution>
-						<id>copy-plantuml.lib-files</id>
-						<phase>package</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/gh-pages/plantuml.lib/${plantuml-lib-version}</outputDirectory>
-							<resources>
-								<resource>
-									<directory>../net.sourceforge.plantuml.lib.repository/target/repository</directory>
-									<filtering>false</filtering>
-								</resource>
-							</resources>
-							<overwrite>true</overwrite>
-							<encoding>UTF-8</encoding>
-						</configuration>
-					</execution>
+					
 					<execution>
 						<id>copy-plantuml.eclipse-files</id>
 						<phase>package</phase>
@@ -94,6 +78,7 @@
 							<encoding>UTF-8</encoding>
 						</configuration>
 					</execution>
+					
 					<execution>
 						<id>copy-readme</id>
 						<phase>package</phase>
@@ -115,8 +100,10 @@
 							<encoding>UTF-8</encoding>
 						</configuration>
 					</execution>
+					
 				</executions>
 			</plugin>
+			
 			<plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -126,6 +113,7 @@
                     <executable>git</executable>
                 </configuration>
                 <executions>
+                
                     <execution>
                         <id>git-clone-gh-pages</id>
                         <phase>prepare-package</phase>
@@ -142,6 +130,7 @@
                             </arguments>
                         </configuration>
                     </execution>
+                    
                     <execution>
                         <id>git-add-gh-pages</id>
                         <phase>package</phase>
@@ -157,6 +146,7 @@
                             </arguments>
                         </configuration>
                     </execution>
+                    
                     <execution>
                         <id>git-commit-gh-pages</id>
                         <phase>package</phase>
@@ -173,6 +163,7 @@
                             </arguments>
                         </configuration>
                     </execution>
+                    
                 </executions>
             </plugin>
 		</plugins>
@@ -180,7 +171,6 @@
 
 	<modules>
 		<module>../net.sourceforge.plantuml.aggregator</module>
-		<module>../net.sourceforge.plantuml.lib.repository</module>
 	</modules>
 
 </project>

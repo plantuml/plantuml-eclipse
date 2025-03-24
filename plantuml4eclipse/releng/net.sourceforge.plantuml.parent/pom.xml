@@ -10,7 +10,6 @@
 	<properties>
 		<releaseVersion>1.1.33</releaseVersion>
 		<qualifier>-SNAPSHOT</qualifier>
-		<plantuml-lib-version>1.2024.5</plantuml-lib-version>
 		
 		<!-- tycho-version variable is defined in repo-root-folder/.mvn/maven.config, see https://tycho.eclipseprojects.io/doc/latest/StructuredBuild.html,
 		     in addition, we specify it here to avoid IDE warnings because of an unrecognized variable definition -->
@@ -129,13 +128,6 @@
 						<goals>
 						    <goal>feature-source</goal>
 						</goals>
-						<configuration>
-							<excludes>
-								<!-- provide plug-ins not containing any source code -->
-								<plugin id="net.sourceforge.plantuml.lib" />
-								<plugin id="net.sourceforge.plantuml.lib.jlatexmath" />
-							</excludes>
-						</configuration>
 				    </execution>
 				</executions>
 			</plugin>

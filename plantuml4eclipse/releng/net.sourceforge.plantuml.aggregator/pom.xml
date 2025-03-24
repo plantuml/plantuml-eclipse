@@ -14,8 +14,6 @@
 	<modules>
 		<module>../net.sourceforge.plantuml.target</module>
 
-		<module>../../bundles/net.sourceforge.plantuml.lib</module>
-
 		<module>../../bundles/net.sourceforge.plantuml.eclipse.imagecontrol</module>
 
 		<module>../../bundles/net.sourceforge.plantuml.eclipse</module>
@@ -42,13 +40,6 @@
 		<module>../../bundles/net.sourceforge.plantuml.uml2</module>
 		 -->
 
-		<module>../../bundles/net.sourceforge.plantuml.lib.elk</module>
-		<module>../../features/net.sourceforge.plantuml.lib.elk.feature</module>
-
-		<module>../../bundles/net.sourceforge.plantuml.lib.jlatexmath</module>
-		<module>../../features/net.sourceforge.plantuml.lib.jlatexmath.feature</module>
-
-		<module>../../features/net.sourceforge.plantuml.lib.feature</module>
 		<module>../../features/net.sourceforge.plantuml.feature</module>
 		<module>../../features/net.sourceforge.plantuml.ecore.feature</module>
 
