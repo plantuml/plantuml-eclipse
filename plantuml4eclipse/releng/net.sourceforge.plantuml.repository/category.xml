@@ -9,7 +9,7 @@
    <category-def name="net.sourceforge.plantuml.feature" label="PlantUML Eclipse support"/>
 
    <!-- Source code feature(s) -->
-   <category-def name="net.sourceforge.plantuml.feature.source" label="Source"/>
+   <category-def name="net.sourceforge.plantuml.feature.source" label="PlantUML Eclipse support sources"/>
    <feature id="net.sourceforge.plantuml.feature.source" version="1.1.33.qualifier">
       <category name="net.sourceforge.plantuml.feature.source"/>
    </feature>
