@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature id="net.sourceforge.plantuml.library.feature">
+      <category name="net.sourceforge.plantuml.library.category"/>
+   </feature>
+   <category-def name="net.sourceforge.plantuml.library.category" label="PlantUML Library"/>
+</site>
