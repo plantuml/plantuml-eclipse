@@ -19,8 +19,6 @@
 
    <requires>
       <import feature="net.sourceforge.plantuml.feature" version="1.1.33.qualifier"/>
-      <import plugin="net.sourceforge.plantuml.eclipse"/>
-      <import plugin="net.sourceforge.plantuml.text"/>
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.emf.common"/>
       <import plugin="org.eclipse.emf.ecore"/>
@@ -32,9 +30,6 @@
 
    <plugin
          id="net.sourceforge.plantuml.ecore"
-         download-size="0"
-         install-size="0"
-         version="1.1.33.qualifier"
-         unpack="false"/>
+         version="1.1.33.qualifier"/>
 
 </feature>

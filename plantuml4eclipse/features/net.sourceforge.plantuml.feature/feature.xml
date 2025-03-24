@@ -21,13 +21,10 @@
       <import plugin="org.eclipse.ui.ide" version="3.10.2" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui" version="3.106.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.resources" version="3.9.1" match="greaterOrEqual"/>
-      <import plugin="net.sourceforge.plantuml.eclipse.imagecontrol"/>
       <import plugin="org.eclipse.core.jobs"/>
       <import plugin="org.eclipse.swt"/>
       <import plugin="org.eclipse.ui.workbench"/>
       <import plugin="org.eclipse.osgi"/>
-      <import plugin="net.sourceforge.plantuml.eclipse"/>
-      <import plugin="net.sourceforge.plantuml.text"/>
       <import plugin="org.eclipse.jdt.core"/>
       <import plugin="org.eclipse.jdt.debug.ui"/>
       <import plugin="org.eclipse.jdt.core.manipulation"/>
@@ -42,37 +39,22 @@
 
    <plugin
          id="net.sourceforge.plantuml.eclipse"
-         download-size="0"
-         install-size="0"
-         version="1.1.33.qualifier"
-         unpack="false"/>
+         version="1.1.33.qualifier"/>
 
    <plugin
          id="net.sourceforge.plantuml.jdt"
-         download-size="0"
-         install-size="0"
-         version="1.1.33.qualifier"
-         unpack="false"/>
+         version="1.1.33.qualifier"/>
 
    <plugin
          id="net.sourceforge.plantuml.text"
-         download-size="0"
-         install-size="0"
-         version="1.1.33.qualifier"
-         unpack="false"/>
+         version="1.1.33.qualifier"/>
 
    <plugin
          id="net.sourceforge.plantuml.eclipse.imagecontrol"
-         download-size="0"
-         install-size="0"
-         version="1.1.33.qualifier"
-         unpack="false"/>
+         version="1.1.33.qualifier"/>
 
    <plugin
          id="net.sourceforge.plantuml.svg"
-         download-size="0"
-         install-size="0"
-         version="1.1.33.qualifier"
-         unpack="false"/>
+         version="1.1.33.qualifier"/>
 
 </feature>
