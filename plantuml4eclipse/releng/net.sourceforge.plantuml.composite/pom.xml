@@ -125,7 +125,7 @@
                                 <argument>clone</argument>
                                 <argument>-b</argument>
                                 <argument>gh-pages</argument>
-                                <argument>git@github.com:hallvard/plantuml.git</argument>
+                                <argument>git@github.com:plantuml/plantuml-eclipse.git</argument>
                                 <argument>${basedir}/target/gh-pages</argument>
                             </arguments>
                         </configuration>

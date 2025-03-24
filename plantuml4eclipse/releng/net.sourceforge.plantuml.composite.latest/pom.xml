@@ -72,7 +72,7 @@
                     <source>
                         <!-- source repositories to mirror from -->
                         <repository>
-                            <url>https://hallvard.github.io/plantuml/</url>
+                            <url>https://plantuml.github.io/plantuml-eclipse/</url>
                             <!-- <url>file:/Users/travkin/Documents/git-repos/plantuml4eclipse/releng/net.sourceforge.plantuml.composite/target/gh-pages</url> -->
                             <layout>p2</layout>
                             <!-- supported layouts are "p2-metadata", "p2-artifacts", and "p2" (for joint repositories; default) -->
