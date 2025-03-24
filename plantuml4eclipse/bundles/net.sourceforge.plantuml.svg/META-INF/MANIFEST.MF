@@ -10,14 +10,12 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.10.0",
  org.eclipse.ui;bundle-version="3.106.1",
  org.eclipse.ui.workbench,
  org.eclipse.ui.ide;bundle-version="3.10.2",
- org.eclipse.ui.browser;bundle-version="3.4.200"
+ org.eclipse.ui.browser;bundle-version="3.4.200",
+ net.sourceforge.plantuml.eclipse,
+ net.sourceforge.plantuml.eclipse.imagecontrol
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ClassPath: .,
  libs/jmustache-1.15.jar
-Import-Package: net.sourceforge.plantuml.eclipse,
- net.sourceforge.plantuml.eclipse.imagecontrol,
- net.sourceforge.plantuml.eclipse.views,
- net.sourceforge.plantuml.util,
- org.eclipse.swt.layout,
+Import-Package: org.eclipse.swt.layout,
  org.eclipse.swt.widgets
