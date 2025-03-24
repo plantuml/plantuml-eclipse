@@ -1,0 +1,173 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>net.sourceforge.plantuml</groupId>
+  <artifactId>net.sourceforge.plantuml.repository.composite</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <name>PlantUML library and PlantUML Eclipse plug-ins in an Eclipse composite update site</name>
+
+  <properties>
+	<!-- tycho-version variable is defined in repo-root-folder/.mvn/maven.config, see https://tycho.eclipseprojects.io/doc/latest/StructuredBuild.html,
+         in addition, we specify it here to avoid IDE warnings because of an unrecognized variable definition -->
+    <tycho-version>3.0.5</tycho-version>
+	<plantuml4e-version>1.1.33</plantuml4e-version>
+  </properties>
+
+  <build>
+    <plugins>
+	
+		<plugin>
+			<artifactId>maven-resources-plugin</artifactId>
+			<version>2.7</version>
+			<executions>
+
+				<execution>
+					<id>copy-composite-files</id>
+					<phase>process-resources</phase>
+					<goals>
+						<goal>copy-resources</goal>
+					</goals>
+					<configuration>
+					<outputDirectory>${basedir}/target/composite-repository</outputDirectory>
+					<resources>
+						<resource>
+							<directory>repository</directory>
+							<filtering>false</filtering>
+						</resource>
+					</resources>
+					<overwrite>true</overwrite>
+					<encoding>UTF-8</encoding>
+					</configuration>
+				</execution>
+		
+				<execution>
+					<id>copy-plantuml4e-update-site</id>
+					<phase>process-resources</phase>
+					<goals>
+						<goal>copy-resources</goal>
+					</goals>
+					<configuration>
+					<outputDirectory>${basedir}/target/composite-repository/plantuml.eclipse/${plantuml4e-version}</outputDirectory>
+					<resources>
+						<resource>
+							<directory>../plantuml4eclipse/releng/net.sourceforge.plantuml.repository/target/repository</directory>
+							<filtering>false</filtering>
+						</resource>
+					</resources>
+					<overwrite>true</overwrite>
+					<encoding>UTF-8</encoding>
+					</configuration>
+				</execution>
+				
+				<execution>
+					<id>copy-update-site-to-gh-pages</id>
+					<phase>package</phase>
+					<goals>
+						<goal>copy-resources</goal>
+					</goals>
+					<configuration>
+					<outputDirectory>${basedir}/target/gh-pages</outputDirectory>
+					<resources>
+						<resource>
+							<directory>${basedir}/target/composite-repository</directory>
+							<filtering>false</filtering>
+						</resource>
+					</resources>
+					<overwrite>true</overwrite>
+					<encoding>UTF-8</encoding>
+					</configuration>
+				</execution>
+			
+				<execution>
+					<id>copy-readme</id>
+					<phase>package</phase>
+					<goals>
+						<goal>copy-resources</goal>
+					</goals>
+					<configuration>
+						<outputDirectory>${basedir}/target/gh-pages</outputDirectory>
+						<resources>
+							<resource>
+								<directory>..</directory>
+								<includes>
+									<include>README.md</include>
+								</includes>
+								<filtering>false</filtering>
+							</resource>
+						</resources>
+						<overwrite>true</overwrite>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</execution>
+
+			</executions>
+		</plugin>
+	  
+		<plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.6.0</version>
+            <inherited>false</inherited> <!-- only execute these in the parent -->
+            <configuration>
+                <executable>git</executable>
+            </configuration>
+            <executions>
+            
+                <execution>
+                    <id>git-clone-gh-pages</id>
+                    <phase>prepare-package</phase>
+                    <goals>
+                        <goal>exec</goal>
+                    </goals>
+                    <configuration>
+                        <arguments>
+                            <argument>clone</argument>
+                            <argument>-b</argument>
+                            <argument>gh-pages</argument>
+                            <argument>git@github.com:plantuml/plantuml-eclipse.git</argument>
+                            <argument>${basedir}/target/gh-pages</argument>
+                        </arguments>
+                    </configuration>
+                </execution>
+                
+                <execution>
+                    <id>git-add-gh-pages</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>exec</goal>
+                    </goals>
+                    <configuration>
+                        <arguments>
+                            <argument>-C</argument>
+                            <argument>${basedir}/target/gh-pages</argument>
+                            <argument>add</argument>
+                            <argument>--all</argument>
+                        </arguments>
+                    </configuration>
+                </execution>
+                
+                <execution>
+                    <id>git-commit-gh-pages</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>exec</goal>
+                    </goals>
+                    <configuration>
+                        <arguments>
+                            <argument>-C</argument>
+                            <argument>${basedir}/target/gh-pages</argument>
+                            <argument>commit</argument>
+                            <argument>-m</argument>
+                            <argument>New PlantUML4Eclipse release version ${plantuml4e-version}</argument>
+                        </arguments>
+                    </configuration>
+                </execution>
+                
+            </executions>
+        </plugin>
+	  
+    </plugins>
+  </build>
+</project>
