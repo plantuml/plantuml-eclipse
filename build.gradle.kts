@@ -1,4 +1,5 @@
 import groovy.json.JsonSlurper
+import org.apache.tools.ant.taskdefs.condition.Os
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
@@ -74,6 +75,8 @@ val plantUmlLibFeatureDir = "$plantUmlLibRootDir/$featureName"
 val plantUmlLibPluginLibDir = "$plantUmlLibPluginDir/lib"
 val latestPlantUmlLibReleaseVersion =  readLatestPlantUmlLibReleaseVersion()
 val latestPlantUmlLibReleaseVersionSimple = latestPlantUmlLibReleaseVersion?.substringAfter("v")
+
+val mvnCmd = if (Os.isFamily(Os.FAMILY_WINDOWS)) { "mvn.cmd" } else { "mvn"}
 
 
 val downloadPlantUmlLibsTask = tasks.register("downloadPlantUmlLibs") {
@@ -198,6 +201,18 @@ val updateVersionsInEclipseProjectsTask = tasks.register<Copy>("updateVersionsIn
     from("build/eclipse-files")
     into(plantUmlLibRootDir)
     filteringCharset = "UTF-8"
+}
+
+val buildEclipseUpdateSiteTask = tasks.register<Exec>("buildPlantUmlLibUpdateSite") {
+    group = "build"
+
+    dependsOn(copyLibsTask)
+    dependsOn(updateVersionsInEclipseProjectsTask)
+
+    workingDir = file(plantUmlLibRootDir).absoluteFile
+
+    // Add --quiet argument?
+    commandLine = listOf(mvnCmd, "--batch-mode", "--errors", "clean", "package")
 }
 
 tasks.register("printLatestPlantUMLVersion") {
