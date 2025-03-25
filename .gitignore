@@ -1,6 +1,8 @@
 bin/
+build/
 target/
 .idea
+.gradle
 **/.polyglot.build.properties
 **/.META-INF_MANIFEST.MF
 **/.polyglot.*
