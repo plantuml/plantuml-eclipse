@@ -82,8 +82,10 @@ val mvnCmd = if (Os.isFamily(Os.FAMILY_WINDOWS)) { "mvn.cmd" } else { "mvn"}
 val downloadPlantUmlLibsTask = tasks.register("downloadPlantUmlLibs") {
     group = "plantuml-lib"
 
-    downloadFile("https://github.com/plantuml/plantuml/releases/download/$latestPlantUmlLibReleaseVersion/plantuml-epl-$latestPlantUmlLibReleaseVersionSimple.jar", "build/lib")
-    downloadFile("https://github.com/plantuml/plantuml/releases/download/$latestPlantUmlLibReleaseVersion/plantuml-epl-$latestPlantUmlLibReleaseVersionSimple-sources.jar", "build/lib")
+    doLast {
+        downloadFile("https://github.com/plantuml/plantuml/releases/download/$latestPlantUmlLibReleaseVersion/plantuml-epl-$latestPlantUmlLibReleaseVersionSimple.jar", "build/lib")
+        downloadFile("https://github.com/plantuml/plantuml/releases/download/$latestPlantUmlLibReleaseVersion/plantuml-epl-$latestPlantUmlLibReleaseVersionSimple-sources.jar", "build/lib")
+    }
 }
 
 val deleteObsoleteLibsTask = tasks.register<Delete>("clearEclipsePluginLibDir") {
