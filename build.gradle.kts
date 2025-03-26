@@ -16,7 +16,7 @@ version = "1.0.0-SNAPSHOT"
 description = "PlantUML composite update site"
 
 
-fun readLatestPlantUmlLibReleaseVersion(): String? {
+fun readLatestPlantUmlLibReleaseVersion(): String {
     var latestReleaseVersion: String? = null
 
     val connection = URI("https://api.github.com/repos/plantuml/plantuml/releases/latest")
@@ -70,14 +70,16 @@ fun createDirs(directory: File) {
 val plantUmlLibRootDir = "plantuml-lib"
 val pluginName = "net.sourceforge.plantuml.library"
 val featureName = "$pluginName.feature"
+val repositoryName = "$pluginName.repository"
 val plantUmlLibPluginDir = "$plantUmlLibRootDir/$pluginName"
 val plantUmlLibFeatureDir = "$plantUmlLibRootDir/$featureName"
+val plantUmlLibRepositoryDir = "$plantUmlLibRootDir/$repositoryName"
 val plantUmlLibPluginLibDir = "$plantUmlLibPluginDir/lib"
 val latestPlantUmlLibReleaseVersion =  readLatestPlantUmlLibReleaseVersion()
-val latestPlantUmlLibReleaseVersionSimple = latestPlantUmlLibReleaseVersion?.substringAfter("v")
+val latestPlantUmlLibReleaseVersionSimple = latestPlantUmlLibReleaseVersion.substringAfter("v")
 
 val mvnCmd = if (Os.isFamily(Os.FAMILY_WINDOWS)) { "mvn.cmd" } else { "mvn"}
-
+val gitCmd = if (Os.isFamily(Os.FAMILY_WINDOWS)) { "git.exe" } else { "git"}
 
 val downloadPlantUmlLibsTask = tasks.register("downloadPlantUmlLibs") {
     group = "plantuml-lib"
@@ -205,7 +207,7 @@ val updateVersionsInEclipseProjectsTask = tasks.register<Copy>("updateVersionsIn
     filteringCharset = "UTF-8"
 }
 
-val buildEclipseUpdateSiteTask = tasks.register<Exec>("buildPlantUmlLibUpdateSite") {
+val buildPlantUmlLibUpdateSiteTask = tasks.register<Exec>("buildPlantUmlLibUpdateSite") {
     group = "build"
 
     dependsOn(copyLibsTask)
@@ -215,6 +217,50 @@ val buildEclipseUpdateSiteTask = tasks.register<Exec>("buildPlantUmlLibUpdateSit
 
     // Add --quiet argument?
     commandLine = listOf(mvnCmd, "--batch-mode", "--errors", "clean", "package")
+}
+
+val cloneGhPagesTask = tasks.register<Exec>("cloneGitHubPages") {
+    group = "publish"
+
+    commandLine = listOf(gitCmd, "clone", "-b", "gh-pages", "git@github.com:plantuml/plantuml-eclipse.git", "build/gh-pages")
+}
+
+val checkIfPlantUmlLibIsAlreadyPublishedTask = tasks.register("checkIfPlantUmlLibIsAlreadyPublished") {
+    group = "publish"
+
+    dependsOn(cloneGhPagesTask)
+
+    doLast {
+        val ghPagesUpdateSiteTargetDir = File("build/gh-pages/plantuml.lib", latestPlantUmlLibReleaseVersionSimple)
+        if (ghPagesUpdateSiteTargetDir.exists()) {
+            throw GradleException("The PlantUML library version $latestPlantUmlLibReleaseVersionSimple has already been" +
+                    " published. The files were found in directory ${ghPagesUpdateSiteTargetDir}.")
+        }
+    }
+}
+
+val updateGhPagesFilesTask = tasks.register<Copy>("updateGhPagesFiles") {
+    group = "publish"
+
+    dependsOn(cloneGhPagesTask)
+
+    from("composite-repository/repository")
+    from(".") {
+        include("README.md")
+    }
+    into("build/gh-pages")
+    filteringCharset = "UTF-8"
+}
+
+val addLatestPlantUmlUpdateSiteToGhPagesTask = tasks.register<Copy>("addLatestPlantUmlUpdateSiteToGhPages") {
+    group = "publish"
+
+    dependsOn(checkIfPlantUmlLibIsAlreadyPublishedTask)
+    dependsOn(buildPlantUmlLibUpdateSiteTask)
+
+    from("$plantUmlLibRepositoryDir/target/repository")
+    into("build/gh-pages/plantuml.lib/$latestPlantUmlLibReleaseVersionSimple")
+    filteringCharset = "UTF-8"
 }
 
 tasks.register("printLatestPlantUMLVersion") {
