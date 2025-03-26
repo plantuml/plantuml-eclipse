@@ -2,6 +2,12 @@ name: PlantUML4Eclipse CI
 
 on:
   push:
+    #branches:
+    #  - main
+    branches-ignore:
+    #  - main
+      - gh-pages
+  pull_request:
     branches:
       - main
 
