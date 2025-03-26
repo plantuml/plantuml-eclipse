@@ -30,6 +30,6 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Build PlantUML lib update site
-        run: mvn --batch-mode --update-snapshots clean package -f plantuml-lib/pom.xml
+        run: ./gradle clean buildPlantUmlLibUpdateSite
       - name: Verify PlantUML4Eclipse
         run: mvn --batch-mode --update-snapshots clean verify -f plantuml4eclipse/releng/net.sourceforge.plantuml.aggregator/pom.xml
