@@ -30,8 +30,12 @@ jobs:
       - name: Build latest PlantUML lib update site
         run: gradle updateGhPagesFiles addLatestPlantUmlUpdateSiteToGhPages
       - name: Push update site to GitHub pages
+        env:
+          GIT_DIR: ${{ github.workspace }}/build/gh-pages/.git
         # see https://github.com/actions/checkout?tab=readme-ov-file#push-a-commit-using-the-built-in-token
         run: |
+          echo $GITHUB_WORKSPACE
+          echo $GIT_DIR
           cd build/gh-pages
           pwd
           ls -al
