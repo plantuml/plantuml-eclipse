@@ -16,14 +16,19 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@v4
+      - name: Clone GitHub pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: build/gh-pages
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+      #- name: Build latest PlantUML lib update site
+      #  run: gradle buildPlantUmlLibUpdateSite
       - name: Add latest PlantUML lib to composite update site
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         # TODO: for now we only prepare the git commit for publishing the update site at GitHub pages
-        run: gradle clean gitCommitPlantUmlLibUpdateSiteToGhPages
+        run: gradle gitCommitPlantUmlLibUpdateSiteToGhPages
