@@ -28,7 +28,7 @@ jobs:
           ref: gh-pages
           path: build/gh-pages
       - name: Build latest PlantUML lib update site
-        run: gradle addLatestPlantUmlUpdateSiteToGhPages
+        run: gradle updateGhPagesFiles addLatestPlantUmlUpdateSiteToGhPages
       - name: Push update site to GitHub pages
         # see https://github.com/actions/checkout?tab=readme-ov-file#push-a-commit-using-the-built-in-token
         run: |
