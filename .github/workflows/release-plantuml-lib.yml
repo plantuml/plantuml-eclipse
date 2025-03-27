@@ -24,19 +24,12 @@ jobs:
           cache: maven
       - name: Clone GitHub pages
         run: git clone -b gh-pages https://github.com/plantuml/plantuml-eclipse.git build/gh-pages
-      #  uses: actions/checkout@v4
-      #  with:
-      #    ref: gh-pages
-      #    path: build/gh-pages
       - name: Build latest PlantUML lib update site
         run: gradle updateGhPagesFiles addLatestPlantUmlUpdateSiteToGhPages
       - name: Push update site to GitHub pages
-        #env:
-        #  GIT_DIR: ${{ github.workspace }}/build/gh-pages/.git
         # see https://github.com/actions/checkout?tab=readme-ov-file#push-a-commit-using-the-built-in-token
         run: |
           echo $GITHUB_WORKSPACE
-#          echo $GIT_DIR
           cd build/gh-pages
           pwd
           ls -al
