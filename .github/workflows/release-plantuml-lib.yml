@@ -32,9 +32,9 @@ jobs:
       - name: Push update site to GitHub pages
         # see https://github.com/actions/checkout?tab=readme-ov-file#push-a-commit-using-the-built-in-token
         run: |
+          cd build/gh-pages
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          cd build/gh-pages
           git status
           git add --all
           git commit -m "Add new PlantUML lib update site version"
