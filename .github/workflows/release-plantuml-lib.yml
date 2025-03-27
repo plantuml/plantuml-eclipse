@@ -22,7 +22,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
-      - run: git config --global --add safe.directory $GITHUB_WORKSPACE/build/gh-pages
       - name: Clone GitHub pages
         uses: actions/checkout@v4
         with:
@@ -31,8 +30,6 @@ jobs:
       - name: Build latest PlantUML lib update site
         run: gradle updateGhPagesFiles addLatestPlantUmlUpdateSiteToGhPages
       - name: Push update site to GitHub pages
-        env:
-          GIT_DIR: ${{ github.workspace }}/build/gh-pages/.git
         # see https://github.com/actions/checkout?tab=readme-ov-file#push-a-commit-using-the-built-in-token
         run: |
           echo $GITHUB_WORKSPACE
@@ -40,9 +37,9 @@ jobs:
           cd build/gh-pages
           pwd
           ls -al
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git status
-          git add --all
-          git commit -m "Add new PlantUML lib update site version"
+          git -C $GITHUB_WORKSPACE/build/gh-pages status
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C $GITHUB_WORKSPACE/build/gh-pages add --all
+          git -C $GITHUB_WORKSPACE/build/gh-pages commit -m "Add new PlantUML lib update site version"
 #          git push
