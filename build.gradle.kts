@@ -82,6 +82,8 @@ val plantUmlLibPluginLibDir = "$plantUmlLibPluginDir/lib"
 val latestPlantUmlLibReleaseVersion =  readLatestPlantUmlLibReleaseVersion()
 val latestPlantUmlLibReleaseVersionSimple = latestPlantUmlLibReleaseVersion.substringAfter("v")
 
+val buildDirectoyPath = project.layout.buildDirectory.get().toString()
+
 val mvnCmd = if (Os.isFamily(Os.FAMILY_WINDOWS)) { "mvn.cmd" } else { "mvn"}
 val gitCmd = if (Os.isFamily(Os.FAMILY_WINDOWS)) { "git.exe" } else { "git"}
 
@@ -299,7 +301,7 @@ val gitAddPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitAddPlant
     dependsOn(updateGhPagesFilesTask)
     dependsOn(addLatestPlantUmlUpdateSiteToGhPagesTask)
 
-    commandLine = listOf(gitCmd, "-C", "build/gh-pages", "add", "--all")
+    commandLine = listOf(gitCmd, "-C", "$buildDirectoyPath/gh-pages", "add", "--all")
 }
 
 val gitCommitPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitCommitPlantUmlLibUpdateSiteToGhPages") {
@@ -307,7 +309,7 @@ val gitCommitPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitCommi
 
     dependsOn(gitAddPlantUmlLibUpdateSiteToGhPagesTask)
 
-    commandLine = listOf(gitCmd, "-C", "build/gh-pages", "commit", "-m", "Add new PlantUML lib update site version $latestPlantUmlLibReleaseVersionSimple")
+    commandLine = listOf(gitCmd, "-C", "$buildDirectoyPath/gh-pages", "commit", "-m", "Add new PlantUML lib update site version $latestPlantUmlLibReleaseVersionSimple")
 }
 
 val gitPushPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitPushPlantUmlLibUpdateSiteToGhPages") {
@@ -315,5 +317,5 @@ val gitPushPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitPushPla
 
     dependsOn(gitCommitPlantUmlLibUpdateSiteToGhPagesTask)
 
-    commandLine = listOf(gitCmd, "-C", "build/gh-pages", "push")
+    commandLine = listOf(gitCmd, "-C", "$buildDirectoyPath/gh-pages", "push")
 }
