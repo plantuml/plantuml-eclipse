@@ -23,5 +23,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Add latest PlantUML lib to composite update site
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         # TODO: for now we only prepare the git commit for publishing the update site at GitHub pages
         run: gradle clean gitCommitPlantUmlLibUpdateSiteToGhPages
