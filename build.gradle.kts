@@ -244,7 +244,29 @@ val updateGhPagesFilesTask = tasks.register<Copy>("updateGhPagesFiles") {
 
     dependsOn(cloneGhPagesTask)
 
-    from("composite-repository/repository")
+    val prefix = "<children size='"
+    val suffix = "'>"
+    val childrenEndTag = "</children>"
+
+    from("composite-repository/repository") {
+        include("composite*.xml")
+        filter { line: String ->
+            if (line.trim().startsWith(prefix) && line.endsWith(suffix)) {
+                val sizeText = line.substring(line.indexOf(prefix) + prefix.length, line.indexOf(suffix))
+                val size = Integer.valueOf(sizeText) + 1
+
+                line.substring(0, line.indexOf(prefix)) + prefix + size + suffix
+            } else if (line.contains(childrenEndTag)) {
+                val indentation = line.substring(0, line.indexOf("<")) + "\t"
+
+                indentation + "<child location='plantuml.lib/$latestPlantUmlLibReleaseVersionSimple' />" + System.lineSeparator() + line
+            }
+            else line
+        }
+    }
+    from("composite-repository/repository") {
+        include("p2.index")
+    }
     from(".") {
         include("README.md")
     }
@@ -266,6 +288,7 @@ val addLatestPlantUmlUpdateSiteToGhPagesTask = tasks.register<Copy>("addLatestPl
 val gitAddPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitAddPlantUmlLibUpdateSiteToGhPages") {
     group = "publish"
 
+    dependsOn(updateGhPagesFilesTask)
     dependsOn(addLatestPlantUmlUpdateSiteToGhPagesTask)
 
     commandLine = listOf(gitCmd, "-C", "build/gh-pages", "add", "--all")
