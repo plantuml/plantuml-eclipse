@@ -263,6 +263,22 @@ val addLatestPlantUmlUpdateSiteToGhPagesTask = tasks.register<Copy>("addLatestPl
     filteringCharset = "UTF-8"
 }
 
+val gitAddPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitAddPlantUmlLibUpdateSiteToGhPages") {
+    group = "publish"
+
+    dependsOn(addLatestPlantUmlUpdateSiteToGhPagesTask)
+
+    commandLine = listOf(gitCmd, "-C", "build/gh-pages", "add", "--all")
+}
+
+val gitCommitPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitCommitPlantUmlLibUpdateSiteToGhPages") {
+    group = "publish"
+
+    dependsOn(gitAddPlantUmlLibUpdateSiteToGhPagesTask)
+
+    commandLine = listOf(gitCmd, "-C", "build/gh-pages", "commit", "-m", "Add new PlantUML lib update site version $latestPlantUmlLibReleaseVersionSimple")
+}
+
 tasks.register("printLatestPlantUMLVersion") {
     group = "plantuml-lib"
 
