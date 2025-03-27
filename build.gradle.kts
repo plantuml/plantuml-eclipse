@@ -310,10 +310,10 @@ val gitCommitPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitCommi
     commandLine = listOf(gitCmd, "-C", "build/gh-pages", "commit", "-m", "Add new PlantUML lib update site version $latestPlantUmlLibReleaseVersionSimple")
 }
 
-tasks.register("printLatestPlantUMLVersion") {
-    group = "plantuml-lib"
+val gitPushPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitPushPlantUmlLibUpdateSiteToGhPages") {
+    group = "publish"
 
-    doLast {
-        println("Latest PlantUML lib version is $latestPlantUmlLibReleaseVersion.")
-    }
+    dependsOn(gitCommitPlantUmlLibUpdateSiteToGhPagesTask)
+
+    commandLine = listOf(gitCmd, "-C", "build/gh-pages", "push")
 }
