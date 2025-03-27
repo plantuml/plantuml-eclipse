@@ -38,6 +38,10 @@ fun readLatestPlantUmlLibReleaseVersion(): String {
         latestReleaseVersion = readVersionFromRelease(responseJson)
     }
 
+    if (latestReleaseVersion == null) {
+        throw GradleException("Could not read PlantUml library version!")
+    }
+
     return latestReleaseVersion
 }
 
