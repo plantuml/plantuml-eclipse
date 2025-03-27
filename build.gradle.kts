@@ -89,6 +89,10 @@ val downloadPlantUmlLibsTask = tasks.register("downloadPlantUmlLibs") {
     group = "plantuml-lib"
 
     doLast {
+        println("#################################################################################")
+        println("Using PlantUML library version: $latestPlantUmlLibReleaseVersion")
+        println("#################################################################################")
+
         downloadFile("https://github.com/plantuml/plantuml/releases/download/$latestPlantUmlLibReleaseVersion/plantuml-epl-$latestPlantUmlLibReleaseVersionSimple.jar", "build/lib")
         downloadFile("https://github.com/plantuml/plantuml/releases/download/$latestPlantUmlLibReleaseVersion/plantuml-epl-$latestPlantUmlLibReleaseVersionSimple-sources.jar", "build/lib")
     }
