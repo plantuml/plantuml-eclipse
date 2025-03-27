@@ -1,6 +1,9 @@
 name: PlantUML library release for Eclipse
 
 on:
+  push:
+    branches:
+      - automate-releases
   # Triggered by external repository_dispatch event (from plantuml repo)
   #repository_dispatch:
   #  types: [plantuml-release]
