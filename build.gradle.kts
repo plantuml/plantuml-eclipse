@@ -227,8 +227,7 @@ val buildPlantUmlLibUpdateSiteTask = tasks.register<Exec>("buildPlantUmlLibUpdat
 
     workingDir = file(plantUmlLibRootDir).absoluteFile
 
-    // Add --quiet argument?
-    commandLine = listOf(mvnCmd, "--batch-mode", "--errors", "clean", "package")
+    commandLine = listOf(mvnCmd, "--batch-mode", "--errors", "--quiet", "clean", "package")
 }
 
 //val cloneGhPagesTask = tasks.register<Exec>("cloneGitHubPages") {
