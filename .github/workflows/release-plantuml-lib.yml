@@ -33,18 +33,21 @@ jobs:
         id: update_site
         run: |
           export PLANTUML_VERSION=$(./gradlew -q printPlantUmlLibVersion)
-          echo $PLANTUML_VERSION
           echo "plantuml_version=$PLANTUML_VERSION" >> $GITHUB_OUTPUT
           ./gradlew updateGhPagesContents --no-daemon
 
       - name: Save artifacts for the git push
         uses: actions/upload-artifact@v4
+        env:
+          PLANTUML_VERSION: ${{ steps.update_site.outputs.plantuml_version }}
         with:
           name: 'gh-pages-update'
           path: |
-            build/gh-pages/*.*
-            build/gh-pages/plantuml.lib/${{ steps.update_site.outputs.plantuml_version }}/
-            !build/gh-pages/plantuml.eclipse/**/*.*
+            build/gh-pages/composite*.xml
+            build/gh-pages/p2.index
+            build/gh-pages/*.md
+            build/gh-pages/plantuml.lib/${{ env.PLANTUML_VERSION }}/
+#            !build/gh-pages/plantuml.eclipse/**/*.*
           if-no-files-found: error
           retention-days: 1
           overwrite: true
