@@ -17,34 +17,32 @@ description = "PlantUML composite update site"
 
 
 fun readLatestPlantUmlLibReleaseVersion(): String {
-//    var latestReleaseVersion: String? = null
-//
-//    val connection = URI("https://api.github.com/repos/plantuml/plantuml/releases/latest")
-//        .toURL().openConnection() as HttpURLConnection
-//    connection.requestMethod = "GET"
-//
-//    var responseJson : String? = null
-//    try {
-//        val responseCode = connection.responseCode
-//        if (responseCode == HttpURLConnection.HTTP_OK) {
-//            val reader = BufferedReader(InputStreamReader(connection.inputStream))
-//            responseJson = reader.readText()
-//        }
-//    } catch (e: Exception) {
-//        e.printStackTrace()
-//    }
-//
-//    if (responseJson != null) {
-//        latestReleaseVersion = readVersionFromRelease(responseJson)
-//    }
-//
-//    if (latestReleaseVersion == null) {
-//        throw GradleException("Could not read PlantUml library version!")
-//    }
-//
-//    return latestReleaseVersion
+    var latestReleaseVersion: String? = null
 
-    return "v1.2025.2"
+    val connection = URI("https://api.github.com/repos/plantuml/plantuml/releases/latest")
+        .toURL().openConnection() as HttpURLConnection
+    connection.requestMethod = "GET"
+
+    var responseJson : String? = null
+    try {
+        val responseCode = connection.responseCode
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            val reader = BufferedReader(InputStreamReader(connection.inputStream))
+            responseJson = reader.readText()
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+
+    if (responseJson != null) {
+        latestReleaseVersion = readVersionFromRelease(responseJson)
+    }
+
+    if (latestReleaseVersion == null) {
+        throw GradleException("Could not read PlantUml library version!")
+    }
+
+    return latestReleaseVersion
 }
 
 fun readVersionFromRelease(releaseJson: String): String {
