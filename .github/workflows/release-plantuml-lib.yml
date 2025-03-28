@@ -17,12 +17,6 @@ jobs:
       - name: Check out
         uses: actions/checkout@v4
 
-      - name: Clone GitHub pages
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          path: build/gh-pages
-
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -32,8 +26,6 @@ jobs:
 
       - name: Build latest PlantUML lib update site
         run: |
-          echo "Files after check-out:"
-          ls -al build/gh-pages
           ./gradlew updateGhPagesFiles --no-daemon
           echo "Files after adapting files for GH pages (after updateGhPagesFiles gradle task):"
           ls -al build/gh-pages
