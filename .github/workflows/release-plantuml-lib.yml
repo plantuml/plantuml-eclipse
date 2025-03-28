@@ -26,11 +26,8 @@ jobs:
 
       - name: Build latest PlantUML lib update site
         run: |
-          ./gradlew updateGhPagesFiles --no-daemon
-          echo "Files after adapting files for GH pages (after updateGhPagesFiles gradle task):"
-          ls -al build/gh-pages
-          ./gradlew addLatestPlantUmlUpdateSiteToGhPages --no-daemon
-          echo "Files after building update site (after addLatestPlantUmlUpdateSiteToGhPages gradle task):"
+          ./gradlew updateGhPagesContents --no-daemon
+          echo "Files after updating GH pages (after updateGhPagesContents gradle task):"
           ls -al build/gh-pages
 
       - name: Save artifacts for the git push
