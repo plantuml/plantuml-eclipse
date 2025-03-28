@@ -89,6 +89,14 @@ val buildDirectoyPath = project.layout.buildDirectory.get().toString()
 val mvnCmd = if (Os.isFamily(Os.FAMILY_WINDOWS)) { "mvn.cmd" } else { "mvn"}
 val gitCmd = if (Os.isFamily(Os.FAMILY_WINDOWS)) { "git.exe" } else { "git"}
 
+val setEnvVarPlantUmlLibVersionTask = tasks.register("printPlantUmlLibVersion") {
+    group = "plantuml-lib"
+
+    doLast {
+        println(latestPlantUmlLibReleaseVersionSimple)
+    }
+}
+
 val downloadPlantUmlLibsTask = tasks.register("downloadPlantUmlLibs") {
     group = "plantuml-lib"
 

@@ -13,6 +13,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      plantuml_version: ${{ steps.update_site.outputs.plantuml_version }}
     steps:
       - name: Check out
         uses: actions/checkout@v4
@@ -25,7 +27,9 @@ jobs:
           cache: maven
 
       - name: Build latest PlantUML lib update site
+        id: update_site
         run: |
+          echo "plantuml_version=$(./gradlew -q printPlantUmlLibVersion)" >> $GITHUB_OUTPUT
           ./gradlew updateGhPagesContents --no-daemon
 
       - name: Save artifacts for the git push
@@ -42,6 +46,8 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     needs: build
+    env:
+      PLANTUML_VERSION: ${{ needs.build.outputs.plantuml_version }}
     steps:
       - name: Clone GitHub pages
         uses: actions/checkout@v4
@@ -56,8 +62,8 @@ jobs:
       - name: Push update site to GitHub pages
         # see https://github.com/actions/checkout?tab=readme-ov-file#push-a-commit-using-the-built-in-token
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add --all
-          git commit -m "Add new PlantUML lib update site version"
+          git commit -m "Add PlantUML lib update site ver. $PLANTUML_VERSION (triggered by $GITHUB_ACTOR)"
 #          git push
