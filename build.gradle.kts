@@ -297,11 +297,25 @@ val addLatestPlantUmlUpdateSiteToGhPagesTask = tasks.register<Copy>("addLatestPl
     filteringCharset = "UTF-8"
 }
 
-val gitAddPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitAddPlantUmlLibUpdateSiteToGhPages") {
+val updateGhPagesContentsTask = tasks.register("updateGhPagesContents") {
     group = "publish"
 
     dependsOn(updateGhPagesFilesTask)
     dependsOn(addLatestPlantUmlUpdateSiteToGhPagesTask)
+
+    doLast {
+        val ghPagesUpdateSiteTargetDir = File("build/gh-pages/plantuml.lib", latestPlantUmlLibReleaseVersionSimple)
+        if (!ghPagesUpdateSiteTargetDir.exists()) {
+            throw GradleException("The new PlantUML library version $latestPlantUmlLibReleaseVersionSimple is missing in the build directory." +
+                    " Expected the following directory to exist: ${ghPagesUpdateSiteTargetDir}.")
+        }
+    }
+}
+
+val gitAddPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitAddPlantUmlLibUpdateSiteToGhPages") {
+    group = "publish"
+
+    dependsOn(updateGhPagesContentsTask)
 
     commandLine = listOf(gitCmd, "-C", "$buildDirectoyPath/gh-pages", "add", "--all")
 }
