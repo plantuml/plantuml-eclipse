@@ -34,9 +34,14 @@ jobs:
         run: |
           echo "Files after check-out:"
           ls -al build/gh-pages
-          ./gradlew updateGhPagesContents --no-daemon --stacktrace
+          ./gradlew updateGhPagesFiles --no-daemon
+          echo "Files after adapting files for GH pages:"
+          ls -al build/gh-pages
+          ./gradlew addLatestPlantUmlUpdateSiteToGhPages --no-daemon
           echo "Files after building update site:"
           ls -al build/gh-pages
+          echo "Files in Maven build folder:"
+          ls -al plantuml-lib/net.sourceforge.plantuml.library.repository/target/repository
 
       - name: Save artifacts for the git push
         uses: actions/upload-artifact@v4
