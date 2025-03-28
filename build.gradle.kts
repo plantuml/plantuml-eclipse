@@ -246,18 +246,18 @@ val buildPlantUmlLibUpdateSiteTask = tasks.register<Exec>("buildPlantUmlLibUpdat
     commandLine = listOf(mvnCmd, "--batch-mode", "--errors", "--quiet", "clean", "package")
 }
 
-//val cloneGhPagesTask = tasks.register<Exec>("cloneGitHubPages") {
-//    group = "publish"
-//
-//    commandLine = listOf(gitCmd, "clone", "-b", "gh-pages", "git@github.com:plantuml/plantuml-eclipse.git", "build/gh-pages")
-//}
+val cloneGhPagesTask = tasks.register<Exec>("cloneGitHubPages") {
+    group = "publish"
+
+    outputs.dir(project.layout.buildDirectory.dir("gh-pages"))
+
+    commandLine = listOf(gitCmd, "clone", "-b", "gh-pages", "https://github.com/plantuml/plantuml-eclipse.git", "build/gh-pages")
+}
 
 val checkIfPlantUmlLibIsAlreadyPublishedTask = tasks.register("checkIfPlantUmlLibIsAlreadyPublished") {
     group = "publish"
 
-    //dependsOn(cloneGhPagesTask)
-
-    inputs.dir(project.layout.buildDirectory.dir("gh-pages"))
+    dependsOn(cloneGhPagesTask)
 
     doLast {
         val ghPagesUpdateSiteTargetDir = File("build/gh-pages/plantuml.lib", latestPlantUmlLibReleaseVersionSimple)
@@ -271,9 +271,8 @@ val checkIfPlantUmlLibIsAlreadyPublishedTask = tasks.register("checkIfPlantUmlLi
 val updateGhPagesFilesTask = tasks.register<Copy>("updateGhPagesFiles") {
     group = "publish"
 
-    //dependsOn(cloneGhPagesTask)
+    dependsOn(cloneGhPagesTask)
 
-    inputs.dir(project.layout.buildDirectory.dir("gh-pages"))
     outputs.dir(project.layout.buildDirectory.dir("gh-pages"))
 
     val prefix = "<children size='"
@@ -312,7 +311,6 @@ val addLatestPlantUmlUpdateSiteToGhPagesTask = tasks.register<Copy>("addLatestPl
     dependsOn(checkIfPlantUmlLibIsAlreadyPublishedTask)
     dependsOn(buildPlantUmlLibUpdateSiteTask)
 
-    inputs.dir(project.layout.buildDirectory.dir("gh-pages"))
     outputs.dir(project.layout.buildDirectory.dir("gh-pages"))
 
     from("$plantUmlLibRepositoryDir/target/repository")
