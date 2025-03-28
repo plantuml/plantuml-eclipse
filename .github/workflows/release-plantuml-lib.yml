@@ -72,4 +72,4 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add --all
           git commit -m "Add PlantUML lib update site ver. $PLANTUML_VERSION (triggered by $GITHUB_ACTOR)"
-          git push
+#          git push
