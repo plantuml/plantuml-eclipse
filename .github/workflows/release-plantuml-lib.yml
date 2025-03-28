@@ -27,8 +27,6 @@ jobs:
       - name: Build latest PlantUML lib update site
         run: |
           ./gradlew updateGhPagesContents --no-daemon
-          echo "Files after updating GH pages (after updateGhPagesContents gradle task):"
-          ls -al build/gh-pages
 
       - name: Save artifacts for the git push
         uses: actions/upload-artifact@v4
@@ -56,9 +54,6 @@ jobs:
       - name: Push update site to GitHub pages
         # see https://github.com/actions/checkout?tab=readme-ov-file#push-a-commit-using-the-built-in-token
         run: |
-          echo $GITHUB_WORKSPACE
-          ls -al
-          git status
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add --all
