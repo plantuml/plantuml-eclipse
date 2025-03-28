@@ -34,10 +34,10 @@ jobs:
         run: |
           echo "Files after check-out:"
           ls -al build/gh-pages
-          ./gradlew updateGhPagesFiles --no-daemon
+          ./gradlew updateGhPagesFiles --no-daemon --stacktrace
           echo "Files after adapting files for GH pages:"
           ls -al build/gh-pages
-          ./gradlew addLatestPlantUmlUpdateSiteToGhPages --no-daemon
+          ./gradlew addLatestPlantUmlUpdateSiteToGhPages --no-daemon --stacktrace
           echo "Files after building update site:"
           ls -al build/gh-pages
 
