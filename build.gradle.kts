@@ -92,6 +92,8 @@ val gitCmd = if (Os.isFamily(Os.FAMILY_WINDOWS)) { "git.exe" } else { "git"}
 val downloadPlantUmlLibsTask = tasks.register("downloadPlantUmlLibs") {
     group = "plantuml-lib"
 
+    outputs.dir(project.layout.buildDirectory.dir("lib"))
+
     doLast {
         println("#################################################################################")
         println("Using PlantUML library version: $latestPlantUmlLibReleaseVersion")
@@ -114,6 +116,8 @@ val copyLibsTask = tasks.register<Copy>("copyLibsToEclipsePlugin") {
     dependsOn(downloadPlantUmlLibsTask)
     dependsOn(deleteObsoleteLibsTask)
 
+    inputs.dir(project.layout.buildDirectory.dir("lib"))
+
     from("build/lib")
     into(plantUmlLibPluginLibDir)
     include("*.jar")
@@ -121,6 +125,8 @@ val copyLibsTask = tasks.register<Copy>("copyLibsToEclipsePlugin") {
 
 val updateVersionsInManifestTask = tasks.register<Copy>("updateVersionsInManifest") {
     group = "plantuml-lib"
+
+    outputs.dir(project.layout.buildDirectory.dir("eclipse-files"))
 
     from("$plantUmlLibPluginDir/META-INF") {
         include("MANIFEST.MF")
@@ -140,6 +146,8 @@ val updateVersionsInManifestTask = tasks.register<Copy>("updateVersionsInManifes
 
 val updateVersionsInClasspathTask = tasks.register<Copy>("updateVersionsInClasspath") {
     group = "plantuml-lib"
+
+    outputs.dir(project.layout.buildDirectory.dir("eclipse-files"))
 
     val linePrefix = "<classpathentry exported=\"true\" kind=\"lib\" path=\"lib/plantuml-epl-"
 
@@ -174,6 +182,8 @@ val updateVersionsInClasspathTask = tasks.register<Copy>("updateVersionsInClassp
 val updateVersionInFeatureTask = tasks.register<Copy>("updateVersionInFeature") {
     group = "plantuml-lib"
 
+    outputs.dir(project.layout.buildDirectory.dir("eclipse-files"))
+
     from(plantUmlLibFeatureDir) {
         include("feature.xml")
         filter { line: String ->
@@ -189,6 +199,8 @@ val updateVersionInFeatureTask = tasks.register<Copy>("updateVersionInFeature") 
 
 val updateVersionInParentPomTask = tasks.register<Copy>("updateVersionInPom") {
     group = "plantuml-lib"
+
+    outputs.dir(project.layout.buildDirectory.dir("eclipse-files"))
 
     val startTag = "<plantuml-lib-version>"
     val endTag = "</plantuml-lib-version>"
@@ -209,6 +221,8 @@ val updateVersionInParentPomTask = tasks.register<Copy>("updateVersionInPom") {
 val updateVersionsInEclipseProjectsTask = tasks.register<Copy>("updateVersionsInEclipseProjects") {
     group = "plantuml-lib"
 
+    inputs.dir(project.layout.buildDirectory.dir("eclipse-files"))
+
     dependsOn(updateVersionsInManifestTask)
     dependsOn(updateVersionsInClasspathTask)
     dependsOn(updateVersionInFeatureTask)
@@ -224,6 +238,8 @@ val buildPlantUmlLibUpdateSiteTask = tasks.register<Exec>("buildPlantUmlLibUpdat
 
     dependsOn(copyLibsTask)
     dependsOn(updateVersionsInEclipseProjectsTask)
+
+    outputs.dir(project.layout.projectDirectory.dir(plantUmlLibRootDir))
 
     workingDir = file(plantUmlLibRootDir).absoluteFile
 
@@ -241,6 +257,8 @@ val checkIfPlantUmlLibIsAlreadyPublishedTask = tasks.register("checkIfPlantUmlLi
 
     //dependsOn(cloneGhPagesTask)
 
+    inputs.dir(project.layout.buildDirectory.dir("gh-pages"))
+
     doLast {
         val ghPagesUpdateSiteTargetDir = File("build/gh-pages/plantuml.lib", latestPlantUmlLibReleaseVersionSimple)
         if (ghPagesUpdateSiteTargetDir.exists()) {
@@ -254,6 +272,9 @@ val updateGhPagesFilesTask = tasks.register<Copy>("updateGhPagesFiles") {
     group = "publish"
 
     //dependsOn(cloneGhPagesTask)
+
+    inputs.dir(project.layout.buildDirectory.dir("gh-pages"))
+    outputs.dir(project.layout.buildDirectory.dir("gh-pages"))
 
     val prefix = "<children size='"
     val suffix = "'>"
@@ -290,6 +311,9 @@ val addLatestPlantUmlUpdateSiteToGhPagesTask = tasks.register<Copy>("addLatestPl
 
     dependsOn(checkIfPlantUmlLibIsAlreadyPublishedTask)
     dependsOn(buildPlantUmlLibUpdateSiteTask)
+
+    inputs.dir(project.layout.buildDirectory.dir("gh-pages"))
+    outputs.dir(project.layout.buildDirectory.dir("gh-pages"))
 
     from("$plantUmlLibRepositoryDir/target/repository")
     into("build/gh-pages/plantuml.lib/$latestPlantUmlLibReleaseVersionSimple")
