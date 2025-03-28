@@ -11,35 +11,61 @@ on:
   workflow_dispatch:
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Check out
         uses: actions/checkout@v4
+
+      - name: Clone GitHub pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: build/gh-pages
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+
+      - name: Build latest PlantUML lib update site
+        run: gradle updateGhPagesFiles addLatestPlantUmlUpdateSiteToGhPages
+
+      - name: Save artifacts for the git push
+        uses: actions/upload-artifact@v4
+        with:
+          name: 'gh-pages-update'
+          path: build/gh-pages
+          if-no-files-found: error
+          retention-days: 1
+          overwrite: true
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: Clone GitHub pages
         uses: actions/checkout@v4
         with:
           ref: gh-pages
-          path: build/gh-pages
-      - name: Build latest PlantUML lib update site
-        run: gradle updateGhPagesFiles addLatestPlantUmlUpdateSiteToGhPages
+
+      - name: Load artifacts for the git push
+        uses: actions/download-artifact@v4
+        with:
+          name: 'gh-pages-update'
+
       - name: Push update site to GitHub pages
         # see https://github.com/actions/checkout?tab=readme-ov-file#push-a-commit-using-the-built-in-token
         run: |
           echo $GITHUB_WORKSPACE
           echo $GIT_DIR
-          cd build/gh-pages
           pwd
           ls -al
-          git -C $GITHUB_WORKSPACE/build/gh-pages status
+          git status
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git -C $GITHUB_WORKSPACE/build/gh-pages add --all
-          git -C $GITHUB_WORKSPACE/build/gh-pages commit -m "Add new PlantUML lib update site version"
+          git add --all
+          git commit -m "Add new PlantUML lib update site version"
 #          git push
