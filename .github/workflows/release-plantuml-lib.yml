@@ -1,12 +1,15 @@
 name: PlantUML library release for Eclipse
 
 on:
+  # activate push trigger only for testing purposes
   push:
     branches:
       - automate-releases
+
   # Triggered by external repository_dispatch event (from plantuml repo)
   #repository_dispatch:
   #  types: [plantuml-release]
+
   # Allow manual triggering via GitHub UI
   workflow_dispatch:
 
@@ -29,7 +32,9 @@ jobs:
       - name: Build latest PlantUML lib update site
         id: update_site
         run: |
-          echo "plantuml_version=$(./gradlew -q printPlantUmlLibVersion)" >> $GITHUB_OUTPUT
+          export PLANTUML_VERSION=$(./gradlew -q printPlantUmlLibVersion)
+          echo $PLANTUML_VERSION
+          echo "plantuml_version=$PLANTUML_VERSION" >> $GITHUB_OUTPUT
           ./gradlew updateGhPagesContents --no-daemon
 
       - name: Save artifacts for the git push
@@ -37,7 +42,8 @@ jobs:
         with:
           name: 'gh-pages-update'
           path: |
-            build/gh-pages/
+            build/gh-pages/*.*
+            build/gh-pages/plantuml.lib/${{ steps.update_site.outputs.plantuml_version }}/
             !build/gh-pages/plantuml.eclipse/**/*.*
           if-no-files-found: error
           retention-days: 1
