@@ -31,7 +31,7 @@ jobs:
           cache: maven
 
       - name: Build latest PlantUML lib update site
-        run: gradle updateGhPagesFiles addLatestPlantUmlUpdateSiteToGhPages
+        run: gradle updateGhPagesFiles addLatestPlantUmlUpdateSiteToGhPages --no-daemon
 
       - name: Save artifacts for the git push
         uses: actions/upload-artifact@v4
@@ -60,8 +60,6 @@ jobs:
         # see https://github.com/actions/checkout?tab=readme-ov-file#push-a-commit-using-the-built-in-token
         run: |
           echo $GITHUB_WORKSPACE
-          echo $GIT_DIR
-          pwd
           ls -al
           git status
           git config --global user.name "github-actions[bot]"
