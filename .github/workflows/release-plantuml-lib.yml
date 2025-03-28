@@ -32,7 +32,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: 'gh-pages-update'
-          path: build/gh-pages/
+          path: |
+            build/gh-pages/
+            !build/gh-pages/plantuml.eclipse/**/*.*
           if-no-files-found: error
           retention-days: 1
           overwrite: true
