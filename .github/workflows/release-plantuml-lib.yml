@@ -31,13 +31,21 @@ jobs:
           cache: maven
 
       - name: Build latest PlantUML lib update site
-        run: gradle updateGhPagesFiles addLatestPlantUmlUpdateSiteToGhPages --no-daemon
+        run: |
+          echo "Files after check-out:"
+          ls -al build/gh-pages
+          ./gradlew updateGhPagesFiles --no-daemon
+          echo "Files after adapting files for GH pages:"
+          ls -al build/gh-pages
+          ./gradlew addLatestPlantUmlUpdateSiteToGhPages --no-daemon
+          echo "Files after building update site:"
+          ls -al build/gh-pages
 
       - name: Save artifacts for the git push
         uses: actions/upload-artifact@v4
         with:
           name: 'gh-pages-update'
-          path: build/gh-pages/**/*.*
+          path: build/gh-pages/
           if-no-files-found: error
           retention-days: 1
           overwrite: true
