@@ -13,3 +13,5 @@ jobs:
     steps:
       - name: Print Hello World
         run: echo "HelloWorld - triggered by PlantUML release!"
+      - name: Print Release Details
+        run: echo "PlantUML ${{ github.event.client_payload.release }}, snapshot? ${{ github.event.client_payload.snapshot }}"
