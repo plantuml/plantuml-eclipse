@@ -25,6 +25,8 @@ jobs:
           ref: ${{ github.event.client_payload.ref }}"
     
   build:
+    # igrnore PlantUML snapshot releases (pre-releases), read snapshot flag from repository_dispatch event's payload
+    if: github.event.client_payload.snapshot == 'false'
     runs-on: ubuntu-latest
     outputs:
       plantuml_version: ${{ steps.update_site.outputs.plantuml_version }}
