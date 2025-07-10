@@ -61,7 +61,6 @@ jobs:
             build/gh-pages/p2.index
             build/gh-pages/*.md
             build/gh-pages/plantuml.lib/${{ env.PLANTUML_VERSION }}/
-#            !build/gh-pages/plantuml.eclipse/**/*.*
           if-no-files-found: error
           retention-days: 1
           overwrite: true
@@ -89,4 +88,4 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add --all
           git commit -m "Add PlantUML lib update site ver. $PLANTUML_VERSION (triggered by $GITHUB_ACTOR)"
-#          git push
+          git push
