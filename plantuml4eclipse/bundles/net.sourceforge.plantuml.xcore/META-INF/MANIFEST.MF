@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Xcore PlantUML mapping
+Bundle-SymbolicName: net.sourceforge.plantuml.xcore; singleton:=true
+Automatic-Module-Name: net.sourceforge.plantuml.xcore
+Bundle-Version: 1.1.33.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Import-Package: org.eclipse.emf.ecore,
+ org.eclipse.emf.ecore.resource,
+ org.eclipse.emf.ecore.util,
+ org.eclipse.jface.text,
+ org.eclipse.jface.viewers,
+ org.eclipse.ui,
+ org.eclipse.ui.editors.text,
+ org.eclipse.xtext.resource,
+ org.eclipse.xtext.ui.editor,
+ org.eclipse.xtext.util.concurrent
+Bundle-ClassPath: .
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.10.0",
+ net.sourceforge.plantuml.eclipse,
+ net.sourceforge.plantuml.ecore,
+ net.sourceforge.plantuml.text

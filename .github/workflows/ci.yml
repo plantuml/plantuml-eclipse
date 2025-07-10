@@ -1,0 +1,35 @@
+name: PlantUML4Eclipse CI
+
+on:
+  push:
+    #branches:
+    #  - main
+    branches-ignore:
+    #  - main
+      - gh-pages
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Cache maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build PlantUML lib update site
+        run: ./gradlew clean buildPlantUmlLibUpdateSite --no-daemon
+      # TODO activate the following, as soon as we have an Eclipse update site with the PlantUML lib
+      #- name: Verify PlantUML4Eclipse
+      #  run: mvn --batch-mode --update-snapshots clean verify -f plantuml4eclipse/releng/net.sourceforge.plantuml.aggregator/pom.xml

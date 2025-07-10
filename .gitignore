@@ -1,8 +1,11 @@
 bin/
+build/
 target/
 .idea
+.gradle
 **/.polyglot.build.properties
 **/.META-INF_MANIFEST.MF
 **/.polyglot.*
+**/.tycho-consumer-pom.xml
 feature.xml.takari_issue_192
 category.xml.takari_issue_192

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="net.sourceforge.plantuml.feature"
+      label="%featureName"
+      version="1.1.33.qualifier"
+      provider-name="PlantUML Team">
+
+   <description url="http://plantuml.sourceforge.net/">
+      %description
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <requires>
+      <import plugin="org.eclipse.ui.ide" version="3.10.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui" version="3.106.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources" version="3.9.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.jobs"/>
+      <import plugin="org.eclipse.swt"/>
+      <import plugin="org.eclipse.ui.workbench"/>
+      <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.jdt.debug.ui"/>
+      <import plugin="org.eclipse.jdt.core.manipulation"/>
+      <import plugin="org.eclipse.jdt.ui"/>
+      <import plugin="org.eclipse.core.runtime" version="3.10.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.editors" version="3.8.200" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.jface" version="3.10.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.browser" version="3.4.200" match="greaterOrEqual"/>
+      <import feature="net.sourceforge.plantuml.library.feature" version="1.2025.3" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="net.sourceforge.plantuml.eclipse"
+         version="1.1.33.qualifier"/>
+
+   <plugin
+         id="net.sourceforge.plantuml.jdt"
+         version="1.1.33.qualifier"/>
+
+   <plugin
+         id="net.sourceforge.plantuml.text"
+         version="1.1.33.qualifier"/>
+
+   <plugin
+         id="net.sourceforge.plantuml.eclipse.imagecontrol"
+         version="1.1.33.qualifier"/>
+
+   <plugin
+         id="net.sourceforge.plantuml.svg"
+         version="1.1.33.qualifier"/>
+
+</feature>

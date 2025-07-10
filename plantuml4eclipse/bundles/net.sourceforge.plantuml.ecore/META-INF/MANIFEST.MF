@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Ecore PlantUML mapping
+Bundle-SymbolicName: net.sourceforge.plantuml.ecore; singleton:=true
+Automatic-Module-Name: net.sourceforge.plantuml.ecore
+Bundle-Version: 1.1.33.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Export-Package: net.sourceforge.plantuml.ecore
+Import-Package: org.eclipse.core.runtime;version="3.4.0",
+ org.eclipse.emf.common.util,
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.ecore.resource,
+ org.eclipse.emf.ecore.resource.impl,
+ org.eclipse.emf.ecore.util,
+ org.eclipse.emf.edit.domain,
+ org.eclipse.jface.viewers,
+ org.eclipse.ui
+Require-Bundle: net.sourceforge.plantuml.eclipse,
+ net.sourceforge.plantuml.text
+Bundle-ClassPath: .
