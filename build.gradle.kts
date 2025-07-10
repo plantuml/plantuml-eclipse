@@ -244,6 +244,9 @@ val buildPlantUmlLibUpdateSiteTask = tasks.register<Exec>("buildPlantUmlLibUpdat
 
     dependsOn(copyLibsTask)
     dependsOn(updateVersionsInEclipseProjectsTask)
+	
+	// Work-around to force this task to run everytime
+	outputs.upToDateWhen { false }
 
     outputs.dir(project.layout.projectDirectory.dir(plantUmlLibRootDir))
 
