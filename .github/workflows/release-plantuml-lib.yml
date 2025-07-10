@@ -7,10 +7,10 @@ on:
   #    - automate-releases
 
   # Triggered by external repository_dispatch event (from plantuml repo)
-  #repository_dispatch:
-  #  types: [plantuml-release]
+  repository_dispatch:
+    types: [plantuml-release]
 
-  # Allow manual triggering via GitHub UI
+  # Temporarily allow manual triggering via GitHub UI
   workflow_dispatch:
 
 jobs:
