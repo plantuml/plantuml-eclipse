@@ -10,6 +10,12 @@
   <name>PlantUML integration project for Eclipse</name>
 
   <properties>
+      <!-- PlantUML version will be set by gradle (in all relevant files, e.g. also in MANIFEST.MF).
+         Run ./gradlew buildPlantUmlLibUpdateSite in git repo root folder in order to
+         update the version to the latest PlantUML release and to build a new Eclipse update site / p2 repo.
+         Building and publishing the update site is automatically done by the GitHub workflow
+         release-plantuml-lib.yml as soon as a PlantUML library release is created,
+         see https://github.com/plantuml/plantuml/blob/master/.github/workflows/trigger-plantuml-eclipse-release.yml -->
     <plantuml-lib-version>1.2025.4</plantuml-lib-version>
     <qualifier>-SNAPSHOT</qualifier>
 
