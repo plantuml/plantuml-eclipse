@@ -14,6 +14,16 @@ on:
   workflow_dispatch:
 
 jobs:
+  info:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Workflow Call Arguments
+        run: |
+          echo -e "Workflow was triggered with the following arguments\n\
+          PlantUML version: ${{ github.event.client_payload.release }}, \
+          snapshot: ${{ github.event.client_payload.snapshot }}, \
+          ref: ${{ github.event.client_payload.ref }}"
+    
   build:
     runs-on: ubuntu-latest
     outputs:
@@ -21,6 +31,7 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@v4
+        # TODO switch branch here after merge to main
         with:
           ref: automate-releases
 
