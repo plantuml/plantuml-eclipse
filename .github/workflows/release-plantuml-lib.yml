@@ -22,7 +22,8 @@ jobs:
           echo -e "Workflow was triggered with the following arguments\n\
           PlantUML version: ${{ github.event.client_payload.release }}, \
           snapshot: ${{ github.event.client_payload.snapshot }}, \
-          ref: ${{ github.event.client_payload.ref }}"
+          ref: ${{ github.event.client_payload.ref }}, \
+          commit: ${{ github.event.client_payload.commit }}"
     
   build:
     # igrnore PlantUML snapshot releases (pre-releases), read snapshot flag from repository_dispatch event's payload
