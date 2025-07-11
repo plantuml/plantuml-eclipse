@@ -82,6 +82,9 @@ val plantUmlLibPluginLibDir = "$plantUmlLibPluginDir/lib"
 val latestPlantUmlLibReleaseVersion =  readLatestPlantUmlLibReleaseVersion()
 val latestPlantUmlLibReleaseVersionSimple = latestPlantUmlLibReleaseVersion.substringAfter("v")
 
+val plantUml4ERootDir = "plantuml4eclipse"
+val plantUml4EAggregatorDir = "$plantUml4ERootDir/releng/net.sourceforge.plantuml.aggregator"
+
 val buildDirectoyPath = project.layout.buildDirectory.get().toString()
 
 val mvnCmd = if (Os.isFamily(Os.FAMILY_WINDOWS)) { "mvn.cmd" } else { "mvn"}
@@ -389,3 +392,19 @@ val gitPushPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitPushPla
 
     commandLine = listOf(gitCmd, "-C", "$buildDirectoyPath/gh-pages", "push")
 }
+
+// build PlantUML4Eclipse projects (plug-ins, features, and update site / p2 repo) with Maven/Tycho
+val buildPlantUml4EUpdateSiteTask = tasks.register<Exec>("buildPlantUml4EUpdateSite") {
+    group = "build"
+
+    // Work-around to force this task to run everytime
+    outputs.upToDateWhen { false }
+
+    outputs.dir(project.layout.projectDirectory.dir(plantUml4ERootDir))
+
+    workingDir = file(plantUml4EAggregatorDir).absoluteFile
+
+    commandLine = listOf(mvnCmd, "--batch-mode", "--errors", "clean", "package")
+}
+
+// TODO call mvn clean on PlantUML lib and PlantUML4Eclipse projects when gradle task clean is called, similar for build task
