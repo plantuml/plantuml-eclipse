@@ -72,12 +72,12 @@ fun createDirs(directory: File) {
 
 
 val plantUmlLibRootDir = "plantuml-lib"
-val pluginName = "net.sourceforge.plantuml.library"
-val featureName = "$pluginName.feature"
-val repositoryName = "$pluginName.repository"
-val plantUmlLibPluginDir = "$plantUmlLibRootDir/$pluginName"
-val plantUmlLibFeatureDir = "$plantUmlLibRootDir/$featureName"
-val plantUmlLibRepositoryDir = "$plantUmlLibRootDir/$repositoryName"
+val plantUmlLibPluginName = "net.sourceforge.plantuml.library"
+val plantUmlLibFeatureName = "$plantUmlLibPluginName.feature"
+val plantUmlLibRepositoryName = "$plantUmlLibPluginName.repository"
+val plantUmlLibPluginDir = "$plantUmlLibRootDir/$plantUmlLibPluginName"
+val plantUmlLibFeatureDir = "$plantUmlLibRootDir/$plantUmlLibFeatureName"
+val plantUmlLibRepositoryDir = "$plantUmlLibRootDir/$plantUmlLibRepositoryName"
 val plantUmlLibPluginLibDir = "$plantUmlLibPluginDir/lib"
 val latestPlantUmlLibReleaseVersion =  readLatestPlantUmlLibReleaseVersion()
 val latestPlantUmlLibReleaseVersionSimple = latestPlantUmlLibReleaseVersion.substringAfter("v")
@@ -146,7 +146,7 @@ val updateVersionsInManifestTask = tasks.register<Copy>("updateVersionsInManifes
             else line
         }
     }
-    into("build/eclipse-files/$pluginName/META-INF")
+    into("build/eclipse-files/$plantUmlLibPluginName/META-INF")
     filteringCharset = "UTF-8"
 }
 
@@ -181,7 +181,7 @@ val updateVersionsInClasspathTask = tasks.register<Copy>("updateVersionsInClassp
             else line
         }
     }
-    into("build/eclipse-files/$pluginName")
+    into("build/eclipse-files/$plantUmlLibPluginName")
     filteringCharset = "UTF-8"
 }
 
@@ -199,7 +199,7 @@ val updateVersionInFeatureTask = tasks.register<Copy>("updateVersionInFeature") 
             else line
         }
     }
-    into("build/eclipse-files/$featureName")
+    into("build/eclipse-files/$plantUmlLibFeatureName")
     filteringCharset = "UTF-8"
 }
 
