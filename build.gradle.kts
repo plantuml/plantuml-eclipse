@@ -95,6 +95,7 @@ val setEnvVarPlantUmlLibVersionTask = tasks.register("printPlantUmlLibVersion") 
     }
 }
 
+// download latest PlantUML EPL lib to build/lib
 val downloadPlantUmlLibsTask = tasks.register("downloadPlantUmlLibs") {
     group = "plantuml-lib"
 
@@ -110,12 +111,14 @@ val downloadPlantUmlLibsTask = tasks.register("downloadPlantUmlLibs") {
     }
 }
 
+// delete *.jar in plantuml-lib\net.sourceforge.plantuml.library\lib
 val deleteObsoleteLibsTask = tasks.register<Delete>("clearEclipsePluginLibDir") {
     group = "plantuml-lib"
 
     delete(fileTree(plantUmlLibPluginLibDir).include("*.jar"))
 }
 
+// copy build/lib/*.jar to plantuml-lib\net.sourceforge.plantuml.library\lib
 val copyLibsTask = tasks.register<Copy>("copyLibsToEclipsePlugin") {
     group = "plantuml-lib"
 
@@ -129,6 +132,8 @@ val copyLibsTask = tasks.register<Copy>("copyLibsToEclipsePlugin") {
     include("*.jar")
 }
 
+// set version in plantuml-lib\net.sourceforge.plantuml.library\META-INF\MANIFEST.MF to that of latest PlantUML lib
+// place modified file to build/eclipse-files/
 val updateVersionsInManifestTask = tasks.register<Copy>("updateVersionsInManifest") {
     group = "plantuml-lib"
 
@@ -150,6 +155,8 @@ val updateVersionsInManifestTask = tasks.register<Copy>("updateVersionsInManifes
     filteringCharset = "UTF-8"
 }
 
+// set version in plantuml-lib\net.sourceforge.plantuml.library\.classpath & ...\build.properties to that of latest PlantUML lib
+// place modified files to build/eclipse-files/
 val updateVersionsInClasspathTask = tasks.register<Copy>("updateVersionsInClasspath") {
     group = "plantuml-lib"
 
@@ -185,6 +192,8 @@ val updateVersionsInClasspathTask = tasks.register<Copy>("updateVersionsInClassp
     filteringCharset = "UTF-8"
 }
 
+// set version in plantuml-lib\net.sourceforge.plantuml.library.feature\feature.xml to that of latest PlantUML lib
+// place modified file to build/eclipse-files/
 val updateVersionInFeatureTask = tasks.register<Copy>("updateVersionInFeature") {
     group = "plantuml-lib"
 
@@ -203,6 +212,8 @@ val updateVersionInFeatureTask = tasks.register<Copy>("updateVersionInFeature") 
     filteringCharset = "UTF-8"
 }
 
+// set version in plantuml-lib\pom.xml to that of latest PlantUML lib
+// place modified file to build/eclipse-files/
 val updateVersionInParentPomTask = tasks.register<Copy>("updateVersionInPom") {
     group = "plantuml-lib"
 
@@ -224,6 +235,7 @@ val updateVersionInParentPomTask = tasks.register<Copy>("updateVersionInPom") {
     filteringCharset = "UTF-8"
 }
 
+// copy filtered/modified files from build/eclipse-files/ to plantuml-lib/
 val updateVersionsInEclipseProjectsTask = tasks.register<Copy>("updateVersionsInEclipseProjects") {
     group = "plantuml-lib"
 
@@ -239,6 +251,7 @@ val updateVersionsInEclipseProjectsTask = tasks.register<Copy>("updateVersionsIn
     filteringCharset = "UTF-8"
 }
 
+// build PlantUML lib projects (plug-in, feature, and update site / p2 repo) with Maven/Tycho
 val buildPlantUmlLibUpdateSiteTask = tasks.register<Exec>("buildPlantUmlLibUpdateSite") {
     group = "build"
 
@@ -255,6 +268,7 @@ val buildPlantUmlLibUpdateSiteTask = tasks.register<Exec>("buildPlantUmlLibUpdat
     commandLine = listOf(mvnCmd, "--batch-mode", "--errors", "--quiet", "clean", "package")
 }
 
+// git clone gh-pages branch to build/gh-pages
 val cloneGhPagesTask = tasks.register<Exec>("cloneGitHubPages") {
     group = "publish"
 
@@ -263,6 +277,7 @@ val cloneGhPagesTask = tasks.register<Exec>("cloneGitHubPages") {
     commandLine = listOf(gitCmd, "clone", "-b", "gh-pages", "https://github.com/plantuml/plantuml-eclipse.git", "build/gh-pages")
 }
 
+// check if build/gh-pages/plantuml.lib/<latest-PlantUML-lib-version> already exists
 val checkIfPlantUmlLibIsAlreadyPublishedTask = tasks.register("checkIfPlantUmlLibIsAlreadyPublished") {
     group = "publish"
 
@@ -277,6 +292,9 @@ val checkIfPlantUmlLibIsAlreadyPublishedTask = tasks.register("checkIfPlantUmlLi
     }
 }
 
+// update composite-repository/repository/composite*.xml, add new PlantUML lib version / update site
+// copy composite-repository/repository/*.* and README.md to build/gh-pages
+// TODO also update composite*.xml files in composite-repository/repository?
 val updateGhPagesFilesTask = tasks.register<Copy>("updateGhPagesFiles") {
     group = "publish"
 
@@ -314,6 +332,8 @@ val updateGhPagesFilesTask = tasks.register<Copy>("updateGhPagesFiles") {
     filteringCharset = "UTF-8"
 }
 
+// copy built PlantUML lib update site to composite update site: from plantuml-lib\net.sourceforge.plantuml.library\target\repostiory
+// from plantuml-lib\net.sourceforge.plantuml.library.repository\target\repository to build/gh-pages/plantuml.lib/<latest-PlantUML-lib-version>
 val addLatestPlantUmlUpdateSiteToGhPagesTask = tasks.register<Copy>("addLatestPlantUmlUpdateSiteToGhPages") {
     group = "publish"
 
@@ -327,6 +347,7 @@ val addLatestPlantUmlUpdateSiteToGhPagesTask = tasks.register<Copy>("addLatestPl
     filteringCharset = "UTF-8"
 }
 
+// Add new PlantUML lib update site to GitHub pages in build/gh-pages (call other tasks to do so)
 val updateGhPagesContentsTask = tasks.register("updateGhPagesContents") {
     group = "publish"
 
@@ -342,6 +363,7 @@ val updateGhPagesContentsTask = tasks.register("updateGhPagesContents") {
     }
 }
 
+// git add everything in build/gh-pages/
 val gitAddPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitAddPlantUmlLibUpdateSiteToGhPages") {
     group = "publish"
 
@@ -350,6 +372,7 @@ val gitAddPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitAddPlant
     commandLine = listOf(gitCmd, "-C", "$buildDirectoyPath/gh-pages", "add", "--all")
 }
 
+// git commit changed files for new PlantUML lib update site
 val gitCommitPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitCommitPlantUmlLibUpdateSiteToGhPages") {
     group = "publish"
 
@@ -358,6 +381,7 @@ val gitCommitPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitCommi
     commandLine = listOf(gitCmd, "-C", "$buildDirectoyPath/gh-pages", "commit", "-m", "Add new PlantUML lib update site version $latestPlantUmlLibReleaseVersionSimple")
 }
 
+// git push commit with new PlantUML lib update site
 val gitPushPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitPushPlantUmlLibUpdateSiteToGhPages") {
     group = "publish"
 
