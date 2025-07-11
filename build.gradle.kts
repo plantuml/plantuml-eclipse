@@ -1,9 +1,11 @@
 import groovy.json.JsonSlurper
 import org.apache.tools.ant.taskdefs.condition.Os
+import org.w3c.dom.Element
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URI
+import javax.xml.parsers.DocumentBuilderFactory
 import kotlin.io.path.Path
 import kotlin.io.path.name
 
@@ -15,6 +17,28 @@ group = "net.sourceforge.plantuml"
 version = "1.0.0-SNAPSHOT"
 description = "PlantUML composite update site"
 
+
+fun readPomProperty(propertyName: String, pomFile: File): String? {
+    if (propertyName.isBlank()) {
+        throw IllegalArgumentException()
+    }
+
+    val docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+    val pomDocument = docBuilder.parse(pomFile)
+    pomDocument.documentElement.normalize()
+
+    val propertiesList = pomDocument.getElementsByTagName("properties")
+    if (propertiesList.length != 1) {
+        return null
+    }
+
+    val propertiesElement = propertiesList.item(0) as Element
+    val nodeList = propertiesElement.getElementsByTagName(propertyName)
+    if (nodeList.length == 1) {
+        return nodeList.item(0).textContent.trim()
+    }
+    return null
+}
 
 fun readLatestPlantUmlLibReleaseVersion(): String {
     var latestReleaseVersion: String? = null
@@ -405,6 +429,15 @@ val buildPlantUml4EUpdateSiteTask = tasks.register<Exec>("buildPlantUml4EUpdateS
     workingDir = file(plantUml4EAggregatorDir).absoluteFile
 
     commandLine = listOf(mvnCmd, "--batch-mode", "--errors", "clean", "package")
+
+    val parentPom = file("$plantUml4ERootDir/releng/net.sourceforge.plantuml.parent/pom.xml")
+    val plantUml4EVersion = readPomProperty("releaseVersion", parentPom)
+
+    doFirst {
+        println("#################################################################################")
+        println("Building PlantUML4Eclipse version: $plantUml4EVersion")
+        println("#################################################################################")
+    }
 }
 
 // TODO call mvn clean on PlantUML lib and PlantUML4Eclipse projects when gradle task clean is called, similar for build task
