@@ -329,8 +329,7 @@ val checkIfPlantUmlLibIsAlreadyPublishedTask = tasks.register("checkIfPlantUmlLi
 
 // update composite-repository/repository/composite*.xml, add new PlantUML lib version / update site
 // copy composite-repository/repository/*.* and README.md to build/gh-pages
-// TODO also update composite*.xml files in composite-repository/repository?
-val updateGhPagesFilesTask = tasks.register<Copy>("updateGhPagesFiles") {
+val updateGhPagesFilesAddLatestPlantUmlLibTask = tasks.register<Copy>("updateGhPagesFilesAddLatestPlantUmlLib") {
     group = "publish"
 
     dependsOn(cloneGhPagesTask)
@@ -383,17 +382,17 @@ val addLatestPlantUmlUpdateSiteToGhPagesTask = tasks.register<Copy>("addLatestPl
 }
 
 // Add new PlantUML lib update site to GitHub pages in build/gh-pages (call other tasks to do so)
-val updateGhPagesContentsTask = tasks.register("updateGhPagesContents") {
+val updateGhPagesContentsAddLatestPlantUmlLibTask = tasks.register("updateGhPagesContentsAddLatestPlantUmlLib") {
     group = "publish"
 
-    dependsOn(updateGhPagesFilesTask)
+    dependsOn(updateGhPagesFilesAddLatestPlantUmlLibTask)
     dependsOn(addLatestPlantUmlUpdateSiteToGhPagesTask)
 
     doLast {
         val ghPagesUpdateSiteTargetDir = File("build/gh-pages/plantuml.lib", latestPlantUmlLibReleaseVersionSimple)
         if (!ghPagesUpdateSiteTargetDir.exists()) {
             throw GradleException("The new PlantUML library version $latestPlantUmlLibReleaseVersionSimple is missing in the build directory." +
-                    " Expected the following directory to exist: ${ghPagesUpdateSiteTargetDir}.")
+                    " Expected the following directory to exist: $ghPagesUpdateSiteTargetDir.")
         }
     }
 }
@@ -402,7 +401,7 @@ val updateGhPagesContentsTask = tasks.register("updateGhPagesContents") {
 val gitAddPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitAddPlantUmlLibUpdateSiteToGhPages") {
     group = "publish"
 
-    dependsOn(updateGhPagesContentsTask)
+    dependsOn(updateGhPagesContentsAddLatestPlantUmlLibTask)
 
     commandLine = listOf(gitCmd, "-C", "$buildDirectoyPath/gh-pages", "add", "--all")
 }
