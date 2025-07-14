@@ -366,6 +366,46 @@ val updateGhPagesFilesAddLatestPlantUmlLibTask = tasks.register<Copy>("updateGhP
     filteringCharset = "UTF-8"
 }
 
+// TODO Somehow avoid redundant code, compare updateGhPagesFilesAddLatestPlantUmlLibTask and updateGhPagesFilesAddPlantUml4ETask
+// update composite-repository/repository/composite*.xml, add current PlantUML4Eclipse version / update site
+// copy composite-repository/repository/*.* and README.md to build/gh-pages
+val updateGhPagesFilesAddPlantUml4ETask = tasks.register<Copy>("updateGhPagesFilesAddPlantUml4Eclipse") {
+    group = "publish"
+
+    dependsOn(cloneGhPagesTask)
+
+    outputs.dir(project.layout.buildDirectory.dir("gh-pages"))
+
+    val prefix = "<children size='"
+    val suffix = "'>"
+    val childrenEndTag = "</children>"
+
+    from("composite-repository/repository") {
+        include("composite*.xml")
+        filter { line: String ->
+            if (line.trim().startsWith(prefix) && line.endsWith(suffix)) {
+                val sizeText = line.substring(line.indexOf(prefix) + prefix.length, line.indexOf(suffix))
+                val size = Integer.valueOf(sizeText) + 1
+
+                line.substring(0, line.indexOf(prefix)) + prefix + size + suffix
+            } else if (line.contains(childrenEndTag)) {
+                val indentation = line.substring(0, line.indexOf("<")) + "\t"
+
+                indentation + "<child location='plantuml.eclipse/$plantUml4EVersion' />" + System.lineSeparator() + line
+            }
+            else line
+        }
+    }
+    from("composite-repository/repository") {
+        include("p2.index")
+    }
+    from(".") {
+        include("README.md")
+    }
+    into("build/gh-pages")
+    filteringCharset = "UTF-8"
+}
+
 // copy built PlantUML lib update site to composite update site:
 // from plantuml-lib\net.sourceforge.plantuml.library.repository\target\repository to build/gh-pages/plantuml.lib/<latest-PlantUML-lib-version>
 val addLatestPlantUmlUpdateSiteToGhPagesTask = tasks.register<Copy>("addLatestPlantUmlUpdateSiteToGhPages") {
@@ -476,5 +516,43 @@ val addPlantUml4EUpdateSiteToGhPagesTask = tasks.register<Copy>("addPlantUml4Ecl
     filteringCharset = "UTF-8"
 }
 
+// TODO Somehow avoid redundant code, compare updateGhPagesContentsAddLatestPlantUmlLibTask and updateGhPagesContentsAddPlantUml4ETask
+// Add new PlantUML4Eclipse update site to GitHub pages in build/gh-pages (call other tasks to do so)
+val updateGhPagesContentsAddPlantUml4ETask = tasks.register("updateGhPagesContentsAddPlantUml4Eclipse") {
+    group = "publish"
+
+    dependsOn(updateGhPagesFilesAddPlantUml4ETask)
+    dependsOn(addPlantUml4EUpdateSiteToGhPagesTask)
+
+    doLast {
+        val ghPagesUpdateSiteTargetDir = File("build/gh-pages/plantuml.eclipse", plantUml4EVersion)
+        if (!ghPagesUpdateSiteTargetDir.exists()) {
+            throw GradleException("The new PlantUML4Eclipse version $plantUml4EVersion is missing in the build directory." +
+                    " Expected the following directory to exist: $ghPagesUpdateSiteTargetDir.")
+        }
+    }
+}
+
+// TODO Somehow avoid redundant code, compare gitAddPlantUmlLibUpdateSiteToGhPagesTask and gitAddPlantUml4EUpdateSiteToGhPagesTask
+// git add everything in build/gh-pages/
+val gitAddPlantUml4EUpdateSiteToGhPagesTask = tasks.register<Exec>("gitAddPlantUml4EclipseUpdateSiteToGhPages") {
+    group = "publish"
+
+    dependsOn(updateGhPagesContentsAddPlantUml4ETask)
+
+    commandLine = listOf(gitCmd, "-C", "$buildDirectoyPath/gh-pages", "add", "--all")
+}
+
+// TODO Somehow avoid redundant code, compare gitCommitPlantUmlLibUpdateSiteToGhPagesTask and gitCommitPlantUml4EUpdateSiteToGhPagesTask
+// git commit changed files for new PlantUML4Eclipse update site
+val gitCommitPlantUml4EUpdateSiteToGhPagesTask = tasks.register<Exec>("gitCommitPlantUml4EclipseUpdateSiteToGhPages") {
+    group = "publish"
+
+    dependsOn(gitAddPlantUml4EUpdateSiteToGhPagesTask)
+
+    commandLine = listOf(gitCmd, "-C", "$buildDirectoyPath/gh-pages", "commit", "-m", "New PlantUML4Eclipse release: $plantUml4EVersion")
+}
+
+// We did not add a git push gradle task for PlantUml4Eclipse, since we want the changes to be reviewed before pushing them
 
 // TODO call mvn clean on PlantUML lib and PlantUML4Eclipse projects when gradle task clean is called, similar for build task
