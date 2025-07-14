@@ -74,6 +74,12 @@ fun readVersionFromRelease(releaseJson: String): String {
     return json["tag_name"].toString()
 }
 
+fun readCurrentPlantUML4EVersionFromPom(): String {
+    val parentPom = file("$plantUml4ERootDir/releng/net.sourceforge.plantuml.parent/pom.xml")
+    val plantUml4EVersion = readPomProperty("releaseVersion", parentPom)
+    return plantUml4EVersion ?: "unknown"
+}
+
 fun downloadFile(sourceFileUrl : String, destinationDirectoryPath : String) {
     val uri = URI(sourceFileUrl)
     val fileName = Path(uri.path).name
@@ -108,6 +114,8 @@ val latestPlantUmlLibReleaseVersionSimple = latestPlantUmlLibReleaseVersion.subs
 
 val plantUml4ERootDir = "plantuml4eclipse"
 val plantUml4EAggregatorDir = "$plantUml4ERootDir/releng/net.sourceforge.plantuml.aggregator"
+val plantUml4ERepositoryDir = "$plantUml4ERootDir/releng/net.sourceforge.plantuml.repository"
+val plantUml4EVersion = readCurrentPlantUML4EVersionFromPom()
 
 val buildDirectoyPath = project.layout.buildDirectory.get().toString()
 
@@ -359,7 +367,7 @@ val updateGhPagesFilesTask = tasks.register<Copy>("updateGhPagesFiles") {
     filteringCharset = "UTF-8"
 }
 
-// copy built PlantUML lib update site to composite update site: from plantuml-lib\net.sourceforge.plantuml.library\target\repostiory
+// copy built PlantUML lib update site to composite update site:
 // from plantuml-lib\net.sourceforge.plantuml.library.repository\target\repository to build/gh-pages/plantuml.lib/<latest-PlantUML-lib-version>
 val addLatestPlantUmlUpdateSiteToGhPagesTask = tasks.register<Copy>("addLatestPlantUmlUpdateSiteToGhPages") {
     group = "publish"
@@ -430,14 +438,44 @@ val buildPlantUml4EUpdateSiteTask = tasks.register<Exec>("buildPlantUml4EUpdateS
 
     commandLine = listOf(mvnCmd, "--batch-mode", "--errors", "clean", "package")
 
-    val parentPom = file("$plantUml4ERootDir/releng/net.sourceforge.plantuml.parent/pom.xml")
-    val plantUml4EVersion = readPomProperty("releaseVersion", parentPom)
-
     doFirst {
         println("#################################################################################")
         println("Building PlantUML4Eclipse version: $plantUml4EVersion")
         println("#################################################################################")
     }
 }
+
+// check if build/gh-pages/plantuml.eclipse/<PlantUML4Eclipse-version> already exists
+val checkIfPlantUml4EUpdateSiteAlreadyExistsTask = tasks.register("checkIfPlantUml4EclipseUpdateSiteAlreadyExists") {
+    group = "publish"
+
+    dependsOn(cloneGhPagesTask)
+
+    doLast {
+        val ghPagesUpdateSiteTargetDir = File("build/gh-pages/plantuml.eclipse", plantUml4EVersion)
+        if (ghPagesUpdateSiteTargetDir.exists()) {
+            throw GradleException("Target update site directory already exists: $ghPagesUpdateSiteTargetDir")
+        }
+    }
+}
+
+// copy built PlantUML4Eclipse update site to composite update site:
+// from plantuml4eclipse\releng\net.sourceforge.plantuml.repository\target\repostiory to build/gh-pages/plantuml.eclipse/<PlantUML4Eclipse-version>
+val addPlantUml4EUpdateSiteToGhPagesTask = tasks.register<Copy>("addPlantUml4EclipseUpdateSiteToGhPages") {
+    group = "publish"
+
+    dependsOn(buildPlantUml4EUpdateSiteTask)
+    dependsOn(cloneGhPagesTask)
+    dependsOn(checkIfPlantUml4EUpdateSiteAlreadyExistsTask)
+
+    outputs.dir(project.layout.buildDirectory.dir("gh-pages"))
+
+    val targetDirPath = "build/gh-pages/plantuml.eclipse/$plantUml4EVersion"
+
+    from("$plantUml4ERepositoryDir/target/repository")
+    into(targetDirPath)
+    filteringCharset = "UTF-8"
+}
+
 
 // TODO call mvn clean on PlantUML lib and PlantUML4Eclipse projects when gradle task clean is called, similar for build task
