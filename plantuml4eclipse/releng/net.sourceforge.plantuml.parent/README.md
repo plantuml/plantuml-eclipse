@@ -1,4 +1,4 @@
-# releng/net.sourceforge.plantuml.composite
+# releng/net.sourceforge.plantuml.parent
 
 Module for building and releasing new version.
 
