@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Plantuml Plug-in
+Bundle-Name: PlantUML SVG Plug-in
 Bundle-SymbolicName: net.sourceforge.plantuml.svg; singleton:=true
 Automatic-Module-Name: net.sourceforge.plantuml.svg
 Bundle-Version: 1.1.33.qualifier
