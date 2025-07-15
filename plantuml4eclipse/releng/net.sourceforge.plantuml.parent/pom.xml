@@ -19,7 +19,7 @@
 	</properties>
 	
 	<modules>
-		<module>../net.sourceforge.plantuml.composite</module>
+		<module>../net.sourceforge.plantuml.aggregator</module>
 	</modules>
 
 	<profiles>
