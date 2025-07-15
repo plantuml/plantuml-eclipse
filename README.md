@@ -38,16 +38,23 @@ Of course, you can also ask questions about how to use PlantUML, tell us about h
 We use github pages at [https://plantuml.github.io/plantuml-eclipse/](https://plantuml.github.io/plantuml-eclipse/) as the update site URL.
 Just install the plug-ins in Eclipse via the Help > Install New Software... dialog using that URL.
 
+You'll need at least the following
+- net.sourceforge.plantuml.library (the PlantUML library for rendering diagrams, bundled as an Eclipse plug-in, includes ELK layouting library)
+- net.sourceforge.plantuml.eclipse (the PlantUML support for Eclipse)
+
 # For developers / contributors
 
 You'll find some developer documentation here:
-- net.sourceforge.plantuml.composite/README.md (how to build, run, and release)
-- net.sourceforge.plantuml.lib/README.md (how to update PlantUML library)
+- plantuml4eclipse/releng/net.sourceforge.plantuml.parent/README.md (how to build, run, and release)
+- plantuml4eclipse/releng/net.sourceforge.plantuml.parent/Customization.md (how to adapt diagrams)
+
+The PlantUML4Eclipse plug-ins depend on the PlantUML library bundle, i.e. net.sourceforge.plantuml.library.
+This bundle is automatically built and published on an Eclipse update site
+(this repo's GitHub pages publish a composite update site with PlantUML library and PlantUML4Eclipse plug-ins)
+as soon as there is a new PlantUML release (see GitHub workflows).
+The net.sourceforge.plantuml.library bundle uses the EPL licensed version of the PlantUML library.
 
 # Main plugins (net.sourceforge.plantuml.)
-- lib - plantuml.jar packaged as a bundle
-- lib.jlatexmath - fragment to the lib bundle that adds the jlatexmath lib
-- lib.elk - fragment to the lib bundle that adds the ELK layout engine lib
 - eclipse - core Eclipse integration, including the extension point for providing diagrams
 - eclipse.imagecontrol - the control for viewing the generated images
 - svg - the browser-based svg view
@@ -60,8 +67,12 @@ You'll find some developer documentation here:
 
 # Releases
 
-Notable features in recent releases, details are found in [releases](https://github.com/hallvard/plantuml/releases).
-Note that the version numbers of the plantuml.lib plugin are a bit special, since they use the version of the included plantuml.jar
+Notable features in recent releases are listed below.
+You'll find all versions in the [releases](https://github.com/plantuml/plantuml-eclipse/releases) section.
+(Previously, [releases were published by Hallvard Trætteberg](https://github.com/hallvard/plantuml/releases)).
+
+Note that the net.sourceforge.plantuml.library plugin's versions are similar to those of the included PlantUML library release versions.
+This plugin's life cycle is strictly coupled with that of the PlantUML library releases.
 
 
 

@@ -1,64 +1,76 @@
-# releng/net.sourceforge.plantuml.parent
+# plantuml4eclipse/releng/net.sourceforge.plantuml.parent
 
-Module for building and releasing new version.
+Parent Maven module for building and releasing new PlantUML Eclipse plug-in versions.
 
-## Build procedure
+## Build procedure (PlantUML library only)
 
-- Open the .target file in `releng/net.sourceforge.plantuml.target`, e.g. `eclipse-2023-12.target`. and set it as active target platform.
-- Run pre-defined launch configuration *Build all with Maven* from `releng/net.sourceforge.plantuml.composite`.
+There two options for building the PlantUML library projects for Eclipse:
+- In the directory `plantuml-lib` run `mvn clean package`
+- In the git repo root directory run `./gradlew buildPlantUmlLibUpdateSite` (but this will call the Maven/tycho build anayway) 
+
+## Build procedure (PlantUML4Eclipse only)
+
+- Open the .target file in `plantuml4eclipse/releng/net.sourceforge.plantuml.target`, e.g. `eclipse-2023-12.target`. and set it as active target platform.
+- Run pre-defined launch configuration *Build PlantUML4Eclipse with Maven* from `plantuml4eclipse/releng/net.sourceforge.plantuml.parent`.
 
 ## Run PlantUML in Eclipse
 
-- Run the pre-defined launch configuration *PlantUML4e-2023-12* (or similar) from `releng/net.sourceforge.plantuml.aggregator`.
+- Run the pre-defined launch configuration *PlantUML4e-2023-12_mac* or *PlantUML4e-2023-12_windows* (or similar version) from `plantuml4eclipse/releng/net.sourceforge.plantuml.parent`.
 
 ## Release procedure
 
-### Pre-release
+### Release new PlantUML library version
+
+This is done completely automatically.
+As soon as a new PlantUML library version is released, the GitHub workflow `.github/workflows/release-plantuml-lib.yml` is triggered.
+That worklfow builds a new version of the net.sourceforge.plantuml.library plug-in, the corresponding Eclipse feature, and the corresponding Eclipse update site (p2 repository).
+After building the Eclipse projects, the workflow adds the new version to the composite update site (see `composite-repository`)
+and commits the changes to this repository's GitHub pages (git branch *gh-pages*).
+This way, the changes to the update site are published.
+
+
+### PlantUML4Eclipse pre-release
 
 - update all pom.xml, MANIFEST.MF, feature.xml, etc. to new version, e.g. 1.1.31-SNAPSHOT or 1.1.31.qualifier,
   also update dependencies and other version-dependant configurations,
   do this also for the `pom.xml` files in folders `bundles`, `features`, `releng`, and `tests`,
-  do this also for the plantuml.lib version (see README.md in plantuml.lib bundle),
-  also update `releaseVersion` property in `releng/net.sourceforge.plantuml.parent/pom.xml`
-- update `compositeArtifacts.xml` and `compositeContent.xml` files so they list the new version(s)
+  also update `releaseVersion` property in `plantuml4eclipse/releng/net.sourceforge.plantuml.parent/pom.xml`
+- update `composite-repository/compositeArtifacts.xml` and `composite-repository/compositeContent.xml` files to the latest version from *gh-pages* branch (published version)
+  in order to add the PlantUML library version(s) that were automatically published in the meanwhile.
 - re-calculate / update all features' dependencies (seems to be obsolete now, see https://github.com/eclipse-pde/eclipse.pde/issues/26)
 - build and test and build and test...
-- run `mvn clean install` on project `net.sourceforge.plantuml.composite` or just run the launch configuration *Build all with Maven*
-  (that builds and runs all non-UI unit tests)
+- run `mvn clean install` on project `plantuml4eclipse/releng/net.sourceforge.plantuml.parent` or just run the launch configuration *Build PlantUML4Eclipse with Maven*
+  (that builds and runs all non-UI tests)
 - run the plug-ins tests, too (see `net.sourceforge.plantuml.*.tests` and `no.hal.osgi.emf.tests` projects)
 - git add, commit and push
-- update the README.md in root folder, e.g. add release notes
+- update the README.md in git repo root folder, e.g. add release notes
 - switch to new branch named <version>-release
 
 ## Release
 
 ### Build artifacts and repository
 
-- build with `mvn clean install` on project `net.sourceforge.plantuml.composite` 
-  or just run the launch configuration *Build all with Maven*
+- build with `mvn clean install` on project `plantuml4eclipse/releng/net.sourceforge.plantuml.parent` 
+  or just run the launch configuration *Build PlantUML4Eclipse with Maven*
   (that builds and runs all non-UI unit tests)
 - test the release candidate
-- check the PlantUML lib update site / repository in target/gh-pages/plantuml.lib/<version>
-  and the PlantUML Eclipse update site / repository in target/gh-pages/plantuml.eclipse/<version>,
+- check the PlantUML Eclipse update site in `plantuml4eclipse\releng\net.sourceforge.plantuml.repository\target\repository`,
   ensure that you have only the latest plug-in / feature versions there and only one version per plug-in / feature
 - add, commit and push
 
 ### Update GitHub pages
 
-That is done by the Maven build automatically, when you run `mvn clean install`
-on project `net.sourceforge.plantuml.composite` or the launch configuration *Build all with Maven*.
-Just check if the following steps were successfully done by Maven.
-If everything is as expected, push the changes to GitHub pages.
+That is done by a Gradle build script, when you run `./gradlew gitCommitPlantUml4EclipseUpdateSiteToGhPages` in the git repo root directory.
+Just check all the changes in the new commit and check if the following steps were successfully done by the build script.
 
-- open file explorer on clone of gh-pages branch
-- copy contents in the target/repository folder into the proper places (should have been done by the build) 
-    - cp -r releng/net.sourceforge.plantuml.composite/target/repository/{compositeArtifacts.xml,compositeContent.xml} gh-pages/
-    - cp -r releng/net.sourceforge.plantuml.composite/target/repository/plantuml.lib/* gh-pages/plantuml.lib/
-    - cp -r releng/net.sourceforge.plantuml.composite/target/repository/plantuml.eclipse/* gh-pages/plantuml.eclipse/
-- copy the README.md in the proper place
-    - cp README.md gh-pages/
-- add, commit (should have been done by the build)
-- push to gh-pages
+- open file explorer on clone of *gh-pages* branch in `build\gh-pages` directory
+- check if the files `compositeArtifacts.xml` and `compositeContent.xml` include the new update sites / plug-in versions
+  and correct number of artifacts
+- check the contents of `build\gh-pages\plantuml.eclipse/` and `build\gh-pages\plantuml.lib/`
+- check the contents of `build\gh-pages\README.md` is consistent to `README.md` from git repo root directory
+- check the latest commit and its message on *gh-pages* branch
+
+If everything is as expected, push the changes to GitHub pages (git branch *gh-pages*).
 
 ### Release on GitHub
 
@@ -72,7 +84,7 @@ If everything is as expected, push the changes to GitHub pages.
 
 ### Post-release
 
-- search and replace <version> with <version+1>-SNAPSHOT in pom.xml, and <version> with <version+1>.qualifier in MANIFEST.MF, feature.xml and category.xml
+- search and replace <version> with <version+1>-SNAPSHOT in `pom.xml`, and <version> with <version+1>.qualifier in `MANIFEST.MF`, `feature.xml` and `category.xml`
 - add the new version to `compositeArtifacts.xml` and `compositeContent.xml` and update the number of files
 - build, commit and push
 
