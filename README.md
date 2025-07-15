@@ -75,6 +75,20 @@ Note that the net.sourceforge.plantuml.library plugin's versions are similar to 
 This plugin's life cycle is strictly coupled with that of the PlantUML library releases.
 
 
+## [1.1.33](https://github.com/plantuml/plantuml-eclipse/releases/tag/1.1.33)
+- Move git repository from https://github.com/hallvard/plantuml to https://github.com/plantuml/plantuml-eclipse
+  (see discussions [1](https://github.com/hallvard/plantuml/discussions/166) and [2](https://github.com/plantuml/plantuml-eclipse/discussions/2))
+- Separate releases for PlantUML library plug-in (PlantUML lib) and PlantUML support for Eclipse plug-ins (PlantUML4Eclipse).
+  This way, we make the PlantUML library (EPL-licensed) easily re-usable in any Eclipse plug-in (just add a dependency and install it via update site).
+  ([issue #145](https://github.com/hallvard/plantuml/issues/145))
+- Automate PlantUML library plug-in releases (create new PlantUML library plug-in for Eclipse as soon as a PlantUML library is released)
+  ([issue #145](https://github.com/hallvard/plantuml/issues/145))
+- Semi-automate PlantUML for Eclipse plug-in releases
+  ([issue #145](https://github.com/hallvard/plantuml/issues/145)) 
+- Update dependency to PlantUML library version to 1.2025.4 (see [changes](https://plantuml.com/changes))
+  and remove some obsolete plug-ins since we no longer need ELK library (it is now included in the PlantUML library).
+- Improve saving a diagram as an SVG file, suggest the same folder for the new *.svg file as the original *.puml file.
+
 
 ## [1.1.32](https://github.com/hallvard/plantuml/releases/tag/1.1.32)
 - Updated PlantUML library version to 1.2024.5, see [changes](https://plantuml.com/changes).
