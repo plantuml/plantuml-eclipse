@@ -22,8 +22,8 @@ There two options for building the PlantUML library projects for Eclipse:
 ### Release new PlantUML library version
 
 This is done completely automatically.
-As soon as a new PlantUML library version is released, the GitHub workflow `.github/workflows/release-plantuml-lib.yml` is triggered.
-That worklfow builds a new version of the net.sourceforge.plantuml.library plug-in, the corresponding Eclipse feature, and the corresponding Eclipse update site (p2 repository).
+As soon as a new PlantUML library version is released, the GitHub workflow `.github/workflows/release-plantuml-lib.yml` is triggered on the git branch *main*.
+That worklfow builds a new version of the `net.sourceforge.plantuml.library` plug-in, the corresponding Eclipse feature, and the corresponding Eclipse update site (p2 repository).
 After building the Eclipse projects, the workflow adds the new version to the composite update site (see `composite-repository`)
 and commits the changes to this repository's GitHub pages (git branch *gh-pages*).
 This way, the changes to the update site are published.
@@ -31,7 +31,8 @@ This way, the changes to the update site are published.
 
 ### PlantUML4Eclipse pre-release
 
-- update all pom.xml, MANIFEST.MF, feature.xml, etc. to new version, e.g. 1.1.31-SNAPSHOT or 1.1.31.qualifier,
+- check out git branch `develop`
+- update all `pom.xml`, `MANIFEST.MF`, `feature.xml`, etc. to new version, e.g. `1.1.33-SNAPSHOT` or `1.1.33.qualifier`,
   also update dependencies and other version-dependant configurations,
   do this also for the `pom.xml` files in folders `bundles`, `features`, `releng`, and `tests`,
   also update `releaseVersion` property in `plantuml4eclipse/releng/net.sourceforge.plantuml.parent/pom.xml`
@@ -43,8 +44,8 @@ This way, the changes to the update site are published.
   (that builds and runs all non-UI tests)
 - run the plug-ins tests, too (see `net.sourceforge.plantuml.*.tests` and `no.hal.osgi.emf.tests` projects)
 - git add, commit and push
-- update the README.md in git repo root folder, e.g. add release notes
-- switch to new branch named <version>-release
+- update the `README.md` in git repo root folder, e.g. add release notes
+- switch to new branch named `release/<version>`
 
 ## Release
 
