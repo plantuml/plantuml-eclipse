@@ -1,4 +1,10 @@
-# PlantUML - generate UML diagrams from files and view them in Eclipse
+<!-- see https://shields.io/badges -->
+
+![GitHub License](https://img.shields.io/github/license/plantuml/plantuml-eclipse)
+[![PlantUML library release for Eclipse](https://github.com/plantuml/plantuml-eclipse/actions/workflows/release-plantuml-lib.yml/badge.svg?branch=main)](https://github.com/plantuml/plantuml-eclipse/actions/workflows/release-plantuml-lib.yml)
+[![PlantUML4Eclipse CI](https://github.com/plantuml/plantuml-eclipse/actions/workflows/ci.yml/badge.svg)](https://github.com/plantuml/plantuml-eclipse/actions/workflows/ci.yml)
+
+# PlantUML - Generate UML diagrams from files and view them in Eclipse
 
 The plantuml library implements a DSL and renderer for many UML diagrams (class, sequence, objects, states, activities, ...).
 See http://plantuml.com for more info about the DSL and renderer.
