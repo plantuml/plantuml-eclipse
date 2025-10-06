@@ -9,6 +9,10 @@
 			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.33.0.v20231121-0955"/>
 			<unit id="org.eclipse.emf.sdk.feature.group" version="2.36.0.v20231107-0612"/>
 		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<repository location="https://plantuml.github.io/plantuml-eclipse/"/>
+			<unit id="net.sourceforge.plantuml.library.feature.feature.group" version="1.2025.8.202510041814"/>
+		</location>
 	</locations>
 	<targetJRE path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17"/>
 </target>
