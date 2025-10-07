@@ -277,10 +277,26 @@ val checkIfPlantUmlLibIsAlreadyPublishedTask = tasks.register("checkIfPlantUmlLi
     }
 }
 
-val updateGhPagesFilesTask = tasks.register<Copy>("updateGhPagesFiles") {
+// copy composite*.xml published on GH pages to temporary build folder in order to modify them in a next step by filtering
+val copyGhPagesFilesForModificationForPlantUmlLibReleaseTask = tasks.register<Copy>("copyGhPagesFilesForModificationForPlantUmlLibRelease") {
     group = "publish"
 
     dependsOn(cloneGhPagesTask)
+
+    outputs.dir(project.layout.buildDirectory.dir("composite-repository"))
+
+    from("build/gh-pages") {
+        include("composite*.xml")
+    }
+    into("build/composite-repository")
+    filteringCharset = "UTF-8"
+}
+
+// update composite*.xml: add new PlantUML lib version / update site, copy the files to build/gh-pages
+val updateGhPagesFilesTask = tasks.register<Copy>("updateGhPagesFiles") {
+    group = "publish"
+
+    dependsOn(copyGhPagesFilesForModificationForPlantUmlLibReleaseTask)
 
     outputs.dir(project.layout.buildDirectory.dir("gh-pages"))
 
@@ -288,7 +304,7 @@ val updateGhPagesFilesTask = tasks.register<Copy>("updateGhPagesFiles") {
     val suffix = "'>"
     val childrenEndTag = "</children>"
 
-    from("composite-repository/repository") {
+    from("build/composite-repository") {
         include("composite*.xml")
         filter { line: String ->
             if (line.trim().startsWith(prefix) && line.endsWith(suffix)) {
@@ -303,12 +319,6 @@ val updateGhPagesFilesTask = tasks.register<Copy>("updateGhPagesFiles") {
             }
             else line
         }
-    }
-    from("composite-repository/repository") {
-        include("p2.index")
-    }
-    from(".") {
-        include("README.md")
     }
     into("build/gh-pages")
     filteringCharset = "UTF-8"
