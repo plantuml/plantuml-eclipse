@@ -4,7 +4,7 @@ Bundle-Name: Ecore PlantUML mapping
 Bundle-SymbolicName: net.sourceforge.plantuml.ecore; singleton:=true
 Automatic-Module-Name: net.sourceforge.plantuml.ecore
 Bundle-Version: 1.1.33.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Export-Package: net.sourceforge.plantuml.ecore
 Import-Package: org.eclipse.core.runtime;version="3.4.0",
  org.eclipse.emf.common.util,

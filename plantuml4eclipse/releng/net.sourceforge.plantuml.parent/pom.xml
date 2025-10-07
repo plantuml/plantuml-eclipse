@@ -105,11 +105,11 @@
 				<version>${tycho-version}</version>
 				<configuration>
 					<pomDependencies>consider</pomDependencies>
-					<executionEnvironment>JavaSE-17</executionEnvironment>
+					<executionEnvironment>JavaSE-21</executionEnvironment>
 					<target>
 						<artifact>
 							<groupId>net.sourceforge.plantuml</groupId>
-							<artifactId>eclipse-2023-12</artifactId>
+							<artifactId>eclipse-2025-03</artifactId>
 							<version>${releaseVersion}${qualifier}</version>
 						</artifact>
 					</target>

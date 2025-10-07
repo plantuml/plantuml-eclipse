@@ -14,7 +14,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.10.0",
  net.sourceforge.plantuml.eclipse,
  net.sourceforge.plantuml.eclipse.imagecontrol
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ClassPath: .,
  libs/jmustache-1.15.jar
 Import-Package: org.eclipse.swt.layout,

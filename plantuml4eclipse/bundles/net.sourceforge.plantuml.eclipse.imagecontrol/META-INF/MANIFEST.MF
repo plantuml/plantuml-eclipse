@@ -8,7 +8,7 @@ Bundle-Vendor: PlantUML Team
 Require-Bundle: org.eclipse.jface;bundle-version="3.10.2"
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Import-Package: org.eclipse.jface.action,
  org.eclipse.jface.resource,
  org.eclipse.swt,
