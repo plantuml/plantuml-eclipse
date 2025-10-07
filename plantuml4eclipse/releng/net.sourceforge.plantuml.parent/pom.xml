@@ -37,18 +37,19 @@
 		<module>../../bundles/net.sourceforge.plantuml.ecore</module>
 		<module>../../tests/net.sourceforge.plantuml.ecore.tests</module>
 
-
 		<module>../../bundles/no.hal.osgi.emf</module>
 		<module>../../tests/no.hal.osgi.emf.tests</module>
+		
 		<module>../../bundles/net.sourceforge.plantuml.osgi</module>
 
 		<module>../../bundles/net.sourceforge.plantuml.xcore</module>
-		<!-- 
+		
 		<module>../../bundles/net.sourceforge.plantuml.uml2</module>
-		 -->
+		<module>../../bundles/net.sourceforge.plantuml.uml2.tests</module>
 
 		<module>../../features/net.sourceforge.plantuml.feature</module>
 		<module>../../features/net.sourceforge.plantuml.ecore.feature</module>
+		<module>../../features/net.sourceforge.plantuml.uml2.feature</module>
 
 		<module>../net.sourceforge.plantuml.repository</module>
 	</modules>
