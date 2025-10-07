@@ -20,7 +20,6 @@ import org.eclipse.swt.graphics.Rectangle;
 import net.sourceforge.plantuml.FileFormat;
 import net.sourceforge.plantuml.FileFormatOption;
 import net.sourceforge.plantuml.FileSystem;
-import net.sourceforge.plantuml.OptionFlags;
 import net.sourceforge.plantuml.SourceStringReader;
 import net.sourceforge.plantuml.StringUtils;
 import net.sourceforge.plantuml.core.DiagramDescription;
@@ -103,7 +102,7 @@ public class DiagramData {
 		} else {
 			FileSystem.getInstance().reset();
 		}
-		OptionFlags.getInstance().setQuiet(true);
+//		OptionFlags.getInstance().setQuiet(true);
 		return getImage(textDiagram, imageNum, links);
 	}
 

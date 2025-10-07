@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-import net.sourceforge.plantuml.OptionFlags;
+import net.sourceforge.plantuml.dot.GraphvizRuntimeEnvironment;
 import net.sourceforge.plantuml.eclipse.Activator;
 import net.sourceforge.plantuml.eclipse.utils.PlantumlConstants;
 import net.sourceforge.plantuml.eclipse.utils.WorkbenchUtil;
@@ -116,7 +116,7 @@ public class WorkbenchPreferencePage extends PreferencePage implements IWorkbenc
 			@Override
 			public void propertyChange(final PropertyChangeEvent event) {
 				ImageData testDotImg = null;
-				OptionFlags.getInstance().setDotExecutable(graphvizPath.getStringValue());
+				GraphvizRuntimeEnvironment.getInstance().setDotExecutable(graphvizPath.getStringValue());
 				try {
 					testDotImg = new DiagramData(PlantumlConstants.TEST_DOT_DIAGRAM).getImage();
 				} catch (final StackOverflowError e) {
