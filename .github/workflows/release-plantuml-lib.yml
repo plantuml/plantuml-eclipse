@@ -49,7 +49,7 @@ jobs:
         run: |
           export PLANTUML_VERSION=$(./gradlew -q printPlantUmlLibVersion)
           echo "plantuml_version=$PLANTUML_VERSION" >> $GITHUB_OUTPUT
-          ./gradlew updateGhPagesContents --no-daemon
+          ./gradlew updateGhPagesContentsAddLatestPlantUmlLib --no-daemon
 
       - name: Save artifacts for the git push
         uses: actions/upload-artifact@v4
