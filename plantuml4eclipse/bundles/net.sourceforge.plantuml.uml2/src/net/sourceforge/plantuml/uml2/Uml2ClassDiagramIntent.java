@@ -73,14 +73,25 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 		int genFlags = GEN_MEMBERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_ASSOCIATIONS;
 		for (Element source : getSource()) {
 			if (source instanceof Package) {
-				buffer.append(getDiagramText((Package) source, genFlags));
+				String diagramText = getDiagramText((Package) source, genFlags);
+				if (diagramText != null) {
+					buffer.append(diagramText);
+				}
 			} else if (source instanceof Classifier) {
-				buffer.append(getClassifier((Classifier) source, genFlags));
+				String classifier = getClassifier((Classifier) source, genFlags);
+				if (classifier != null) {
+					buffer.append(classifier);
+				}
 			}
 		}
 		// reset filter
 		PlantUmlOptions.filterList = null;
-		return buffer.toString();
+		String result = buffer.toString();
+		if (result.isBlank()) {
+			return null;
+		}
+		
+		return result;
 	}
 
 	private Map<String, String> skinParams = null;
