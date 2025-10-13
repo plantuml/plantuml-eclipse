@@ -81,7 +81,7 @@ Note that the net.sourceforge.plantuml.library plugin's versions are similar to 
 This plugin's life cycle is strictly coupled with that of the PlantUML library releases.
 
 
-## [1.1.33](https://github.com/plantuml/plantuml-eclipse/releases/tag/1.1.33)
+## [1.2.0](https://github.com/plantuml/plantuml-eclipse/releases/tag/1.1.33)
 - Move git repository from https://github.com/hallvard/plantuml to https://github.com/plantuml/plantuml-eclipse
   (see discussions [1](https://github.com/hallvard/plantuml/discussions/166) and [2](https://github.com/plantuml/plantuml-eclipse/discussions/2))
 - Separate releases for PlantUML library plug-in (PlantUML lib) and PlantUML support for Eclipse plug-ins (PlantUML4Eclipse).
@@ -91,9 +91,11 @@ This plugin's life cycle is strictly coupled with that of the PlantUML library r
   ([issue #145](https://github.com/hallvard/plantuml/issues/145))
 - Semi-automate PlantUML for Eclipse plug-in releases
   ([issue #145](https://github.com/hallvard/plantuml/issues/145)) 
-- Update dependency to PlantUML library version to 1.2025.4 (see [changes](https://plantuml.com/changes))
+- Update dependency to PlantUML library version 1.2025.8 (see [changes](https://plantuml.com/changes))
   and remove some obsolete plug-ins since we no longer need ELK library (it is now included in the PlantUML library).
-- Improve saving a diagram as an SVG file, suggest the same folder for the new *.svg file as the original *.puml file.
+- Improve saving a diagram as an SVG file, suggest the same folder for the new .svg file as the original .puml file.
+- Add UML 2 model support (rendering various diagrams from UML 2 models), original plug-ins implemented by @hallvard were updated and extended.
+  Thanks for the [PR](https://github.com/hallvard/plantuml/pull/187) to @ansgarradermacher.
 
 
 ## [1.1.32](https://github.com/hallvard/plantuml/releases/tag/1.1.32)
