@@ -51,8 +51,9 @@ public abstract class AbstractDiagramIntentProvider implements DiagramIntentProv
 		return true;
 	}
 
+	@SuppressWarnings("unchecked")
 	protected <T> T getWorkbenchPart(final IWorkbenchPart part, final Class<T> partType) {
-		return (T) (partType.isInstance(part) ? part : part.getAdapter(partType));
+		return partType.isInstance(part) ? (T) part : part.getAdapter(partType);
 	}
 
 	/**
