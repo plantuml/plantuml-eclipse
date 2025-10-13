@@ -8,7 +8,7 @@
 	<name>PlantUML for Eclipse (Maven parent project)</name>
 
 	<properties>
-		<releaseVersion>1.1.33</releaseVersion>
+		<releaseVersion>1.2.0</releaseVersion>
 		<qualifier>-SNAPSHOT</qualifier>
 		
 		<!-- tycho-version variable is defined in repo-root-folder/.mvn/maven.config, see https://tycho.eclipseprojects.io/doc/latest/StructuredBuild.html,

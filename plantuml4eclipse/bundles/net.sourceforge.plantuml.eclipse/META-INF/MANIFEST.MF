@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: PlantUML Plug-in
 Bundle-SymbolicName: net.sourceforge.plantuml.eclipse; singleton:=true
 Automatic-Module-Name: net.sourceforge.plantuml.eclipse
-Bundle-Version: 1.1.33.qualifier
+Bundle-Version: 1.2.0.qualifier
 Bundle-Activator: net.sourceforge.plantuml.eclipse.Activator
 Bundle-Vendor: PlantUML Team
 Require-Bundle: org.eclipse.ui.ide;bundle-version="3.10.2",

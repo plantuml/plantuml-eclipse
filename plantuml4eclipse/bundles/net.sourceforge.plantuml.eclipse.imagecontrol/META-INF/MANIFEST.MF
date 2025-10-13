@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Image Control Plug-in
 Bundle-SymbolicName: net.sourceforge.plantuml.eclipse.imagecontrol
 Automatic-Module-Name: net.sourceforge.plantuml.eclipse.imagecontrol
-Bundle-Version: 1.1.33.qualifier
+Bundle-Version: 1.2.0.qualifier
 Bundle-Vendor: PlantUML Team
 Require-Bundle: org.eclipse.jface;bundle-version="3.10.2"
 Bundle-ActivationPolicy: lazy

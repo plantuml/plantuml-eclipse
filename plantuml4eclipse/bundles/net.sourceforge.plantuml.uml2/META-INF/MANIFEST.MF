@@ -4,7 +4,7 @@ Bundle-Name: UML2 PlantUML mapping
 Bundle-SymbolicName: net.sourceforge.plantuml.uml2; singleton:=true
 Bundle-Vendor: PlantUML Team
 Automatic-Module-Name: net.sourceforge.plantuml.uml2
-Bundle-Version: 1.1.33.qualifier
+Bundle-Version: 1.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: net.sourceforge.plantuml.uml2
 Bundle-ActivationPolicy: lazy

@@ -32,7 +32,7 @@ This way, the changes to the update site are published.
 ### PlantUML4Eclipse pre-release
 
 - check out git branch `develop`
-- update all `pom.xml`, `MANIFEST.MF`, `feature.xml`, etc. to new version, e.g. `1.1.33-SNAPSHOT` or `1.1.33.qualifier`,
+- update all `pom.xml`, `MANIFEST.MF`, `feature.xml`, etc. to new version, e.g. `1.2.0-SNAPSHOT` or `1.2.0.qualifier`,
   also update dependencies and other version-dependant configurations,
   do this also for the `pom.xml` files in folders `bundles`, `features`, `releng`, and `tests`,
   also update `releaseVersion` property in `plantuml4eclipse/releng/net.sourceforge.plantuml.parent/pom.xml`
