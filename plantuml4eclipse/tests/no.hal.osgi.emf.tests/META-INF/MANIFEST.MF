@@ -11,3 +11,4 @@ Require-Bundle: org.junit,
  no.hal.osgi.emf;bundle-version="1.2.0.qualifier"
 Bundle-ClassPath: .
 Bundle-RequiredExecutionEnvironment: JavaSE-17
+Automatic-Module-Name: no.hal.osgi.emf.tests

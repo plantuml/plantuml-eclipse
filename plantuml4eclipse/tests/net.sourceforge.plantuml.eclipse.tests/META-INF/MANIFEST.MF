@@ -15,3 +15,4 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.3.1",
 Bundle-ClassPath: .
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: net.sourceforge.plantuml.eclipse.test.util
+Automatic-Module-Name: net.sourceforge.plantuml.eclipse.tests

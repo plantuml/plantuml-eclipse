@@ -16,3 +16,4 @@ Bundle-ClassPath: .
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Import-Package: net.sourceforge.plantuml.eclipse.test.util
 Export-Package: net.sourceforge.plantuml.ecore.test
+Automatic-Module-Name: net.sourceforge.plantuml.ecore.tests

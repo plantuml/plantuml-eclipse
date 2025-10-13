@@ -19,3 +19,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: net.sourceforge.plantuml.text.test
 Import-Package: net.sourceforge.plantuml.eclipse.test.util,
  org.eclipse.jface.text
+Automatic-Module-Name: net.sourceforge.plantuml.text.tests
