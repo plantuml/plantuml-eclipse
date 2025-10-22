@@ -113,7 +113,7 @@ val latestPlantUmlLibReleaseVersion =  readLatestPlantUmlLibReleaseVersion()
 val latestPlantUmlLibReleaseVersionSimple = latestPlantUmlLibReleaseVersion.substringAfter("v")
 
 val plantUml4ERootDir = "plantuml4eclipse"
-val plantUml4EAggregatorDir = "$plantUml4ERootDir/releng/net.sourceforge.plantuml.aggregator"
+val plantUml4EParentDir = "$plantUml4ERootDir/releng/net.sourceforge.plantuml.parent"
 val plantUml4ERepositoryDir = "$plantUml4ERootDir/releng/net.sourceforge.plantuml.repository"
 val plantUml4EVersion = readCurrentPlantUML4EVersionFromPom()
 
@@ -481,7 +481,7 @@ val buildPlantUml4EUpdateSiteTask = tasks.register<Exec>("buildPlantUml4EUpdateS
 
     outputs.dir(project.layout.projectDirectory.dir(plantUml4ERootDir))
 
-    workingDir = file(plantUml4EAggregatorDir).absoluteFile
+    workingDir = file(plantUml4EParentDir).absoluteFile
 
     commandLine = listOf(mvnCmd, "--batch-mode", "--errors", "clean", "package")
 
