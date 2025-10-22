@@ -563,4 +563,9 @@ val gitCommitPlantUml4EUpdateSiteToGhPagesTask = tasks.register<Exec>("gitCommit
 
 // We did not add a git push gradle task for PlantUml4Eclipse, since we want the changes to be reviewed before pushing them
 
+tasks.findByName("build")?.dependsOn(
+    buildPlantUmlLibUpdateSiteTask,
+    buildPlantUml4EUpdateSiteTask
+)
+
 // TODO call mvn clean on PlantUML lib and PlantUML4Eclipse projects when gradle task clean is called, similar for build task
