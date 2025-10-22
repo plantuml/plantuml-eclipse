@@ -31,4 +31,4 @@ jobs:
       - name: Build PlantUML lib update site
         run: ./gradlew clean buildPlantUmlLibUpdateSite --no-daemon
       - name: Build and test PlantUML4Eclipse
-        run: mvn --batch-mode --update-snapshots clean verify -f plantuml4eclipse/releng/net.sourceforge.plantuml.parent/pom.xml
+        run: ./gradlew clean buildPlantUml4EUpdateSite --no-daemon
