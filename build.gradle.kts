@@ -330,7 +330,7 @@ val addLatestPlantUmlUpdateSiteToGhPagesTask = tasks.register<Copy>("addLatestPl
     dependsOn(checkIfPlantUmlLibIsAlreadyPublishedTask)
     dependsOn(buildPlantUmlLibUpdateSiteTask)
 
-    outputs.dir(project.layout.buildDirectory.dir("gh-pages"))
+    outputs.dir(project.layout.buildDirectory.dir("gh-pages/plantuml.lib"))
 
     from("$plantUmlLibRepositoryDir/target/repository")
     into("build/gh-pages/plantuml.lib/$latestPlantUmlLibReleaseVersionSimple")
