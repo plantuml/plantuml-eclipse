@@ -300,7 +300,7 @@ val buildPlantUmlLibUpdateSiteTask = tasks.register<Exec>("buildPlantUmlLibUpdat
 
     workingDir = file(plantUmlLibRootDir).absoluteFile
 
-    commandLine = listOf(mvnCmd, "--batch-mode", "--errors", "--quiet", "clean", "package")
+    commandLine = listOf(mvnCmd, "--batch-mode", "--update-snapshots", "--errors", "--quiet", "clean", "package")
 }
 
 // git clone gh-pages branch to build/gh-pages
@@ -483,7 +483,7 @@ val buildPlantUml4EUpdateSiteTask = tasks.register<Exec>("buildPlantUml4EUpdateS
 
     workingDir = file(plantUml4EParentDir).absoluteFile
 
-    commandLine = listOf(mvnCmd, "--batch-mode", "--errors", "clean", "package")
+    commandLine = listOf(mvnCmd, "--batch-mode", "--update-snapshots", "--errors", "clean", "package")
 
     doFirst {
         println("#################################################################################")
