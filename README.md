@@ -102,7 +102,7 @@ This plugin's life cycle is strictly coupled with that of the PlantUML library r
   ([issue #145](https://github.com/hallvard/plantuml/issues/145))
 - Semi-automate PlantUML for Eclipse plug-in releases
   ([issue #145](https://github.com/hallvard/plantuml/issues/145)) 
-- Update dependency to PlantUML library version 1.2025.8 (see [changes](https://plantuml.com/changes))
+- Update dependency to PlantUML library version 1.2025.9 (see [changes](https://plantuml.com/changes))
   and remove some obsolete plug-ins since we no longer need ELK library (it is now included in the PlantUML library).
 - Improve saving a diagram as an SVG file, suggest the same folder for the new .svg file as the original .puml file.
 - Add UML 2 model support (rendering various diagrams from UML 2 models), original plug-ins implemented by [@hallvard](https://github.com/hallvard) were updated and extended.
