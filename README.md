@@ -24,9 +24,11 @@ Diagram generation is handled by (implementations of) an extension point, called
 
 Each diagram intent provider may support properties that affect details of how diagrams are generated, that may be changed pr. workspace by adding properties in a specific **properties** file in a specific folder. The folder is settable in the PlantUML property sheet. E.g. the diagram intent provider for class diagrams supports two properties,  that controls how attributes' name and type are rendered. Certain other behavior is also controlled by properties in **properties** files, details can be found in Customization.
 
+
 # License
 
 This repo uses the [EPL license vers. 1.0](plantuml4eclipse/features/net.sourceforge.plantuml.feature/epl-v10.html).
+
 
 # Community
 
@@ -39,14 +41,21 @@ Of course, you can also ask questions about how to use PlantUML, tell us about h
 
 *Originally, this repository was created and hosted by [Hallvard Trætteberg](https://github.com/hallvard). You'll find previous issues and discussions in the [original repository](https://github.com/hallvard/plantuml).*
 
+
 # Installation
 
-We use github pages at [https://plantuml.github.io/plantuml-eclipse/](https://plantuml.github.io/plantuml-eclipse/) as the update site URL.
+We use GitHub pages at [https://plantuml.github.io/plantuml-eclipse/](https://plantuml.github.io/plantuml-eclipse/) as the update site URL.
 Just install the plug-ins in Eclipse via the Help > Install New Software... dialog using that URL.
+Previous versions can be installed using the update site [https://hallvard.github.io/plantuml/](https://hallvard.github.io/plantuml/).
 
-You'll need at least the following
-- net.sourceforge.plantuml.library (the PlantUML library for rendering diagrams, bundled as an Eclipse plug-in, includes ELK layouting library)
-- net.sourceforge.plantuml.eclipse (the PlantUML support for Eclipse)
+Beginning with version 1.2.0, you'll need at least the following features
+- *PlantUML Feature* (the PlantUML diagramming support for Eclipse)
+- *PlantUML Library Feature* (the PlantUML library needed for rendering diagrams, it inlcudes the ELK layouting library)
+
+The following features are optional
+- *PlantUML Ecore Feature* (for drawing class diagrams from ecore files)
+- *PlantUML UML2 Feature* (for drawing UML diagrams from UML 2 model files)
+
 
 # For developers / contributors
 
@@ -58,7 +67,8 @@ The PlantUML4Eclipse plug-ins depend on the PlantUML library bundle, i.e. net.so
 This bundle is automatically built and published on an Eclipse update site
 (this repo's GitHub pages publish a composite update site with PlantUML library and PlantUML4Eclipse plug-ins)
 as soon as there is a new PlantUML release (see GitHub workflows).
-The net.sourceforge.plantuml.library bundle uses the EPL licensed version of the PlantUML library.
+The net.sourceforge.plantuml.library bundle uses the EPL-licensed version of the PlantUML library.
+
 
 # Main plugins (net.sourceforge.plantuml.)
 - eclipse - core Eclipse integration, including the extension point for providing diagrams
@@ -67,9 +77,10 @@ The net.sourceforge.plantuml.library bundle uses the EPL licensed version of the
 - text - diagrams based on explicit DSL code, with support for editors based on the standard Eclipse text editor
 - jdt - diagrams based on the Eclipse Java model, with support for Java and Class File editors
 - ecore - diagrams based on Ecore models, with support for most Ecore editors
+- uml2 - diagrams based on UML2 models
 - osgi - component diagrams based on OSGi meta-data
 - (xcore - diagrams based on Xcore models, with support for the Xtext editor)
-- (uml2 - diagrams based on UML2 models, *obsolete*)
+
 
 # Releases
 
@@ -81,7 +92,7 @@ Note that the net.sourceforge.plantuml.library plugin's versions are similar to 
 This plugin's life cycle is strictly coupled with that of the PlantUML library releases.
 
 
-## [1.2.0](https://github.com/plantuml/plantuml-eclipse/releases/tag/1.1.33)
+## [1.2.0](https://github.com/plantuml/plantuml-eclipse/releases/tag/1.2.0)
 - Move git repository from https://github.com/hallvard/plantuml to https://github.com/plantuml/plantuml-eclipse
   (see discussions [1](https://github.com/hallvard/plantuml/discussions/166) and [2](https://github.com/plantuml/plantuml-eclipse/discussions/2))
 - Separate releases for PlantUML library plug-in (PlantUML lib) and PlantUML support for Eclipse plug-ins (PlantUML4Eclipse).
@@ -96,7 +107,6 @@ This plugin's life cycle is strictly coupled with that of the PlantUML library r
 - Improve saving a diagram as an SVG file, suggest the same folder for the new .svg file as the original .puml file.
 - Add UML 2 model support (rendering various diagrams from UML 2 models), original plug-ins implemented by [@hallvard](https://github.com/hallvard) were updated and extended.
   Thanks for the [PR](https://github.com/hallvard/plantuml/pull/187) to [@ansgarradermacher](https://github.com/ansgarradermacher).
-
 
 ## [1.1.32](https://github.com/hallvard/plantuml/releases/tag/1.1.32)
 - Updated PlantUML library version to 1.2024.5, see [changes](https://plantuml.com/changes).
