@@ -40,7 +40,7 @@ This way, the changes to the update site are published.
   in order to add the PlantUML library version(s) that were automatically published in the meanwhile.
 - re-calculate / update all features' dependencies (seems to be obsolete now, see https://github.com/eclipse-pde/eclipse.pde/issues/26)
 - build and test and build and test...
-- run `mvn clean install` on project `plantuml4eclipse/releng/net.sourceforge.plantuml.parent` or just run the launch configuration *Build PlantUML4Eclipse with Maven*
+- run `mvn clean package` on project `plantuml4eclipse/releng/net.sourceforge.plantuml.parent` or just run the launch configuration *Build PlantUML4Eclipse with Maven*
   (that builds and runs all non-UI tests)
 - run the plug-ins tests, too (see `net.sourceforge.plantuml.*.tests` and `no.hal.osgi.emf.tests` projects)
 - git add, commit and push
@@ -51,11 +51,11 @@ This way, the changes to the update site are published.
 
 ### Build artifacts and repository
 
-- build with `mvn clean install` on project `plantuml4eclipse/releng/net.sourceforge.plantuml.parent` 
+- build with `mvn clean package` on project `plantuml4eclipse/releng/net.sourceforge.plantuml.parent` 
   or just run the launch configuration *Build PlantUML4Eclipse with Maven*
   (that builds and runs all non-UI unit tests)
 - test the release candidate
-- check the PlantUML Eclipse update site in `plantuml4eclipse\releng\net.sourceforge.plantuml.repository\target\repository`,
+- check the PlantUML Eclipse update site in `plantuml4eclipse/releng/net.sourceforge.plantuml.repository/target/repository`,
   ensure that you have only the latest plug-in / feature versions there and only one version per plug-in / feature
 - add, commit and push
 
@@ -64,12 +64,12 @@ This way, the changes to the update site are published.
 That is done by a Gradle build script, when you run `./gradlew gitCommitPlantUml4EclipseUpdateSiteToGhPages` in the git repo root directory.
 Just check all the changes in the new commit and check if the following steps were successfully done by the build script.
 
-- open file explorer on clone of *gh-pages* branch in `build\gh-pages` directory
-- check if the files `compositeArtifacts.xml` and `compositeContent.xml` include the new update sites / plug-in versions
-  and correct number of artifacts
-- check the contents of `build\gh-pages\plantuml.eclipse/` and `build\gh-pages\plantuml.lib/`
-- check the contents of `build\gh-pages\README.md` is consistent to `README.md` from git repo root directory
-- check the latest commit and its message on *gh-pages* branch
+- cloning *gh-pages* branch to `build/gh-pages` directory
+- build PlantUML4Eclipse and copy the update site containing the built version to `build/gh-pages/plantuml.eclipse` directory
+- add the new version to the files `compositeArtifacts.xml` and `compositeContent.xml` in `build/gh-pages`
+  and increment the number of artifacts
+- update the contents of `build\gh-pages\README.md` to the contents of the `README.md` from git repo root directory
+- create a git commit on *gh-pages* branch with all changes
 
 If everything is as expected, push the changes to GitHub pages (git branch *gh-pages*).
 
@@ -77,16 +77,15 @@ If everything is as expected, push the changes to GitHub pages (git branch *gh-p
 
 - add a release (create a draft first, fill all the details)
 - add release notes from README.md in root folder
-- merge the release branch back into master
-- tag the new version on master branch with e.g. 1.1.28
-- choose a git tag (e.g. 1.1.28) and the branch `master`
+- merge the `release` branch back into `main` branch
+- tag the new version on `main` branch with e.g. 1.1.28
+- choose a git tag (e.g. 1.1.28) and the branch `main`
 - publish the release
 - close issues that (supposedly) are fixed
 
 ### Post-release
 
-- search and replace <version> with <version+1>-SNAPSHOT in `pom.xml`, and <version> with <version+1>.qualifier in `MANIFEST.MF`, `feature.xml` and `category.xml`
-- add the new version to `compositeArtifacts.xml` and `compositeContent.xml` and update the number of files
+- in `plantuml4eclipse`, search and replace <version> with <version+1>-SNAPSHOT in `pom.xml`, and <version> with <version+1>.qualifier in `MANIFEST.MF`, `feature.xml` and `category.xml`
 - build, commit and push
 
 (think that's enough)
