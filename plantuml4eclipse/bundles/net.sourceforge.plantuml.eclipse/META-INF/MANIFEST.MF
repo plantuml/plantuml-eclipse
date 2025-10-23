@@ -1,15 +1,15 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Plantuml Plug-in
+Bundle-Name: PlantUML Plug-in
 Bundle-SymbolicName: net.sourceforge.plantuml.eclipse; singleton:=true
 Automatic-Module-Name: net.sourceforge.plantuml.eclipse
-Bundle-Version: 1.1.33.qualifier
+Bundle-Version: 1.2.0.qualifier
 Bundle-Activator: net.sourceforge.plantuml.eclipse.Activator
 Bundle-Vendor: PlantUML Team
 Require-Bundle: org.eclipse.ui.ide;bundle-version="3.10.2",
  org.eclipse.ui;bundle-version="3.106.1",
  org.eclipse.core.resources;bundle-version="3.9.1",
- net.sourceforge.plantuml.library;bundle-version="1.2025.3",
+ net.sourceforge.plantuml.library;bundle-version="1.2025.9",
  net.sourceforge.plantuml.eclipse.imagecontrol
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-17

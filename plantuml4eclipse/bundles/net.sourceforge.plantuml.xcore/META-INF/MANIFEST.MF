@@ -2,8 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Xcore PlantUML mapping
 Bundle-SymbolicName: net.sourceforge.plantuml.xcore; singleton:=true
+Bundle-Vendor: PlantUML Team
 Automatic-Module-Name: net.sourceforge.plantuml.xcore
-Bundle-Version: 1.1.33.qualifier
+Bundle-Version: 1.2.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Import-Package: org.eclipse.emf.ecore,
  org.eclipse.emf.ecore.resource,

@@ -5,10 +5,10 @@
 	<artifactId>net.sourceforge.plantuml.parent</artifactId>
 	<version>${releaseVersion}${qualifier}</version>
 	<packaging>pom</packaging>
-	<name>net.sourceforge.plantuml Eclipse plug-in maven parent project</name>
+	<name>PlantUML for Eclipse (Maven parent project)</name>
 
 	<properties>
-		<releaseVersion>1.1.33</releaseVersion>
+		<releaseVersion>1.2.0</releaseVersion>
 		<qualifier>-SNAPSHOT</qualifier>
 		
 		<!-- tycho-version variable is defined in repo-root-folder/.mvn/maven.config, see https://tycho.eclipseprojects.io/doc/latest/StructuredBuild.html,
@@ -19,7 +19,39 @@
 	</properties>
 	
 	<modules>
-		<module>../net.sourceforge.plantuml.composite</module>
+		<module>../net.sourceforge.plantuml.target</module>
+
+		<module>../../bundles/net.sourceforge.plantuml.eclipse.imagecontrol</module>
+
+		<module>../../bundles/net.sourceforge.plantuml.eclipse</module>
+		<module>../../tests/net.sourceforge.plantuml.eclipse.tests</module>
+
+		<module>../../bundles/net.sourceforge.plantuml.svg</module>
+
+		<module>../../bundles/net.sourceforge.plantuml.text</module>
+		<module>../../tests/net.sourceforge.plantuml.text.tests</module>
+
+		<module>../../bundles/net.sourceforge.plantuml.jdt</module>
+		<module>../../tests/net.sourceforge.plantuml.jdt.tests</module>
+
+		<module>../../bundles/net.sourceforge.plantuml.ecore</module>
+		<module>../../tests/net.sourceforge.plantuml.ecore.tests</module>
+
+		<module>../../bundles/no.hal.osgi.emf</module>
+		<module>../../tests/no.hal.osgi.emf.tests</module>
+		
+		<module>../../bundles/net.sourceforge.plantuml.osgi</module>
+
+		<module>../../bundles/net.sourceforge.plantuml.xcore</module>
+		
+		<module>../../bundles/net.sourceforge.plantuml.uml2</module>
+		<module>../../tests/net.sourceforge.plantuml.uml2.tests</module>
+
+		<module>../../features/net.sourceforge.plantuml.feature</module>
+		<module>../../features/net.sourceforge.plantuml.ecore.feature</module>
+		<module>../../features/net.sourceforge.plantuml.uml2.feature</module>
+
+		<module>../net.sourceforge.plantuml.repository</module>
 	</modules>
 
 	<profiles>

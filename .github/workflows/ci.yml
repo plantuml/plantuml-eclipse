@@ -30,6 +30,5 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build PlantUML lib update site
         run: ./gradlew clean buildPlantUmlLibUpdateSite --no-daemon
-      # TODO activate the following, as soon as we have an Eclipse update site with the PlantUML lib
-      #- name: Verify PlantUML4Eclipse
-      #  run: mvn --batch-mode --update-snapshots clean verify -f plantuml4eclipse/releng/net.sourceforge.plantuml.aggregator/pom.xml
+      - name: Build and test PlantUML4Eclipse
+        run: ./gradlew clean buildPlantUml4EUpdateSite --no-daemon
