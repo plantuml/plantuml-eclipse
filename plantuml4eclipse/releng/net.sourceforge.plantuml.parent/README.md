@@ -78,8 +78,8 @@ If everything is as expected, push the changes to GitHub pages (git branch *gh-p
 - add a release (create a draft first, fill all the details)
 - add release notes from README.md in root folder
 - merge the `release` branch back into `main` branch
-- tag the new version on `main` branch with e.g. 1.1.28
-- choose a git tag (e.g. 1.1.28) and the branch `main`
+- tag the new version on `main` branch with e.g. 1.2.0.202510231536
+- In the release draft, choose a git tag (e.g. 1.2.0.202510231536) in the branch `main`
 - publish the release
 - close issues that (supposedly) are fixed
 
