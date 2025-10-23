@@ -365,7 +365,7 @@ val updateGhPagesFilesAddLatestPlantUmlLibTask = tasks.register<Copy>("updateGhP
             } else if (line.contains(childrenEndTag)) {
                 val indentation = line.substring(0, line.indexOf("<")) + "\t"
 
-                indentation + "<child location='plantuml.lib/$latestPlantUmlLibReleaseVersionSimple' />" + System.lineSeparator() + line
+                indentation + "<child location='plantuml.lib/$latestPlantUmlLibReleaseVersionSimple' />\n" + line
             }
             else line
         }
@@ -399,7 +399,7 @@ val updateGhPagesFilesAddPlantUml4ETask = tasks.register<Copy>("updateGhPagesFil
             } else if (line.contains(childrenEndTag)) {
                 val indentation = line.substring(0, line.indexOf("<")) + "\t"
 
-                indentation + "<child location='plantuml.eclipse/$plantUml4EVersion' />" + System.lineSeparator() + line
+                indentation + "<child location='plantuml.eclipse/$plantUml4EVersion' />\n" + line
             }
             else line
         }
