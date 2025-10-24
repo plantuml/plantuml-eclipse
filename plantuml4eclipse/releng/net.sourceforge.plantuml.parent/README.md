@@ -85,7 +85,9 @@ If everything is as expected, push the changes to GitHub pages (git branch *gh-p
 
 ### Post-release
 
-- in `plantuml4eclipse`, search and replace <version> with <version+1>-SNAPSHOT in `pom.xml`, and <version> with <version+1>.qualifier in `MANIFEST.MF`, `feature.xml` and `category.xml`
+- in `plantuml4eclipse`, in net.sourceforge.plantuml.parent/pom.xml increment the version in `<releaseVersion>...</releaseVersion>` property,
+  search and replace `<version>-SNAPSHOT` with `<version+1>-SNAPSHOT` in all `pom.xml`,
+  and `<version>.qualifier` with `<version+1>.qualifier` in all `MANIFEST.MF`, `feature.xml` and `category.xml`
 - build, commit and push
 
 (think that's enough)

@@ -3,24 +3,24 @@
    <category-def name="net.sourceforge.plantuml.feature" label="PlantUML Eclipse support"/>
    <category-def name="net.sourceforge.plantuml.feature.source" label="PlantUML Eclipse support sources"/>
    
-   <feature url="features/net.sourceforge.plantuml.feature_1.2.0.qualifier.jar" id="net.sourceforge.plantuml.feature" version="1.2.0.qualifier">
+   <feature url="features/net.sourceforge.plantuml.feature_1.2.1.qualifier.jar" id="net.sourceforge.plantuml.feature" version="1.2.1.qualifier">
       <category name="net.sourceforge.plantuml.feature"/>
    </feature>
-   <feature url="features/net.sourceforge.plantuml.ecore.feature_1.2.0.qualifier.jar" id="net.sourceforge.plantuml.ecore.feature" version="1.2.0.qualifier">
+   <feature url="features/net.sourceforge.plantuml.ecore.feature_1.2.1.qualifier.jar" id="net.sourceforge.plantuml.ecore.feature" version="1.2.1.qualifier">
       <category name="net.sourceforge.plantuml.feature"/>
    </feature>
-   <feature url="features/net.sourceforge.plantuml.uml2.feature_1.2.0.qualifier.jar" id="net.sourceforge.plantuml.uml2.feature" version="1.2.0.qualifier">
+   <feature url="features/net.sourceforge.plantuml.uml2.feature_1.2.1.qualifier.jar" id="net.sourceforge.plantuml.uml2.feature" version="1.2.1.qualifier">
       <category name="net.sourceforge.plantuml.feature"/>
    </feature>
    
    <!-- Source code feature(s) -->
-   <feature id="net.sourceforge.plantuml.feature.source" version="1.2.0.qualifier">
+   <feature id="net.sourceforge.plantuml.feature.source" version="1.2.1.qualifier">
       <category name="net.sourceforge.plantuml.feature.source"/>
    </feature>
-   <feature id="net.sourceforge.plantuml.ecore.feature.source" version="1.2.0.qualifier">
+   <feature id="net.sourceforge.plantuml.ecore.feature.source" version="1.2.1.qualifier">
       <category name="net.sourceforge.plantuml.feature.source"/>
    </feature>
-   <feature id="net.sourceforge.plantuml.uml2.feature.source" version="1.2.0.qualifier">
+   <feature id="net.sourceforge.plantuml.uml2.feature.source" version="1.2.1.qualifier">
       <category name="net.sourceforge.plantuml.feature.source"/>
    </feature>
 </site>
