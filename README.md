@@ -92,7 +92,7 @@ Note that the net.sourceforge.plantuml.library plugin's versions are similar to 
 This plugin's life cycle is strictly coupled with that of the PlantUML library releases.
 
 
-## [1.2.0](https://github.com/plantuml/plantuml-eclipse/releases/tag/1.2.0)
+## [1.2.0](https://github.com/plantuml/plantuml-eclipse/releases/tag/1.2.0.202511102215)
 - Move git repository from https://github.com/hallvard/plantuml to https://github.com/plantuml/plantuml-eclipse
   (see discussions [1](https://github.com/hallvard/plantuml/discussions/166) and [2](https://github.com/plantuml/plantuml-eclipse/discussions/2))
 - Separate releases for PlantUML library plug-in (PlantUML lib) and PlantUML support for Eclipse plug-ins (PlantUML4Eclipse).
@@ -108,10 +108,10 @@ This plugin's life cycle is strictly coupled with that of the PlantUML library r
 - Add UML 2 model support (rendering various diagrams from UML 2 models), original plug-ins implemented by [@hallvard](https://github.com/hallvard) were updated and extended.
   Thanks for the [PR](https://github.com/hallvard/plantuml/pull/187) to [@ansgarradermacher](https://github.com/ansgarradermacher).
 
-## [1.1.32](https://github.com/hallvard/plantuml/releases/tag/1.1.32)
+## [1.1.32](https://github.com/hallvard/plantuml/releases/tag/1.1.32.202405281552)
 - Updated PlantUML library version to 1.2024.5, see [changes](https://plantuml.com/changes).
 
-## [1.1.31](https://github.com/hallvard/plantuml/releases/tag/1.1.31)
+## [1.1.31](https://github.com/hallvard/plantuml/releases/tag/1.1.31.202404161327)
 - Updated PlantUML library version to 1.2024.4 ([issue #145](https://github.com/hallvard/plantuml/issues/145)), see [changes](https://plantuml.com/changes).
 - Automated some of the steps needed to update to a new PlantUML library version ([issue #145](https://github.com/hallvard/plantuml/issues/145))
 - Updated target platform to Eclipse 2023-12 and to Java 17.
