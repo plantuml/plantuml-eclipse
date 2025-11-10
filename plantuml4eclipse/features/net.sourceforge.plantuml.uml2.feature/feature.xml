@@ -2,7 +2,7 @@
 <feature
       id="net.sourceforge.plantuml.uml2.feature"
       label="%featureName"
-      version="1.2.0.qualifier"
+      version="1.2.1.qualifier"
       provider-name="PlantUML Team">
 
    <description url="http://plantuml.sourceforge.net/">
@@ -18,7 +18,7 @@
    </license>
 
    <requires>
-      <import feature="net.sourceforge.plantuml.feature" version="1.2.0.qualifier"/>
+      <import feature="net.sourceforge.plantuml.feature" version="1.2.1.qualifier"/>
       <import plugin="net.sourceforge.plantuml.eclipse"/>
       <import plugin="net.sourceforge.plantuml.text"/>
       <import plugin="org.eclipse.core.runtime"/>
@@ -31,6 +31,6 @@
 
    <plugin
          id="net.sourceforge.plantuml.uml2"
-         version="1.2.0.qualifier"/>
+         version="1.2.1.qualifier"/>
 
 </feature>
