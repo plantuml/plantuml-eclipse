@@ -191,7 +191,7 @@ Export-Package: net.sourceforge.plantuml,
  net.sourceforge.plantuml.yaml,
  net.sourceforge.plantuml.yaml.parser,
  net.sourceforge.plantuml.zopfli
-Bundle-Vendor: Arnaud Roques
+Bundle-Vendor: PlantUML Team
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: lib/plantuml-epl-1.2025.4.jar
