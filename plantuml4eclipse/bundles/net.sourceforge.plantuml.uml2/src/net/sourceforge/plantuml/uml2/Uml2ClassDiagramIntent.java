@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2025 CEA LIST and others
+ * Copyright (c) 2025, 2026 CEA LIST and others
  *
  * All rights reserved. This program and the accompanying materials are
  * made available under the terms of the Eclipse Public License 2.0 which
@@ -33,6 +33,7 @@ import org.eclipse.uml2.uml.EnumerationLiteral;
 import org.eclipse.uml2.uml.Extend;
 import org.eclipse.uml2.uml.Include;
 import org.eclipse.uml2.uml.Interface;
+import org.eclipse.uml2.uml.InterfaceRealization;
 import org.eclipse.uml2.uml.MultiplicityElement;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.OpaqueBehavior;
@@ -105,7 +106,7 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 		if (skinParams != null) {
 			appendSkinParams(skinParams, buffer);
 		}
-		buffer.append(String.format("package \"%s\" {\n", pack.getName()));
+		buffer.append(String.format("package \"%s\"%s {\n", pack.getName(), StereotypeUtils.stereoNames(pack, false)));
 		List<Classifier> classifiers = new ArrayList<>();
 		for (PackageableElement pe : pack.getPackagedElements()) {
 			if (pe instanceof Classifier) {
@@ -183,7 +184,7 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 		List<Classifier> generals = new ArrayList<Classifier>();
 		generals.addAll(classifier.getGenerals());
 		// no distinction between extension and implements in plantUML
-		generals.addAll(classifier.allRealizedInterfaces());
+		generals.addAll(classifier.directlyRealizedInterfaces());
 		for (final Classifier superClass : generals) {
 			if (!shouldSuppress(superClass, "superType")) {
 				final boolean isImplements = superClass instanceof Interface && !(classifier instanceof Interface);
@@ -194,7 +195,10 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 		}
 		// dependencies
 		for (final Dependency dep : classifier.getClientDependencies()) {
-			if (dep.getSuppliers().size() > 0) {
+			if (dep instanceof InterfaceRealization) {
+				// already treated earlier (an InterfaceRealization is a Dependency)
+				continue;
+			} else if (dep.getSuppliers().size() > 0) {
 				NamedElement supplier = dep.getSuppliers().get(0);
 				appendDependency(classifier, supplier, buffer);
 			}
@@ -529,3 +533,4 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 		return false;
 	}
 }
+
