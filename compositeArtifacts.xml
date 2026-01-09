@@ -9,8 +9,9 @@
 		<property name='p2.atomic.composite.loading' value='true' />
 	 -->
 	</properties>
-	<children size='2'>
+	<children size='3'>
 		<child location='plantuml.lib/1.2025.10' />
 		<child location='plantuml.eclipse/1.2.0' />
+		<child location='plantuml.lib/1.2026.0' />
 	</children>
 </repository>
