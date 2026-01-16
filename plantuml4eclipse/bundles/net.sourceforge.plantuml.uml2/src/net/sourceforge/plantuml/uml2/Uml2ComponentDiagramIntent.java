@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2025 CEA LIST and others
+ * Copyright (c) 2025, 2026 CEA LIST and others
  *
  * All rights reserved. This program and the accompanying materials are
  * made available under the terms of the Eclipse Public License 2.0 which
@@ -66,14 +66,16 @@ public class Uml2ComponentDiagramIntent extends AbstractClassDiagramIntent<Colle
 		}
 		String name = prefix + clazz.getName();
 		if (name.contains(" ")) {
-			buffer.append(String.format("component \"%s\" {\n", name));
+			buffer.append(String.format("component \"%s\"", name));
 		} else {
-			buffer.append(String.format("component %s {\n", name));
+			buffer.append(String.format("component %s", name));
 		}
 		buffer.append(StereotypeUtils.stereoNames(clazz,  false));
+		buffer.append(" {\n");
 		for (Property port : clazz.getAllAttributes()) {
 			if (port instanceof Port) {
-				String portDecl = String.format("port %s", port.getName());
+				// prefix port with stereotype (PlantUML does not precise whether to prefix or postfix a port)
+				String portDecl = String.format("%sport %s", StereotypeUtils.stereoNames(port,  true), port.getName());
 				if (prefix.length() > 0) {
 					portDecl = String.format("%s as %s\n", portDecl, prefix.replace(" ", "").replace(":", ".") + port.getName());		
 				}
@@ -88,7 +90,8 @@ public class Uml2ComponentDiagramIntent extends AbstractClassDiagramIntent<Colle
 			final Type type = attribute.getType();
 			if (type instanceof Class) {
 				// TODO: combine hierarchically with prefix?
-				String atName = String.format("%s: ", attribute.getName());
+				// prefix attribute with stereotype (PlantUML does not precise whether to prefix or postfix an attribute)
+				String atName = String.format("%s%s: ", StereotypeUtils.stereoNames(attribute, true), attribute.getName());
 				// the alreadyHandled list avoids a potential stack overflow, if attribute within a class is typed with this class
 				if (!alreadyHandled.containsKey(type)) {
 					String sub = getDiagramText(atName, (Class) type);
@@ -105,7 +108,6 @@ public class Uml2ComponentDiagramIntent extends AbstractClassDiagramIntent<Colle
 			}
 		}
 
-
 		buffer.append("}\n");
 		return buffer.toString();
 	}
@@ -120,7 +122,7 @@ public class Uml2ComponentDiagramIntent extends AbstractClassDiagramIntent<Colle
 			return NamingUtils.refName(port.getName());
 		}	
 	}
-	
+
 	protected void appendGeneralisation(final Classifier subClass, final Classifier superClass, final boolean isImplements, final StringBuilder buffer) {
 		appendGeneralisation(subClass.getName(), superClass.getName(), isImplements, buffer);
 	}
