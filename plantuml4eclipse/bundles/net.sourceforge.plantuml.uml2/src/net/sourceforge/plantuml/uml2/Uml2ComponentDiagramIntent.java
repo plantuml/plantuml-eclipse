@@ -64,35 +64,41 @@ public class Uml2ComponentDiagramIntent extends AbstractClassDiagramIntent<Colle
 		if (skinParams != null) {
 			appendSkinParams(skinParams, buffer);
 		}
+		CommentUtils.append(clazz, buffer);
 		String name = prefix + clazz.getName();
 		if (name.contains(" ")) {
 			buffer.append(String.format("component \"%s\"", name));
 		} else {
 			buffer.append(String.format("component %s", name));
 		}
-		buffer.append(StereotypeUtils.stereoNames(clazz,  false));
+		buffer.append(StereotypeUtils.stereoNames(clazz, false));
 		buffer.append(" {\n");
 		for (Property port : clazz.getAllAttributes()) {
 			if (port instanceof Port) {
-				// prefix port with stereotype (PlantUML does not precise whether to prefix or postfix a port)
-				String portDecl = String.format("%sport %s", StereotypeUtils.stereoNames(port,  true), port.getName());
+				// postfix port with stereotype (prefixing implies an syntax error)
+				// The port stereotype does not appear in the diagram
+				String portDecl = String.format("port %s%s", port.getName(), StereotypeUtils.stereoNames(port, false));
 				if (prefix.length() > 0) {
-					portDecl = String.format("%s as %s\n", portDecl, prefix.replace(" ", "").replace(":", ".") + port.getName());		
+					portDecl = String.format("%s as %s\n", portDecl,
+							prefix.replace(" ", "").replace(":", ".") + port.getName());
 				}
 				indentBlock(buffer, String.format("%s\n", portDecl));
 			}
 		}
 
-		for (final Property attribute : clazz.getAllAttributes()) {
+		// Support a workaround for enabling parts in PlantUML component diagrams:
+		// Redefine referenced components with a ": " in the name to mimic part : Type notation
+		for (final Property attribute : clazz.getOwnedAttributes()) {
 			if (attribute instanceof Port) {
 				continue;
 			}
 			final Type type = attribute.getType();
 			if (type instanceof Class) {
-				// TODO: combine hierarchically with prefix?
-				// prefix attribute with stereotype (PlantUML does not precise whether to prefix or postfix an attribute)
-				String atName = String.format("%s%s: ", StereotypeUtils.stereoNames(attribute, true), attribute.getName());
-				// the alreadyHandled list avoids a potential stack overflow, if attribute within a class is typed with this class
+				// Don't use stereotype on the attribute as recursion prefix, as this would be shown as a
+				// stereotype on the referenced component
+				String atName = String.format("%s: ", attribute.getName());
+				// the alreadyHandled list avoids a potential stack overflow, if attribute within a class is typed with
+				// this class
 				if (!alreadyHandled.containsKey(type)) {
 					String sub = getDiagramText(atName, (Class) type);
 					alreadyHandled.put((Classifier) type, true);
@@ -109,6 +115,7 @@ public class Uml2ComponentDiagramIntent extends AbstractClassDiagramIntent<Colle
 		}
 
 		buffer.append("}\n");
+		CommentUtils.appendNote(clazz, buffer);
 		return buffer.toString();
 	}
 
@@ -120,10 +127,11 @@ public class Uml2ComponentDiagramIntent extends AbstractClassDiagramIntent<Colle
 		}
 		else {
 			return NamingUtils.refName(port.getName());
-		}	
+		}
 	}
 
-	protected void appendGeneralisation(final Classifier subClass, final Classifier superClass, final boolean isImplements, final StringBuilder buffer) {
+	protected void appendGeneralisation(final Classifier subClass, final Classifier superClass,
+			final boolean isImplements, final StringBuilder buffer) {
 		appendGeneralisation(subClass.getName(), superClass.getName(), isImplements, buffer);
 	}
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2025 CEA LIST and others
+ * Copyright (c) 2025, 2026 CEA LIST and others
  *
  * All rights reserved. This program and the accompanying materials are
  * made available under the terms of the Eclipse Public License 2.0 which
@@ -15,25 +15,36 @@ import java.util.List;
 
 import org.eclipse.uml2.uml.Classifier;
 
+/**
+ * Static configuration of PlantUML generation options from UML2.
+ * TODO: Link with a preference page, enabling users to change properties. Currently,
+ * the preferences can only be changed programmatically.
+ */
 public class PlantUmlOptions {
 	/**
-	 * if true, use simple comments via preceding '
+	 * Different options, how to represent a comment
 	 */
-
-	public static boolean exportComments = true;
+	public enum CommentStyle {
+		NONE, SIMPLE, TOP_NOTE, BOTTOM_NOTE,
+	}
 
 	/**
-	 * use qualified names
+	 * Choose comment style depending on enumeration value
+	 */
+	public static CommentStyle exportComments = CommentStyle.TOP_NOTE;
+
+	/**
+	 * use qualified names in references
 	 */
 	public static boolean useQName = true;
 
 	/**
-	 * if true, skip first element of a qualified name
+	 * if true, use absolute package name (prefixed with .)
 	 */
-	public static boolean skipFirst = true;
+	public static boolean useAbsolute = false;
 
 	/**
-	 * 
+	 * Filter output based on list of declarations
 	 */
 	public static List<Classifier> filterList = null;
 }

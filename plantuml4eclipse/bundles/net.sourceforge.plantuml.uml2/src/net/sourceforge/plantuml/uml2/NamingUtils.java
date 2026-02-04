@@ -109,13 +109,10 @@ public class NamingUtils {
 			return ne.getName();
 		} else {
 			String qName = ne.getQualifiedName();
-			if (PlantUmlOptions.skipFirst && qName != null) {
-				int i = qName.indexOf(Namespace.SEPARATOR);
-				if (i > 0) {
-					qName = qName.substring(i+2);
-				}
+			if (PlantUmlOptions.useAbsolute && qName != null) {
+				qName = "." + qName;
 			}
-			return qName.replace(Namespace.SEPARATOR, ".");
+			return refName(qName).replace(Namespace.SEPARATOR, ".");
 		}
 	}
 }

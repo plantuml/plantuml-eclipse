@@ -91,7 +91,7 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 		if (result.isBlank()) {
 			return null;
 		}
-		
+
 		return result;
 	}
 
@@ -106,7 +106,9 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 		if (skinParams != null) {
 			appendSkinParams(skinParams, buffer);
 		}
-		buffer.append(String.format("package \"%s\"%s {\n", pack.getName(), StereotypeUtils.stereoNames(pack, false)));
+		CommentUtils.append(pack, buffer);
+		buffer.append(String.format("package %s%s {\n", NamingUtils.declName(pack.getName()),
+				StereotypeUtils.stereoNames(pack, false)));
 		List<Classifier> classifiers = new ArrayList<>();
 		for (PackageableElement pe : pack.getPackagedElements()) {
 			if (pe instanceof Classifier) {
@@ -143,6 +145,7 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 		}
 
 		buffer.append("}\n");
+		CommentUtils.appendNote(pack, buffer);
 		return buffer.toString();
 	}
 
@@ -163,7 +166,7 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 		if (classifier instanceof OpaqueBehavior) {
 			return null;
 		}
-		if (classifier instanceof Class || classifier instanceof Interface) {
+		if (classifier instanceof Class || classifier instanceof Interface || classifier instanceof DataType) {
 			return getClassText(classifier, genFlags);
 		} else if (classifier instanceof UseCase) {
 			return getUseCaseText(classifier, genFlags);
@@ -171,8 +174,6 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 			return getActorText(classifier, genFlags);
 		} else if (classifier instanceof Enumeration) {
 			return getEnumText((Enumeration) classifier, genFlags);
-		} else if (classifier instanceof DataType) {
-			return getDataTypeText((DataType) classifier, genFlags);
 		}
 		return null;
 	}
@@ -205,45 +206,61 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 		}
 	}
 
-	/** 
+	/**
 	 * Override in order not to escape the "." in the qualified name, but do escape spaces
 	 */
 	protected String getLogicalName(final String name) {
 		String lName = super.getLogicalName(name);
 		String qName = "";
-		for (int i = 0; i<lName.length(); i++) {
+		for (int i = 0; i < lName.length(); i++) {
 			if (name.charAt(i) == '.') {
 				qName += '.';
-			}
-			else {
+			} else {
 				qName += lName.charAt(i);
 			}
 		}
 		return qName;
 	}
-	
+
 	protected void appendGeneralisation(final Classifier subClass, final Classifier superClass,
 			final boolean isImplements, final StringBuilder buffer) {
 		indentOne(buffer);
-		Package cp = subClass.getNearestPackage();	// generalization is added in pkg of sub class
-		appendGeneralisation(NamingUtils.getName(subClass, cp), NamingUtils.getName(superClass, cp), isImplements, buffer);
+		Package cp = subClass.getNearestPackage(); // generalization is added in pkg of sub class
+		appendGeneralisation(NamingUtils.getName(subClass, cp), NamingUtils.getName(superClass, cp), isImplements,
+				buffer);
 	}
 
 	protected void appendDependency(NamedElement source, NamedElement target, StringBuilder buffer) {
 		indentOne(buffer);
-		Package cp = source.getNearestPackage();	// generalization is added in pkg of source
-		appendRelation(getLogicalName(NamingUtils.getName(source, cp)), false, null, "..>", null, getLogicalName(NamingUtils.getName(target, cp)),
-				false, null, null, buffer);
+		Package cp = source.getNearestPackage(); // generalization is added in pkg of source
+		appendRelation(getLogicalName(NamingUtils.getName(source, cp)), false, null, "..>", null,
+				getLogicalName(NamingUtils.getName(target, cp)), false, null, null, buffer);
 
 	}
 
+	/**
+	 * Color classifiers depending on their types
+	 * TODO propositions in comments, make that customizable
+	 * 
+	 * @param classifier
+	 * @return
+	 */
 	protected String getClassifierColor(final Classifier classifier) {
-		// final Map<String, String> skinParams =
-		// diagramHelper.getSkinParams(classifier, null);
-		// return (skinParams != null ? skinParams.get("BackgroundColor") : null);
+		if (classifier instanceof DataType) {
+			// return "e8e8f0";
+		} else if (classifier instanceof Interface) {
+			// return "f0f0e0";
+		}
 		return null;
 	}
 
+	/**
+	 * Return the text of a class, interface or datatype
+	 * 
+	 * @param classifier
+	 * @param genFlags
+	 * @return
+	 */
 	protected String getClassText(final Classifier classifier, final int genFlags) {
 		final StringBuilder buffer = new StringBuilder();
 
@@ -251,6 +268,7 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 
 		Package currentPkg = classifier.getNearestPackage();
 		boolean isInterface = classifier instanceof Interface;
+		boolean isDataType = classifier instanceof DataType;
 		final String modifiers = classifier.isAbstract() && !isInterface ? "abstract" : null;
 		String link = null;
 
@@ -261,7 +279,7 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 			buffer.append(modifiers);
 			buffer.append(" ");
 		}
-		buffer.append(isInterface ? "interface" : "class");
+		buffer.append(isInterface ? "interface" : (isDataType ? "dataclass" : "class"));
 		buffer.append(" ");
 		appendNameDeclaration(NamingUtils.declName(classifier.getName()), buffer);
 		buffer.append(StereotypeUtils.stereoNames(classifier, false));
@@ -284,8 +302,8 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 			for (final Property attribute : ClassifierUtils.getOwnedAttributes(classifier)) {
 				final Type eType = attribute.getType();
 				if (!(shouldSuppress(attribute, null) || (eType != null && shouldSuppress(eType, "attribute")))) {
-					String attrName = StereotypeUtils.stereoNames(attribute, true);
-					attrName += attribute.getName();
+					// add stereotypes in a prefix (not clearly defined in PlantUML)
+					String attrName = StereotypeUtils.stereoNames(attribute, true) + attribute.getName();
 
 					CommentUtils.append(attribute, buffer, true);
 					appendAttribute(attribute.isDerived(), ModifiersUtil.modifiers(attribute),
@@ -332,6 +350,7 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 			}
 		}
 		appendClassEnd(buffer);
+		CommentUtils.appendNote(classifier, buffer);
 		return buffer.toString();
 	}
 
@@ -373,18 +392,6 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 		final StringBuilder buffer = new StringBuilder();
 
 		buffer.append(String.format(":%s:\n", classifier.getName()));
-		return buffer.toString();
-	}
-
-	protected String getDataTypeText(final DataType dataType, final int genFlags) {
-		final StringBuilder buffer = new StringBuilder();
-		String link = null;
-
-		appendClassStart(null, "class", dataType.getName(), link, getClassifierColor(dataType), buffer);
-		if (dataType.getName() != null) {
-			appendAttribute(null, null, null, dataType.getName(), buffer);
-		}
-		appendClassEnd(buffer);
 		return buffer.toString();
 	}
 
@@ -437,17 +444,11 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 
 		final String startLabel = getRoleLabel(source.getName(), getMultiplicity(source));
 		final String endLabel = getRoleLabel(target.getName(), getMultiplicity(target));
-		// appendAssociation(
-		// sourceClass.getName(), source.getAggregation() ==
-		// AggregationKind.COMPOSITE_LITERAL, source.getName(), getMultiplicity(source),
-		// direction,
-		// targetClass.getName(), target.getAggregation() ==
-		// AggregationKind.COMPOSITE_LITERAL, target.getName(), getMultiplicity(target),
-		// assoc.getName(), buffer);
+
 		indentOne(buffer);
 		Package cp = assoc.getNearestPackage();
 		appendRelation(NamingUtils.getName(sourceClass, cp), false, startLabel, relation, null,
-					NamingUtils.getName(targetClass, cp), false, endLabel, assoc.getName(), buffer);
+				NamingUtils.getName(targetClass, cp), false, endLabel, assoc.getName(), buffer);
 	}
 
 	protected String getRelationEnd(Property from, Property to, boolean left) {
@@ -478,7 +479,10 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 				label += " " + mult;
 			}
 		}
-		return label;
+		if (label != null && label.length() > 0) {
+			return label;
+		}
+		return null;
 	}
 
 	// private final boolean suppressSingleMultiplicity = true;
@@ -504,7 +508,7 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 			return String.format("%d..%s", lower, upperStr);
 		}
 	}
-	
+
 	/**
 	 * check recursively, if a package has any classifiers that should be shown, i.e. are not filtered
 	 * @param pkg a UML package
@@ -533,4 +537,3 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 		return false;
 	}
 }
-
