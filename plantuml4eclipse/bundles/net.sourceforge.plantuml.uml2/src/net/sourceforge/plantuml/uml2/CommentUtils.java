@@ -52,10 +52,10 @@ public class CommentUtils {
 	public static void append(Element el, StringBuilder sb, boolean indent) {
 		boolean simpleComment;
 		if (el instanceof Classifier || el instanceof Package) {
-			simpleComment = PlantUmlOptions.exportComments == CommentStyle.SIMPLE;
+			simpleComment = PlantUmlOptions.commentStyle == CommentStyle.SIMPLE;
 		} else {
 			// always uses simple comments for non-classifiers and non-packages
-			simpleComment = PlantUmlOptions.exportComments != CommentStyle.NONE;
+			simpleComment = PlantUmlOptions.commentStyle != CommentStyle.NONE;
 		}
 		if (simpleComment) {
 			for (Comment comment : getComments(el)) {
@@ -80,28 +80,28 @@ public class CommentUtils {
 	 * @param sb a string-builder to append to
 	 */
 	public static void appendNote(NamedElement ne, StringBuilder sb) {
-		appendNote(ne, sb, false);
+		appendNote(ne, false, sb);
 	}
 
 	/**
 	 * Add owned comments of an element (if any) in form of a PlantUML note.
 	 * 
-	 * @param el a UML element containing eventually comments)
-	 * @param sb a string-builder to append to
-	 * @param if true, prefix each line with a tab
+	 * @param ne     a UML element containing eventually comments)
+	 * @param indent true, prefix each line with a tab
+	 * @param sb     a string-builder to append to
 	 */
-	public static void appendNote(NamedElement ne, StringBuilder sb, boolean indent) {
+	public static void appendNote(NamedElement ne, boolean indent, StringBuilder sb) {
 		boolean noteComment;
 		if (ne instanceof Classifier || ne instanceof Package) {
-			noteComment = PlantUmlOptions.exportComments == CommentStyle.TOP_NOTE
-					|| PlantUmlOptions.exportComments == CommentStyle.BOTTOM_NOTE;
+			noteComment = PlantUmlOptions.commentStyle == CommentStyle.TOP_NOTE
+					|| PlantUmlOptions.commentStyle == CommentStyle.BOTTOM_NOTE;
 		} else {
 			// never use note comments for non-classifiers and non-packages
 			noteComment = false;
 		}
 		if (noteComment) {
 			String position = null;
-			if (PlantUmlOptions.exportComments == CommentStyle.TOP_NOTE) {
+			if (PlantUmlOptions.commentStyle == CommentStyle.TOP_NOTE) {
 				position = "top";
 			} else {
 				position = "bottom";

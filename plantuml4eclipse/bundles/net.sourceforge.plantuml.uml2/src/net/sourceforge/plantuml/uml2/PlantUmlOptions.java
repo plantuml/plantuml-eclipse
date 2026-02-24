@@ -31,7 +31,7 @@ public class PlantUmlOptions {
 	/**
 	 * Choose comment style depending on enumeration value
 	 */
-	public static CommentStyle exportComments = CommentStyle.TOP_NOTE;
+	public static CommentStyle commentStyle = CommentStyle.TOP_NOTE;
 
 	/**
 	 * use qualified names in references

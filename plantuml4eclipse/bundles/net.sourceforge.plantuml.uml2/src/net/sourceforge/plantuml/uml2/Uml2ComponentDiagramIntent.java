@@ -56,7 +56,7 @@ public class Uml2ComponentDiagramIntent extends AbstractClassDiagramIntent<Colle
 
 	/**
 	 * @param prefix handle "parts", i.e. kind of instances
-	 * @param clazz the class/component to produce data for
+	 * @param clazz  the class/component to produce data for
 	 * @return the string
 	 */
 	protected String getDiagramText(String prefix, Class clazz) {
@@ -115,7 +115,11 @@ public class Uml2ComponentDiagramIntent extends AbstractClassDiagramIntent<Colle
 		}
 
 		buffer.append("}\n");
-		CommentUtils.appendNote(clazz, buffer);
+		if (prefix == null) {
+			// only append note, if not within workaround (otherwise, the note would not find
+			// the annotated element via its name)
+			CommentUtils.appendNote(clazz, buffer);
+		}
 		return buffer.toString();
 	}
 
@@ -124,8 +128,7 @@ public class Uml2ComponentDiagramIntent extends AbstractClassDiagramIntent<Colle
 		ConnectableElement port = end.getRole();
 		if (part != null) {
 			return String.format("%s.%s", NamingUtils.refName(part.getName()), NamingUtils.refName(port.getName()));
-		}
-		else {
+		} else {
 			return NamingUtils.refName(port.getName());
 		}
 	}

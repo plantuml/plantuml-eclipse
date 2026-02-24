@@ -31,6 +31,7 @@ import org.eclipse.uml2.uml.StateMachine;
 
 import net.sourceforge.plantuml.eclipse.utils.WorkbenchPartDiagramIntentProviderContext;
 import net.sourceforge.plantuml.text.AbstractDiagramIntentProvider;
+import net.sourceforge.plantuml.uml2.preferences.Uml2PreferenceUtil;
 import net.sourceforge.plantuml.util.AbstractDiagramIntent;
 import net.sourceforge.plantuml.util.DiagramIntent;
 
@@ -116,6 +117,9 @@ public class Uml2DiagramIntentProvider extends AbstractDiagramIntentProvider {
 	}
 
 	protected Collection<? extends DiagramIntent> getDiagramInfos(EObject eObject) {
+		PlantUmlOptions.commentStyle = Uml2PreferenceUtil.getCommentStyle();
+		PlantUmlOptions.useQName = Uml2PreferenceUtil.useQName();
+		PlantUmlOptions.useAbsolute = Uml2PreferenceUtil.useAName();
 		if (eObject instanceof Package) {
 			Package pkg = getPackage(eObject);
 			return getDiagramInfos(pkg);

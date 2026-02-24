@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-
    <extension
          point="net.sourceforge.plantuml.eclipse.diagramIntentProvider">
-
       <diagramIntentProvider
             id="net.sourceforge.plantuml.uml2.Uml2DiagramIntentProvider"
             providerClass="net.sourceforge.plantuml.uml2.Uml2DiagramIntentProvider"
-            label="Multiple diagrams generated from UML2 models"
-            >
+            label="Multiple diagrams generated from UML2 models">
       </diagramIntentProvider>
    </extension>
+
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            id="net.sourceforge.plantuml.uml2-preferences.Uml2DiagramPreferencePage"
+            class="net.sourceforge.plantuml.uml2.preferences.Uml2DiagramPreferencePage"
+            category="net.sourceforge.plantuml.preferences.about"
+            name="UML2 Diagram preferences">
+      </page>
+   </extension>
+
 </plugin>
