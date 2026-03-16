@@ -16,35 +16,58 @@ import java.util.List;
 import org.eclipse.uml2.uml.Classifier;
 
 /**
- * Static configuration of PlantUML generation options from UML2.
- * TODO: Link with a preference page, enabling users to change properties. Currently,
- * the preferences can only be changed programmatically.
+ * Definition of enumerations for PlantUML generation options from UML2.
+ * The settings are linked with a preference page, enabling users to change properties.
  */
 public class PlantUmlOptions {
 	/**
 	 * Different options, how to represent a comment
 	 */
 	public enum CommentStyle {
-		NONE, SIMPLE, TOP_NOTE, BOTTOM_NOTE,
+		/**
+		 * no comments
+		 */
+		NONE,
+
+		/**
+		 * comments via single quote
+		 */
+		SIMPLE,
+
+		/**
+		 * note above element
+		 */
+		TOP_NOTE,
+
+		/**
+		 * note below element
+		 */
+		BOTTOM_NOTE,
 	}
 
 	/**
-	 * Choose comment style depending on enumeration value
+	 * Different ways to represent names
 	 */
-	public static CommentStyle commentStyle = CommentStyle.TOP_NOTE;
+	public enum NamingStyle {
+		/**
+		 * simple name
+		 */
+		SIMPLE,
+
+		/**
+		 * qualified name
+		 */
+		QUALIFIED,
+
+		/**
+		 * absolute qualified name (preceding ".")
+		 */
+		ABSOLUTE
+	}
 
 	/**
-	 * use qualified names in references
-	 */
-	public static boolean useQName = true;
-
-	/**
-	 * if true, use absolute package name (prefixed with .)
-	 */
-	public static boolean useAbsolute = false;
-
-	/**
-	 * Filter output based on list of declarations
+	 * Filter output based on list of declarations. This element is not intended for users and can only be changed
+	 * programmatically.
 	 */
 	public static List<Classifier> filterList = null;
 }

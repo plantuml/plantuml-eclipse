@@ -13,33 +13,31 @@ package net.sourceforge.plantuml.uml2.preferences;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
-import net.sourceforge.plantuml.eclipse.Activator;
 import net.sourceforge.plantuml.uml2.PlantUmlOptions.CommentStyle;
+import net.sourceforge.plantuml.uml2.PlantUmlOptions.NamingStyle;
+import net.sourceforge.plantuml.uml2.Uml2Plugin;
 
 public class Uml2DiagramPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	@Override
 	public void init(final IWorkbench workbench) {
-		IPreferenceStore store = new ScopedPreferenceStore(InstanceScope.INSTANCE, Activator.PLUGIN_ID);
+		IPreferenceStore store = Uml2Plugin.getPreferences();
 		setPreferenceStore(store);
 		setDescription("This preferences page allows to customize PlantUML output from UML2 models"); //$NON-NLS-1$
-		new Uml2PreferenceInitializer().initializeDefaultPreferences();
 	}
 
 	protected ComboFieldEditor commentStyleFE;
 
-	protected BooleanFieldEditor useQNameFE;
+	protected ComboFieldEditor namingStyleFE;
 
-	protected BooleanFieldEditor useANameFE;
+	protected StringFieldEditor colorFE;
 
 	@Override
 	protected void createFieldEditors() {
@@ -48,17 +46,23 @@ public class Uml2DiagramPreferencePage extends FieldEditorPreferencePage impleme
 			String name = lit.name();
 			commentOptions.add(new String[] { name, name });
 		}
+		List<String[]> namingOptions = new ArrayList<String[]>();
+		for (NamingStyle lit : NamingStyle.values()) {
+			String name = lit.name();
+			namingOptions.add(new String[] { name, name });
+		}
 
-		commentStyleFE = new ComboFieldEditor(Uml2PreferenceConstants.P_COMMENT_STYLE, "Comment options", //$NON-NLS-1$
+		commentStyleFE = new ComboFieldEditor(Uml2PreferenceConstants.PREF_COMMENT_STYLE, "Comment options", //$NON-NLS-1$
 				commentOptions.toArray(new String[2][0]), getFieldEditorParent());
 		addField(commentStyleFE);
 
-		useQNameFE = new BooleanFieldEditor(Uml2PreferenceConstants.P_USE_QNAME, "Use qualified names",
-				getFieldEditorParent());
-		addField(useQNameFE);
+		namingStyleFE = new ComboFieldEditor(Uml2PreferenceConstants.PREF_NAMING_STYLE, "Naming options", //$NON-NLS-1$
+				namingOptions.toArray(new String[2][0]), getFieldEditorParent());
+		addField(namingStyleFE);
 
-		useANameFE = new BooleanFieldEditor(Uml2PreferenceConstants.P_USE_ANAME, "Use absolute names",
+		colorFE = new StringFieldEditor(Uml2PreferenceConstants.PREF_ELEMENT_COLORS,
+				"Coloring options (comma separated pairs, e.g. DataType:#302030, Class:#604020)", //$NON-NLS-1$
 				getFieldEditorParent());
-		addField(useANameFE);
+		addField(colorFE);
 	}
 }

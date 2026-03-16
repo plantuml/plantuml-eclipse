@@ -115,7 +115,7 @@ public class Uml2ComponentDiagramIntent extends AbstractClassDiagramIntent<Colle
 		}
 
 		buffer.append("}\n");
-		if (prefix == null) {
+		if (prefix == null || prefix.isEmpty()) {
 			// only append note, if not within workaround (otherwise, the note would not find
 			// the annotated element via its name)
 			CommentUtils.appendNote(clazz, buffer);

@@ -49,6 +49,7 @@ import org.eclipse.uml2.uml.ValueSpecification;
 
 import net.sourceforge.plantuml.eclipse.utils.DiagramIntentProperty;
 import net.sourceforge.plantuml.text.AbstractClassDiagramIntent;
+import net.sourceforge.plantuml.uml2.preferences.Uml2Preferences;
 
 /**
  * Produce a PlantUML class diagram from a UML package
@@ -246,12 +247,8 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 	 * @return
 	 */
 	protected String getClassifierColor(final Classifier classifier) {
-		if (classifier instanceof DataType) {
-			// return "e8e8f0";
-		} else if (classifier instanceof Interface) {
-			// return "f0f0e0";
-		}
-		return null;
+		String elementType = classifier.eClass().getName();
+		return Uml2Preferences.getElementColor(elementType);
 	}
 
 	/**
@@ -285,7 +282,7 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 		buffer.append(StereotypeUtils.stereoNames(classifier, false));
 		appendLink(link, false, buffer);
 		if (color != null) {
-			buffer.append(" #");
+			buffer.append(" ");
 			buffer.append(color);
 		}
 		buffer.append(" {\n");
@@ -307,7 +304,8 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 
 					CommentUtils.append(attribute, buffer, true);
 					appendAttribute(attribute.isDerived(), ModifiersUtil.modifiers(attribute),
-							VisibilityUtils.visibility(attribute), NamingUtils.typeName(attribute, currentPkg), attrName, buffer);
+							VisibilityUtils.visibility(attribute), NamingUtils.typeName(attribute, currentPkg),
+							attrName, buffer);
 					ValueSpecification df = attribute.getDefaultValue();
 					if (df != null && df.stringValue() != null) {
 						// ignore empty default values and multi-line ones which are likely containing
@@ -345,7 +343,8 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 					// do not append "void", if no return type
 					CommentUtils.append(op, buffer, true);
 					appendOperation(ModifiersUtil.modifiers(op), VisibilityUtils.visibility(op),
-							retParam != null ? NamingUtils.typeName(retParam, currentPkg) : null, opName, parameters, buffer);
+							retParam != null ? NamingUtils.typeName(retParam, currentPkg) : null, opName, parameters,
+							buffer);
 				}
 			}
 		}
@@ -511,6 +510,7 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 
 	/**
 	 * check recursively, if a package has any classifiers that should be shown, i.e. are not filtered
+	 * 
 	 * @param pkg a UML package
 	 * @return true, if the package contains directly or indirectly classifiers that should be shown
 	 */
@@ -522,8 +522,7 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 					if (PlantUmlOptions.filterList.contains(pe)) {
 						return true;
 					}
-				}
-				else {
+				} else {
 					return true;
 				}
 			}

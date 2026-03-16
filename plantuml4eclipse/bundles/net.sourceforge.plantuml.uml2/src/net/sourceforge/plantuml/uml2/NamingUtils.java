@@ -17,6 +17,9 @@ import org.eclipse.uml2.uml.Namespace;
 import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.TypedElement;
 
+import net.sourceforge.plantuml.uml2.PlantUmlOptions.NamingStyle;
+import net.sourceforge.plantuml.uml2.preferences.Uml2Preferences;
+
 /**
  * Names with spaces (and other characters to be identified) need to be escaped
  * via "as" directive) The escaped name is referenced by links
@@ -105,11 +108,12 @@ public class NamingUtils {
 	public static String getName(NamedElement ne, Package currentPkg) {
 		if (ne == null) {
 			return UNDEF;
-		} else if (!PlantUmlOptions.useQName || currentPkg == null || ne.getNearestPackage() == currentPkg) {
+		} else if (Uml2Preferences.getNamingStyle() == NamingStyle.SIMPLE || currentPkg == null
+				|| ne.getNearestPackage() == currentPkg) {
 			return ne.getName();
 		} else {
 			String qName = ne.getQualifiedName();
-			if (PlantUmlOptions.useAbsolute && qName != null) {
+			if (Uml2Preferences.getNamingStyle() == NamingStyle.ABSOLUTE && qName != null) {
 				qName = "." + qName;
 			}
 			return refName(qName).replace(Namespace.SEPARATOR, ".");

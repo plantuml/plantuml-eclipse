@@ -14,8 +14,8 @@ import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
-import net.sourceforge.plantuml.eclipse.Activator;
 import net.sourceforge.plantuml.uml2.PlantUmlOptions;
+import net.sourceforge.plantuml.uml2.Uml2Plugin;
 
 public class Uml2PreferenceInitializer extends AbstractPreferenceInitializer {
 
@@ -26,10 +26,10 @@ public class Uml2PreferenceInitializer extends AbstractPreferenceInitializer {
 	 */
 	@Override
 	public void initializeDefaultPreferences() {
-		IEclipsePreferences prefs = DefaultScope.INSTANCE.getNode(Activator.PLUGIN_ID);
+		IEclipsePreferences prefs = DefaultScope.INSTANCE.getNode(Uml2Plugin.PLUGIN_ID);
 
-		prefs.put(Uml2PreferenceConstants.P_COMMENT_STYLE, PlantUmlOptions.CommentStyle.TOP_NOTE.name());
-		prefs.putBoolean(Uml2PreferenceConstants.P_USE_QNAME, true);
-		prefs.putBoolean(Uml2PreferenceConstants.P_USE_ANAME, false);
+		prefs.put(Uml2PreferenceConstants.PREF_COMMENT_STYLE, PlantUmlOptions.CommentStyle.TOP_NOTE.name());
+		prefs.put(Uml2PreferenceConstants.PREF_NAMING_STYLE, PlantUmlOptions.NamingStyle.QUALIFIED.name());
+		prefs.put(Uml2PreferenceConstants.PREF_ELEMENT_COLORS, "");
 	}
 }

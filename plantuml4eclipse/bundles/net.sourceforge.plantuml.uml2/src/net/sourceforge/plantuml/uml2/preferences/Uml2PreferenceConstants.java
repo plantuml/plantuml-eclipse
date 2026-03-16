@@ -15,12 +15,19 @@ package net.sourceforge.plantuml.uml2.preferences;
  */
 public class Uml2PreferenceConstants {
 
-	// different ways to add PlantUML comments
-	public static final String P_COMMENT_STYLE = "commentStyle"; //$NON-NLS-1$
+	/**
+	 * The comment style to use (@see enumeration PlantUmlOptions.CommentStyle)
+	 */
+	public static final String PREF_COMMENT_STYLE = "commentStyle"; //$NON-NLS-1$
 
-	// use qualified names
-	public static final String P_USE_QNAME = "useQName"; //$NON-NLS-1$
+	/**
+	 * The naming style to use (@see PlantUmlOptions.NamingStyle)
+	 */
+	public static final String PREF_NAMING_STYLE = "namingStyle"; //$NON-NLS-1$
 
-	// use absolute names
-	public static final String P_USE_ANAME = "useAName"; //$NON-NLS-1$
+	/**
+	 * The color to use for different elements (comma separated type:color tuples)
+	 */
+	public static final String PREF_ELEMENT_COLORS = "elemntColors"; //$NON-NLS-1$
+
 }
