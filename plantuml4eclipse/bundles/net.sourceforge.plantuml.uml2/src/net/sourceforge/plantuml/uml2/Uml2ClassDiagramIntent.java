@@ -167,14 +167,15 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 		if (classifier instanceof OpaqueBehavior) {
 			return null;
 		}
-		if (classifier instanceof Class || classifier instanceof Interface || classifier instanceof DataType) {
+		if (classifier instanceof Enumeration) {
+			// test enumeration first, since an Enumeration specializes DataType
+			return getEnumText((Enumeration) classifier, genFlags);
+		} else if (classifier instanceof Class || classifier instanceof Interface || classifier instanceof DataType) {
 			return getClassText(classifier, genFlags);
 		} else if (classifier instanceof UseCase) {
 			return getUseCaseText(classifier, genFlags);
 		} else if (classifier instanceof Actor) {
 			return getActorText(classifier, genFlags);
-		} else if (classifier instanceof Enumeration) {
-			return getEnumText((Enumeration) classifier, genFlags);
 		}
 		return null;
 	}
