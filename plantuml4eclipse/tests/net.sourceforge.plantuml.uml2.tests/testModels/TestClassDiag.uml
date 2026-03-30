@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_4460QN1wEe6AzJnW7TwwaQ" name="TestClassDiag">
+  <ownedComment xmi:type="uml:Comment" xmi:id="_es47oCrWEfGQPMuR2eO6HQ">
+    <body>Global comment
+</body>
+  </ownedComment>
+  <ownedComment xmi:type="uml:Comment" xmi:id="_NxFP4CrYEfGQPMuR2eO6HQ" annotatedElement="_Fw_z4CrYEfGQPMuR2eO6HQ">
+    <body>Class1 inherits from Class4 implementing another interface. Test checks that PlantUML representation of Class1 only contains directly implemented interfaces </body>
+  </ownedComment>
   <packageImport xmi:type="uml:PackageImport" xmi:id="_45jtcN1wEe6AzJnW7TwwaQ">
     <importedPackage xmi:type="uml:Model" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#_0"/>
   </packageImport>
   <packagedElement xmi:type="uml:Class" xmi:id="_8IH7MN1wEe6AzJnW7TwwaQ" name="Class1">
+    <generalization xmi:type="uml:Generalization" xmi:id="_L0YSoCrYEfGQPMuR2eO6HQ" general="_Fw_z4CrYEfGQPMuR2eO6HQ"/>
     <ownedAttribute xmi:type="uml:Property" xmi:id="__JHnAd1wEe6AzJnW7TwwaQ" name="class2" type="_8uia8N1wEe6AzJnW7TwwaQ" association="__JFx0N1wEe6AzJnW7TwwaQ">
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__JHnAt1wEe6AzJnW7TwwaQ"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__JIOEN1wEe6AzJnW7TwwaQ" value="1"/>
@@ -41,4 +49,17 @@
   <packagedElement xmi:type="uml:Realization" xmi:id="_VwcHMN43Ee6xdrgRKgF_Tg" client="_8IH7MN1wEe6AzJnW7TwwaQ" supplier="_CzIIoN43Ee6xdrgRKgF_Tg"/>
   <packagedElement xmi:type="uml:Interface" xmi:id="_XATMkN43Ee6xdrgRKgF_Tg" name="SuperInterface"/>
   <packagedElement xmi:type="uml:Package" xmi:id="_WWEowOE1Ee6XiKEncq2v9g" name="emptyPkg"/>
+  <packagedElement xmi:type="uml:Enumeration" xmi:id="_Tbe40CrWEfGQPMuR2eO6HQ" name="TestEnum">
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_Tbe40SrWEfGQPMuR2eO6HQ" name="Literal1"/>
+    <ownedLiteral xmi:type="uml:EnumerationLiteral" xmi:id="_vCWuMCrWEfGQPMuR2eO6HQ" name="Literal2"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_XLltYCrWEfGQPMuR2eO6HQ" name="TestDT">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_XLltYSrWEfGQPMuR2eO6HQ" name="attribute1" visibility="public">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_Fw_z4CrYEfGQPMuR2eO6HQ" name="Class4">
+    <interfaceRealization xmi:type="uml:InterfaceRealization" xmi:id="_chSfYCrZEfGQPMuR2eO6HQ" client="_Fw_z4CrYEfGQPMuR2eO6HQ" supplier="_hvjwgCrYEfGQPMuR2eO6HQ" contract="_hvjwgCrYEfGQPMuR2eO6HQ"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Interface" xmi:id="_hvjwgCrYEfGQPMuR2eO6HQ" name="AnotherIntf"/>
 </uml:Model>
