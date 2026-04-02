@@ -60,8 +60,9 @@ public class CommentUtils {
 		}
 		if (simpleComment) {
 			for (Comment comment : getComments(el)) {
-				if (comment.getBody().length() > 0) {
-					for (String cLine : comment.getBody().split("\n")) {
+				String body = comment.getBody();
+				if (body != null && body.length() > 0) {
+					for (String cLine : body.split("\n")) {
 						if (indent) {
 							sb.append("\t");
 						}
