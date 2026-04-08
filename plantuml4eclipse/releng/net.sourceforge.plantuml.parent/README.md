@@ -78,8 +78,8 @@ If everything is as expected, push the changes to GitHub pages (git branch *gh-p
 - add a release (create a draft first, fill all the details)
 - add release notes from README.md in root folder
 - merge the `release` branch back into `main` branch
-- tag the new version on `main` branch with e.g. 1.2.0.202510231536
-- In the release draft, choose a git tag (e.g. 1.2.0.202510231536) in the branch `main`
+- tag the new version on `main` branch with e.g. 1.2.0.202511102215
+- In the release draft, choose a git tag (e.g. 1.2.0.202511102215) in the branch `main`
 - publish the release
 - close issues that (supposedly) are fixed
 
@@ -88,6 +88,7 @@ If everything is as expected, push the changes to GitHub pages (git branch *gh-p
 - in `plantuml4eclipse`, in `net.sourceforge.plantuml.parent/pom.xml` increment the version in `<releaseVersion>...</releaseVersion>` property,
   search and replace `<version>-SNAPSHOT` with `<version+1>-SNAPSHOT` in all `pom.xml`,
   and `<version>.qualifier` with `<version+1>.qualifier` in all `MANIFEST.MF`, `feature.xml` and `category.xml`
+- update the `composite...xml` files in `net.sourceforge.plantuml.repository.composite` project to the version in `gh-pages` git branch
 - build, commit and push
 
 (think that's enough)

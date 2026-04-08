@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: PlantUML library plug-in
 Bundle-SymbolicName: net.sourceforge.plantuml.library
 Automatic-Module-Name: net.sourceforge.plantuml.library
-Bundle-Version: 1.2025.4.qualifier
+Bundle-Version: 1.2025.10.qualifier
 Export-Package: net.sourceforge.plantuml,
  net.sourceforge.plantuml.abel,
  net.sourceforge.plantuml.activitydiagram,
@@ -36,6 +36,7 @@ Export-Package: net.sourceforge.plantuml,
  net.sourceforge.plantuml.chronology,
  net.sourceforge.plantuml.classdiagram,
  net.sourceforge.plantuml.classdiagram.command,
+ net.sourceforge.plantuml.cli,
  net.sourceforge.plantuml.code,
  net.sourceforge.plantuml.code.deflate,
  net.sourceforge.plantuml.command,
@@ -107,6 +108,7 @@ Export-Package: net.sourceforge.plantuml,
  net.sourceforge.plantuml.klimt.geom,
  net.sourceforge.plantuml.klimt.shape,
  net.sourceforge.plantuml.klimt.sprite,
+ net.sourceforge.plantuml.licensing,
  net.sourceforge.plantuml.log,
  net.sourceforge.plantuml.math,
  net.sourceforge.plantuml.mda,
@@ -123,8 +125,11 @@ Export-Package: net.sourceforge.plantuml,
  net.sourceforge.plantuml.picoweb,
  net.sourceforge.plantuml.plasma,
  net.sourceforge.plantuml.png,
+ net.sourceforge.plantuml.png.quant,
+ net.sourceforge.plantuml.png.quantx,
  net.sourceforge.plantuml.posimo,
  net.sourceforge.plantuml.preproc,
+ net.sourceforge.plantuml.preproc.spm,
  net.sourceforge.plantuml.preproc2,
  net.sourceforge.plantuml.project,
  net.sourceforge.plantuml.project.command,
@@ -191,7 +196,7 @@ Export-Package: net.sourceforge.plantuml,
  net.sourceforge.plantuml.yaml,
  net.sourceforge.plantuml.yaml.parser,
  net.sourceforge.plantuml.zopfli
-Bundle-Vendor: Arnaud Roques
+Bundle-Vendor: PlantUML Team
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: lib/plantuml-epl-1.2025.4.jar
+Bundle-ClassPath: lib/plantuml-epl-1.2025.10.jar

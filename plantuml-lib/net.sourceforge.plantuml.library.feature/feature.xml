@@ -2,7 +2,7 @@
 <feature
       id="net.sourceforge.plantuml.library.feature"
       label="%featureName"
-      version="1.2025.4.qualifier"
+      version="1.2025.10.qualifier"
       provider-name="Arnaud Roques">
 
    <description url="https://plantuml.com/">
@@ -10,7 +10,7 @@
    </description>
 
    <copyright>
-      (C) Copyright 2009-2025, Arnaud Roques
+      (C) Copyright 2009-2025, PlantUML Team
    </copyright>
 
    <license url="%licenseURL">
