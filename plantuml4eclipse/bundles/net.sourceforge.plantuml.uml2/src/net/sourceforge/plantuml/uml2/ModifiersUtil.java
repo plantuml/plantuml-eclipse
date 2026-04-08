@@ -2,7 +2,7 @@
  * Copyright (c) 2025 CEA LIST and others
  *
  * All rights reserved. This program and the accompanying materials are
- * made available under the terms of the Eclipse Public License 2.0 which
+ * made available under the terms of the Eclipse Public License 1.0 which
  * accompanies this distribution, and is available at
  * https://www.eclipse.org/org/documents/epl-v10.html
  *
@@ -18,7 +18,7 @@ import org.eclipse.uml2.uml.Feature;
  * Utility function for PUML modifiers on attributes and operations
  */
 public class ModifiersUtil {
-	
+
 	/**
 	 * return the PlantUML modifier string containing {abstract} and {static}, if applied on a feature
 	 * 
@@ -32,7 +32,7 @@ public class ModifiersUtil {
 		}
 		if (feature instanceof BehavioralFeature) {
 			boolean isAbstract = ((BehavioralFeature) feature).isAbstract();
-			// normally, a method cannot be both abstract and static 
+			// normally, a method cannot be both abstract and static
 			if (isAbstract) {
 				modifiersPUML = "{abstract}";
 			}

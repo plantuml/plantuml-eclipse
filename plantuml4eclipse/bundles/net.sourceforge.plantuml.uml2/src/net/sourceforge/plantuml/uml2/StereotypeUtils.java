@@ -2,7 +2,7 @@
  * Copyright (c) 2025 CEA LIST and others
  *
  * All rights reserved. This program and the accompanying materials are
- * made available under the terms of the Eclipse Public License 2.0 which
+ * made available under the terms of the Eclipse Public License 1.0 which
  * accompanies this distribution, and is available at
  * https://www.eclipse.org/org/documents/epl-v10.html
  *
@@ -21,14 +21,14 @@ import org.eclipse.uml2.uml.Vertex;
  * Utility class around plant-uml stereotypes
  */
 public class StereotypeUtils {
-	
+
 	/**
 	 * Some pseudo states use pseudo stereotypes
 	 */
 	private static final String ST_FORK = "fork"; //$NON-NLS-1$
 	private static final String ST_JOIN = "join"; //$NON-NLS-1$
 	private static final String ST_CHOICE = "choice"; //$NON-NLS-1$
-	
+
 	/**
 	 * @param element a UML element
 	 * @param pre     if true, use stereotype names as prefix (i.e. add a space
@@ -58,12 +58,12 @@ public class StereotypeUtils {
 		}
 		return stNames;
 	}
-	
+
 	/**
 	 * Some states need a pseudo stereotype in PlantUML, notably Fork, Join and Choice (this in not the case in UML)
 	 * 
 	 * @param vertex
-	 *            a vertex
+	 *               a vertex
 	 * @return the pseudo stereotype to use
 	 */
 	public static String stateStereo(Vertex vertex) {

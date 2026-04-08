@@ -2,7 +2,7 @@
  * Copyright (c) 2025 CEA LIST and others
  *
  * All rights reserved. This program and the accompanying materials are
- * made available under the terms of the Eclipse Public License 2.0 which
+ * made available under the terms of the Eclipse Public License 1.0 which
  * accompanies this distribution, and is available at
  * https://www.eclipse.org/org/documents/epl-v10.html
  *
@@ -21,11 +21,9 @@ public class VisibilityUtils {
 	public static String visibility(NamedElement ne) {
 		if (ne.getVisibility() == VisibilityKind.PRIVATE_LITERAL) {
 			return "-";
-		}
-		else if (ne.getVisibility() == VisibilityKind.PROTECTED_LITERAL) {
+		} else if (ne.getVisibility() == VisibilityKind.PROTECTED_LITERAL) {
 			return "#";
-		}
-		else if (ne.getVisibility() == VisibilityKind.PACKAGE_LITERAL) {
+		} else if (ne.getVisibility() == VisibilityKind.PACKAGE_LITERAL) {
 			return "~";
 		}
 		return null;
