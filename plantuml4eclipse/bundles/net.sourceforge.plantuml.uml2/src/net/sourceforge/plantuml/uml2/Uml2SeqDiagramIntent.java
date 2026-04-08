@@ -2,7 +2,7 @@
  * Copyright (c) 2025 CEA LIST and others
  *
  * All rights reserved. This program and the accompanying materials are
- * made available under the terms of the Eclipse Public License 2.0 which
+ * made available under the terms of the Eclipse Public License 1.0 which
  * accompanies this distribution, and is available at
  * https://www.eclipse.org/org/documents/epl-v10.html
  *
@@ -144,22 +144,17 @@ public class Uml2SeqDiagramIntent extends AbstractClassDiagramIntent<Collection<
 			OccurrenceSpecification sourceOS = (OccurrenceSpecification) source;
 			OccurrenceSpecification targetOS = (OccurrenceSpecification) target;
 			if (sourceOS.getCovered() != null && targetOS.getCovered() != null) {
-				buffer.append(String.format("%s%s%s : %s\n",
-						sourceOS.getCovered().getName(),
-						arrow,
-						targetOS.getCovered().getName(),
-						message.getName()));
+				buffer.append(String.format("%s%s%s : %s\n", sourceOS.getCovered().getName(), arrow,
+						targetOS.getCovered().getName(), message.getName()));
 			}
 		} else if (source instanceof MessageOccurrenceSpecification) {
 			// no target - message lost
 			buffer.append(String.format("%s->x] : %s\n",
-					((MessageOccurrenceSpecification) source).getCovered().getName(),
-					message.getName()));
+					((MessageOccurrenceSpecification) source).getCovered().getName(), message.getName()));
 		} else if (target instanceof MessageOccurrenceSpecification) {
 			// no source - message found
 			buffer.append(String.format("%s->x[ : %s\n",
-					((MessageOccurrenceSpecification) target).getCovered().getName(),
-					message.getName()));
+					((MessageOccurrenceSpecification) target).getCovered().getName(), message.getName()));
 		}
 		// appendLL(lifeline, genFlags, buffer);
 	}
@@ -168,7 +163,7 @@ public class Uml2SeqDiagramIntent extends AbstractClassDiagramIntent<Collection<
 	 * Append a lifeline
 	 * 
 	 * @param ia
-	 *            an interaction
+	 *                 an interaction
 	 * @param genFlags
 	 * @param buffer
 	 */
@@ -180,7 +175,8 @@ public class Uml2SeqDiagramIntent extends AbstractClassDiagramIntent<Collection<
 
 	@DiagramIntentProperty(name = CLASS_DIAGRAM__USE_DATA_TYPE_INSTANCE_CLASS_NAME, type = Boolean.class)
 	protected boolean useDataTypeInstanceClassName() {
-		return getIntentProperties().getProperty(CLASS_DIAGRAM__USE_DATA_TYPE_INSTANCE_CLASS_NAME, Boolean.class, false);
+		return getIntentProperties().getProperty(CLASS_DIAGRAM__USE_DATA_TYPE_INSTANCE_CLASS_NAME, Boolean.class,
+				false);
 	}
 
 	protected String getTypeName(final Type type, final String def) {

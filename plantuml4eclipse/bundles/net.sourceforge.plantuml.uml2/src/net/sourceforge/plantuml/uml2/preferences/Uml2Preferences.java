@@ -2,7 +2,7 @@
  * Copyright (c) 2026 CEA LIST and others
  *
  * All rights reserved. This program and the accompanying materials are
- * made available under the terms of the Eclipse Public License 2.0 which
+ * made available under the terms of the Eclipse Public License 1.0 which
  * accompanies this distribution, and is available at
  * https://www.eclipse.org/org/documents/epl-v10.html
  *

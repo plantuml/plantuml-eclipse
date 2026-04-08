@@ -2,7 +2,7 @@
  * Copyright (c) 2025 CEA LIST and others
  *
  * All rights reserved. This program and the accompanying materials are
- * made available under the terms of the Eclipse Public License 2.0 which
+ * made available under the terms of the Eclipse Public License 1.0 which
  * accompanies this distribution, and is available at
  * https://www.eclipse.org/org/documents/epl-v10.html
  *
@@ -98,7 +98,8 @@ public class Uml2StateDiagramIntent extends AbstractClassDiagramIntent<Collectio
 					if (state.getRegions().size() > 0) {
 						buffer.append(" {\n");
 						for (Region subRegion : ((State) vertex).getRegions()) {
-							String subRegionText = getDiagramText(String.format("%s.", state.getName()), subRegion, genFlags);
+							String subRegionText = getDiagramText(String.format("%s.", state.getName()), subRegion,
+									genFlags);
 							indentBlock(buffer, subRegionText);
 						}
 						buffer.append("}\n");
@@ -108,7 +109,8 @@ public class Uml2StateDiagramIntent extends AbstractClassDiagramIntent<Collectio
 			}
 		}
 		for (Transition transition : region.getTransitions()) {
-			buffer.append(String.format("%s -> %s", stateName(prefix, transition.getSource()), stateName(prefix, transition.getTarget())));
+			buffer.append(String.format("%s -> %s", stateName(prefix, transition.getSource()),
+					stateName(prefix, transition.getTarget())));
 			String label = getTransitionLabel(transition);
 			if (label != null && label.length() > 0) {
 				buffer.append(String.format(" : %s", label));
@@ -119,21 +121,21 @@ public class Uml2StateDiagramIntent extends AbstractClassDiagramIntent<Collectio
 	}
 
 	/**
-	 * Return whether a state needs to be declared in PlantUML. This is not the case for initial, terminate and history states, they are
+	 * Return whether a state needs to be declared in PlantUML. This is not the case for initial, terminate and history
+	 * states, they are
 	 * only referenced via a pseudo name
 	 * 
 	 * @param vertex
-	 *            a vertex
+	 *               a vertex
 	 * @return true, if needs declaration
 	 */
 
 	public boolean needsDeclaration(Vertex vertex) {
 		if (vertex instanceof Pseudostate) {
 			PseudostateKind kind = ((Pseudostate) vertex).getKind();
-			if (kind == PseudostateKind.INITIAL_LITERAL ||
-					kind == PseudostateKind.TERMINATE_LITERAL ||
-					kind == PseudostateKind.SHALLOW_HISTORY_LITERAL ||
-					kind == PseudostateKind.DEEP_HISTORY_LITERAL) {
+			if (kind == PseudostateKind.INITIAL_LITERAL || kind == PseudostateKind.TERMINATE_LITERAL
+					|| kind == PseudostateKind.SHALLOW_HISTORY_LITERAL
+					|| kind == PseudostateKind.DEEP_HISTORY_LITERAL) {
 				return false;
 			}
 		}
@@ -145,9 +147,9 @@ public class Uml2StateDiagramIntent extends AbstractClassDiagramIntent<Collectio
 
 	/**
 	 * @param prefix
-	 *            prefix of current container (of a transition)
+	 *               prefix of current container (of a transition)
 	 * @param vertex
-	 *            a vertex
+	 *               a vertex
 	 * @return the (qualified) name to use when referencing a state
 	 */
 	public String stateName(String prefix, Vertex vertex) {

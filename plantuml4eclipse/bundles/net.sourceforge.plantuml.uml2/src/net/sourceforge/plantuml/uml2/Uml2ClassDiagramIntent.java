@@ -2,7 +2,7 @@
  * Copyright (c) 2025, 2026 CEA LIST and others
  *
  * All rights reserved. This program and the accompanying materials are
- * made available under the terms of the Eclipse Public License 2.0 which
+ * made available under the terms of the Eclipse Public License 1.0 which
  * accompanies this distribution, and is available at
  * https://www.eclipse.org/org/documents/epl-v10.html
  *
@@ -242,7 +242,6 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 
 	/**
 	 * Color classifiers depending on their types
-	 * TODO propositions in comments, make that customizable
 	 * 
 	 * @param classifier
 	 * @return
