@@ -55,14 +55,14 @@ public class PlantUmlOptions {
 		SIMPLE,
 
 		/**
-		 * qualified name
+		 * qualified name (relative to selected package)
 		 */
 		QUALIFIED,
 
 		/**
-		 * absolute qualified name (preceding ".")
+		 * fully qualified name
 		 */
-		ABSOLUTE
+		FULLY_QUALIFIED
 	}
 
 	/**

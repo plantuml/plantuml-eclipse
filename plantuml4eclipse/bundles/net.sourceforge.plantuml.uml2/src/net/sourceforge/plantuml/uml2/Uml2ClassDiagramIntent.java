@@ -33,7 +33,6 @@ import org.eclipse.uml2.uml.EnumerationLiteral;
 import org.eclipse.uml2.uml.Extend;
 import org.eclipse.uml2.uml.Include;
 import org.eclipse.uml2.uml.Interface;
-import org.eclipse.uml2.uml.InterfaceRealization;
 import org.eclipse.uml2.uml.MultiplicityElement;
 import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.OpaqueBehavior;
@@ -43,6 +42,7 @@ import org.eclipse.uml2.uml.PackageableElement;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.ParameterDirectionKind;
 import org.eclipse.uml2.uml.Property;
+import org.eclipse.uml2.uml.Realization;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.UseCase;
 import org.eclipse.uml2.uml.ValueSpecification;
@@ -55,6 +55,10 @@ import net.sourceforge.plantuml.uml2.preferences.Uml2Preferences;
  * Produce a PlantUML class diagram from a UML package
  */
 public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collection<Element>> {
+
+	private Package root;
+
+	private NamingUtils nu;
 
 	protected Uml2ClassDiagramIntent(final Collection<Element> source) {
 		super(source, "Class diagram"); //$NON-NLS-1$
@@ -75,14 +79,22 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 		int genFlags = GEN_MEMBERS | GEN_EXTENDS | GEN_IMPLEMENTS | GEN_ASSOCIATIONS;
 		for (Element source : getSource()) {
 			if (source instanceof Package) {
-				String diagramText = getDiagramText((Package) source, genFlags);
+				Package pkg = (Package) source;
+				nu = new NamingUtils(pkg);
+				this.root = pkg;
+				String diagramText = getDiagramTextNodes(pkg, genFlags);
 				if (diagramText != null) {
 					buffer.append(diagramText);
 				}
 			} else if (source instanceof Classifier) {
-				String classifier = getClassifier((Classifier) source, genFlags);
-				if (classifier != null) {
-					buffer.append(classifier);
+				// show only a specific classifier. Adds relationships filtered with respect to a package
+				Classifier cl = (Classifier) source;
+				nu = new NamingUtils(cl.getNearestPackage());
+				this.root = cl.getNearestPackage();
+				String classifierText = getClassifier((Classifier) source, genFlags);
+				if (classifierText != null) {
+					buffer.append(classifierText);
+					appendRelationships(cl, genFlags, buffer);
 				}
 			}
 		}
@@ -102,13 +114,22 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 		return false;
 	}
 
-	protected String getDiagramText(Package pack, final int genFlags) {
+	/**
+	 * Create the nodes for elements within a package. If it corresponds to the selected root package, it will also
+	 * add relationships. All relationships are created at the end of the selected package to avoid that names
+	 * pointing to other sub-packages declared later remain unresolved.
+	 * 
+	 * @param pack     the package to create nodes for
+	 * @param genFlags generation flags
+	 * @return the produced plantUML text
+	 */
+	protected String getDiagramTextNodes(Package pack, final int genFlags) {
 		final StringBuilder buffer = new StringBuilder();
 		if (skinParams != null) {
 			appendSkinParams(skinParams, buffer);
 		}
 		CommentUtils.append(pack, buffer);
-		buffer.append(String.format("package %s%s {\n", NamingUtils.declName(pack.getName()),
+		buffer.append(String.format("package %s%s {\n", nu.declName(pack.getName()),
 				StereotypeUtils.stereoNames(pack, false)));
 		List<Classifier> classifiers = new ArrayList<>();
 		for (PackageableElement pe : pack.getPackagedElements()) {
@@ -119,7 +140,7 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 
 		for (final Package nestedPkg : pack.getNestedPackages()) {
 			if (hasClassifiers(nestedPkg)) {
-				String nestedPkgText = getDiagramText(nestedPkg, genFlags);
+				String nestedPkgText = getDiagramTextNodes(nestedPkg, genFlags);
 				indentBlock(buffer, nestedPkgText);
 			}
 		}
@@ -129,6 +150,37 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 				if (classifierText != null) {
 					indentBlock(buffer, classifierText);
 				}
+			}
+		}
+		if (pack == root) {
+			String diagramTextEdges = getDiagramTextEdges(pack, genFlags);
+			buffer.append(diagramTextEdges);
+		}
+		buffer.append("}\n");
+		CommentUtils.appendNote(pack, buffer);
+		return buffer.toString();
+	}
+
+	/**
+	 * Create the edges (relationships) for elements within a package
+	 *
+	 * @param pack     the package to create relationships for
+	 * @param genFlags generation flags
+	 * @return the produced plantUML text
+	 */
+	protected String getDiagramTextEdges(Package pack, final int genFlags) {
+		final StringBuilder buffer = new StringBuilder();
+		List<Classifier> classifiers = new ArrayList<>();
+		for (PackageableElement pe : pack.getPackagedElements()) {
+			if (pe instanceof Classifier) {
+				classifiers.add((Classifier) pe);
+			}
+		}
+
+		for (final Package nestedPkg : pack.getNestedPackages()) {
+			if (hasClassifiers(nestedPkg)) {
+				String nestedPkgText = getDiagramTextEdges(nestedPkg, genFlags);
+				buffer.append(nestedPkgText);
 			}
 		}
 		if (includes(genFlags, GEN_EXTENDS) || includes(genFlags, GEN_IMPLEMENTS)) {
@@ -144,9 +196,6 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 				}
 			}
 		}
-
-		buffer.append("}\n");
-		CommentUtils.appendNote(pack, buffer);
 		return buffer.toString();
 	}
 
@@ -198,8 +247,9 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 		}
 		// dependencies
 		for (final Dependency dep : classifier.getClientDependencies()) {
-			if (dep instanceof InterfaceRealization) {
-				// already treated earlier (an InterfaceRealization is a Dependency)
+			if (dep instanceof Realization) {
+				// already treated earlier (Realization and its subclass InterfaceRealization are dependencies
+				// Dependency)
 				continue;
 			} else if (dep.getSuppliers().size() > 0) {
 				NamedElement supplier = dep.getSuppliers().get(0);
@@ -227,16 +277,13 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 	protected void appendGeneralisation(final Classifier subClass, final Classifier superClass,
 			final boolean isImplements, final StringBuilder buffer) {
 		indentOne(buffer);
-		Package cp = subClass.getNearestPackage(); // generalization is added in pkg of sub class
-		appendGeneralisation(NamingUtils.getName(subClass, cp), NamingUtils.getName(superClass, cp), isImplements,
-				buffer);
+		appendGeneralisation(nu.getName(subClass, root), nu.getName(superClass, root), isImplements, buffer);
 	}
 
 	protected void appendDependency(NamedElement source, NamedElement target, StringBuilder buffer) {
 		indentOne(buffer);
-		Package cp = source.getNearestPackage(); // generalization is added in pkg of source
-		appendRelation(getLogicalName(NamingUtils.getName(source, cp)), false, null, "..>", null,
-				getLogicalName(NamingUtils.getName(target, cp)), false, null, null, buffer);
+		appendRelation(getLogicalName(nu.getName(source, root)), false, null, "..>", null,
+				getLogicalName(nu.getName(target, root)), false, null, null, buffer);
 
 	}
 
@@ -304,8 +351,8 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 
 					CommentUtils.append(attribute, buffer, true);
 					appendAttribute(attribute.isDerived(), ModifiersUtil.modifiers(attribute),
-							VisibilityUtils.visibility(attribute), NamingUtils.typeName(attribute, currentPkg),
-							attrName, buffer);
+							VisibilityUtils.visibility(attribute), nu.typeName(attribute, currentPkg), attrName,
+							buffer);
 					ValueSpecification df = attribute.getDefaultValue();
 					if (df != null && df.stringValue() != null) {
 						// ignore empty default values and multi-line ones which are likely containing
@@ -329,7 +376,7 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 							String paramString;
 							if (parameter.getType() != null) {
 								paramString = String.format("%s : %s", parameter.getName(),
-										NamingUtils.typeName(parameter, currentPkg));
+										nu.typeName(parameter, currentPkg));
 							} else {
 								paramString = parameter.getName();
 							}
@@ -343,8 +390,7 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 					// do not append "void", if no return type
 					CommentUtils.append(op, buffer, true);
 					appendOperation(ModifiersUtil.modifiers(op), VisibilityUtils.visibility(op),
-							retParam != null ? NamingUtils.typeName(retParam, currentPkg) : null, opName, parameters,
-							buffer);
+							retParam != null ? nu.typeName(retParam, currentPkg) : null, opName, parameters, buffer);
 				}
 			}
 		}
@@ -445,9 +491,8 @@ public class Uml2ClassDiagramIntent extends AbstractClassDiagramIntent<Collectio
 		final String endLabel = getRoleLabel(target.getName(), getMultiplicity(target));
 
 		indentOne(buffer);
-		Package cp = assoc.getNearestPackage();
-		appendRelation(NamingUtils.getName(sourceClass, cp), false, startLabel, relation, null,
-				NamingUtils.getName(targetClass, cp), false, endLabel, assoc.getName(), buffer);
+		appendRelation(nu.getName(sourceClass, root), false, startLabel, relation, null, nu.getName(targetClass, root),
+				false, endLabel, assoc.getName(), buffer);
 	}
 
 	protected String getRelationEnd(Property from, Property to, boolean left) {
