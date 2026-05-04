@@ -1,4 +1,5 @@
 @startuml
+'Global comment
 package TestClassDiag {
 	package subPackage {
 		class Class1 {
@@ -6,7 +7,6 @@ package TestClassDiag {
 		}
 		class Class2 {
 		}
-		Class2 <|-- Class1
 	}
 	class Class1 {
 		class2: Class3 [0..1]
@@ -26,18 +26,18 @@ package TestClassDiag {
 	dataclass TestDT {
 		attribute1: PrimitiveTypes.Integer
 	}
+	'Class1 inherits from Class4 implementing another interface. Test checks that PlantUML representation of Class1 only contains directly implemented interfaces 
 	class Class4 {
 	}
-	note top of Class4: Class1 inherits from Class4 implementing another interface. Test checks that PlantUML representation of Class1 only contains directly implemented interfaces 
 	interface AnotherIntf {
 	}
+	subPackage.Class2 <|-- subPackage.Class1
 	Class4 <|-- Class1
 	SubIntf <|.. Class1
-	Class1 ..> SubIntf
-	TestClassDiag.subPackage.Class2 <|-- Class3
+	subPackage.Class2 <|-- Class3
+	Class3 ..> PrimitiveTypes.Integer
 	SuperInterface <|-- SubIntf
 	AnotherIntf <|.. Class4
 	Class3 "class2 0..1" <-- "class1" Class1
 }
-note top of TestClassDiag: Global comment\n
 @enduml

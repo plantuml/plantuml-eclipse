@@ -56,7 +56,9 @@ public class Uml2DiagramPreferencePage extends FieldEditorPreferencePage impleme
 				commentOptions.toArray(new String[2][0]), getFieldEditorParent());
 		addField(commentStyleFE);
 
-		namingStyleFE = new ComboFieldEditor(Uml2PreferenceConstants.PREF_NAMING_STYLE, "Naming options", //$NON-NLS-1$
+		String namingExplanation = "Naming of referenced types: SIMPLE corresponds to short names,\n"
+				+ "Qualified names are either relative to the selected package (QUALIFIED) or fully qualified"; //$NON-NLS-1$
+		namingStyleFE = new ComboFieldEditor(Uml2PreferenceConstants.PREF_NAMING_STYLE, namingExplanation,
 				namingOptions.toArray(new String[2][0]), getFieldEditorParent());
 		addField(namingStyleFE);
 

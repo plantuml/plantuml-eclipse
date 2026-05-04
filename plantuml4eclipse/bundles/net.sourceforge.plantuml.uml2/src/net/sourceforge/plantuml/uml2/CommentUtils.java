@@ -109,11 +109,12 @@ public class CommentUtils {
 				position = "bottom";
 			}
 			for (Comment comment : getComments(ne)) {
-				if (comment.getBody().length() > 0) {
+				String body = comment.getBody();
+				if (body != null && body.length() > 0) {
 					if (indent) {
 						sb.append("\t");
 					}
-					String body = comment.getBody().replace("\n", "\\n");
+					body = body.replace("\n", "\\n");
 					sb.append(String.format("note %s of %s: %s\n", position, ne.getName(), body));
 				}
 			}

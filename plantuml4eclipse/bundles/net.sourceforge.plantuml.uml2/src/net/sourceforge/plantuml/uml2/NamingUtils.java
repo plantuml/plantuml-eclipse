@@ -30,6 +30,17 @@ public class NamingUtils {
 	 */
 	final public static String UNDEF = "undefined";
 
+	final protected Package root;
+
+	/**
+	 * Create an instance
+	 * 
+	 * @param root the root package to use for qualified names relative to this package
+	 */
+	public NamingUtils(Package root) {
+		this.root = root;
+	}
+
 	/**
 	 * @param name
 	 * @return the name to use in declarations, containing eventually the as name
@@ -66,11 +77,11 @@ public class NamingUtils {
 	 * @param ne a named element (which may also be a multiplicity element)
 	 * @return the name with a multiplicity indicator, if applicable
 	 */
-	public static String typeName(TypedElement te) {
+	public String typeName(TypedElement te) {
 		return typeName(te, null);
 	}
 
-	public static String typeName(TypedElement te, Package currentPkg) {
+	public String typeName(TypedElement te, Package currentPkg) {
 
 		String qName = refName(getName(te.getType(), currentPkg));
 		String multiplicity = "";
@@ -103,20 +114,36 @@ public class NamingUtils {
 	/**
 	 * @param ne a type
 	 * @return the name of a type. If the type is in the current package, just
-	 *         return the simple name. Otherwise use the fully qualified name
+	 *         return the simple name. Otherwise use the qualified name relative to the root package or the fully
+	 *         qualified name
 	 */
-	public static String getName(NamedElement ne, Package currentPkg) {
+	public String getName(NamedElement ne, Package currentPkg) {
 		if (ne == null) {
 			return UNDEF;
-		} else if (Uml2Preferences.getNamingStyle() == NamingStyle.SIMPLE || currentPkg == null
-				|| ne.getNearestPackage() == currentPkg) {
+		} else if (Uml2Preferences.getNamingStyle() == NamingStyle.SIMPLE || ne.getNearestPackage() == currentPkg) {
 			return ne.getName();
-		} else {
+		} else if (Uml2Preferences.getNamingStyle() == NamingStyle.QUALIFIED) {
+			String qName = getQName(ne);
+			return refName(qName).replace(Namespace.SEPARATOR, ".");
+		} else { // fully qualified
 			String qName = ne.getQualifiedName();
-			if (Uml2Preferences.getNamingStyle() == NamingStyle.ABSOLUTE && qName != null) {
-				qName = "." + qName;
-			}
 			return refName(qName).replace(Namespace.SEPARATOR, ".");
 		}
+	}
+
+	/**
+	 * @param ne a named element
+	 * @return the qualified name relative to the registered root package
+	 */
+	protected String getQName(NamedElement ne) {
+		String qn = ne.getName();
+		for (Namespace ns : ne.allNamespaces()) {
+			if (ns == root) {
+				return qn;
+			}
+			qn = ns.getName() + "." + qn;
+		}
+		// root not found, return fully
+		return ne.getQualifiedName().replace(Namespace.SEPARATOR, ".");
 	}
 }
