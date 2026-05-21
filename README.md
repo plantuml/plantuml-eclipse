@@ -93,7 +93,7 @@ This plugin's life cycle is strictly coupled with that of the PlantUML library r
 
 
 ## [1.2.1](https://github.com/plantuml/plantuml-eclipse/releases/tag/1.2.1.202605211549)
-- Update to minimum PlantUML library vers. 1.2026.3
+- Update to minimum PlantUML library vers. 1.2026.3, see [changes](https://plantuml.com/changes)
 - Add update sites for resolving dependencies to UML2 and EMF plug-ins
 - Fix multiple UML 2 diagram issues [#3](https://github.com/plantuml/plantuml-eclipse/issues/3), [#4](https://github.com/plantuml/plantuml-eclipse/issues/4), [#7](https://github.com/plantuml/plantuml-eclipse/issues/7), [#8](https://github.com/plantuml/plantuml-eclipse/issues/8)
   and add a preferences page for UML 2 diagram creation. 
