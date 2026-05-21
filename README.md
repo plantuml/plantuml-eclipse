@@ -92,6 +92,10 @@ Note that the net.sourceforge.plantuml.library plugin's versions are similar to 
 This plugin's life cycle is strictly coupled with that of the PlantUML library releases.
 
 
+## [1.2.1](https://github.com/plantuml/plantuml-eclipse/releases/tag/1.2.1.xxx)
+- Update to minimum PlantUML library vers. 1.2026.3
+- Add update sites for resolving dependencies to UML2 and EMF plug-ins
+
 ## [1.2.0](https://github.com/plantuml/plantuml-eclipse/releases/tag/1.2.0.202511102215)
 - Move git repository from https://github.com/hallvard/plantuml to https://github.com/plantuml/plantuml-eclipse
   (see discussions [1](https://github.com/hallvard/plantuml/discussions/166) and [2](https://github.com/plantuml/plantuml-eclipse/discussions/2))
