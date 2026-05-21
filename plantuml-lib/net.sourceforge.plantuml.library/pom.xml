@@ -6,11 +6,11 @@
 
   <name>PlantUML library bundled as Eclipse plug-in</name>
 
-  	<parent>
-	    <groupId>net.sourceforge.plantuml</groupId>
-	    <artifactId>net.sourceforge.plantuml-eclipse-parent</artifactId>
-	    <version>${plantuml-lib-version}${qualifier}</version>
-	    <relativePath>../pom.xml</relativePath>
-	</parent>
+  <parent>
+    <groupId>net.sourceforge.plantuml</groupId>
+    <artifactId>net.sourceforge.plantuml-eclipse-parent</artifactId>
+    <version>${plantuml-lib-version}${qualifier}</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
 
 </project>

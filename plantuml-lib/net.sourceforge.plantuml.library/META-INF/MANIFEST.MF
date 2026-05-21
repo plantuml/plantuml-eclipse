@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: PlantUML library plug-in
 Bundle-SymbolicName: net.sourceforge.plantuml.library
 Automatic-Module-Name: net.sourceforge.plantuml.library
-Bundle-Version: 1.2025.10.qualifier
+Bundle-Version: 1.2026.3.qualifier
 Export-Package: net.sourceforge.plantuml,
  net.sourceforge.plantuml.abel,
  net.sourceforge.plantuml.activitydiagram,
@@ -42,8 +42,6 @@ Export-Package: net.sourceforge.plantuml,
  net.sourceforge.plantuml.command,
  net.sourceforge.plantuml.command.note,
  net.sourceforge.plantuml.command.note.sequence,
- net.sourceforge.plantuml.compositediagram,
- net.sourceforge.plantuml.compositediagram.command,
  net.sourceforge.plantuml.core,
  net.sourceforge.plantuml.crash,
  net.sourceforge.plantuml.cruise,
@@ -120,7 +118,6 @@ Export-Package: net.sourceforge.plantuml,
  net.sourceforge.plantuml.objectdiagram.command,
  net.sourceforge.plantuml.openiconic,
  net.sourceforge.plantuml.openiconic.data,
- net.sourceforge.plantuml.oregon,
  net.sourceforge.plantuml.pdf,
  net.sourceforge.plantuml.picoweb,
  net.sourceforge.plantuml.plasma,
@@ -134,7 +131,6 @@ Export-Package: net.sourceforge.plantuml,
  net.sourceforge.plantuml.project,
  net.sourceforge.plantuml.project.command,
  net.sourceforge.plantuml.project.core,
- net.sourceforge.plantuml.project.core3,
  net.sourceforge.plantuml.project.draw,
  net.sourceforge.plantuml.project.lang,
  net.sourceforge.plantuml.project.solver,
@@ -199,4 +195,4 @@ Export-Package: net.sourceforge.plantuml,
 Bundle-Vendor: PlantUML Team
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: lib/plantuml-epl-1.2025.10.jar
+Bundle-ClassPath: lib/plantuml-epl-1.2026.3.jar
