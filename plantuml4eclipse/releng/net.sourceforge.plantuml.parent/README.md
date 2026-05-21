@@ -38,6 +38,8 @@ This way, the changes to the update site are published.
   also update `releaseVersion` property in `plantuml4eclipse/releng/net.sourceforge.plantuml.parent/pom.xml`
 - update `composite-repository/compositeArtifacts.xml` and `composite-repository/compositeContent.xml` files to the latest version from *gh-pages* branch (published version)
   in order to add the PlantUML library version(s) that were automatically published in the meanwhile.
+  **Do NOT add the new, unpublished PlantUML4Eclipse version**, that will be done later by a script.
+- update the PlantUML library dependency in `net.sourceforge.plantuml.eclipse/META-INF/MANIFEST.MF` and in `**/feature.xml` and `**/*.target` if necessary
 - re-calculate / update all features' dependencies (seems to be obsolete now, see https://github.com/eclipse-pde/eclipse.pde/issues/26)
 - build and test and build and test...
 - run `mvn clean package` on project `plantuml4eclipse/releng/net.sourceforge.plantuml.parent` or just run the launch configuration *Build PlantUML4Eclipse with Maven*
