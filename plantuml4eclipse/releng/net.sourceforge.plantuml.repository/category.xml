@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/net.sourceforge.plantuml.feature_1.2.1.qualifier.jar" id="net.sourceforge.plantuml.feature" version="1.2.1.qualifier">
+   <feature url="features/net.sourceforge.plantuml.feature_1.2.2.qualifier.jar" id="net.sourceforge.plantuml.feature" version="1.2.2.qualifier">
       <category name="net.sourceforge.plantuml.feature"/>
    </feature>
-   <feature url="features/net.sourceforge.plantuml.ecore.feature_1.2.1.qualifier.jar" id="net.sourceforge.plantuml.ecore.feature" version="1.2.1.qualifier">
+   <feature url="features/net.sourceforge.plantuml.ecore.feature_1.2.2.qualifier.jar" id="net.sourceforge.plantuml.ecore.feature" version="1.2.2.qualifier">
       <category name="net.sourceforge.plantuml.feature"/>
    </feature>
-   <feature url="features/net.sourceforge.plantuml.uml2.feature_1.2.1.qualifier.jar" id="net.sourceforge.plantuml.uml2.feature" version="1.2.1.qualifier">
+   <feature url="features/net.sourceforge.plantuml.uml2.feature_1.2.2.qualifier.jar" id="net.sourceforge.plantuml.uml2.feature" version="1.2.2.qualifier">
       <category name="net.sourceforge.plantuml.feature"/>
    </feature>
-   <feature id="net.sourceforge.plantuml.feature.source" version="1.2.1.qualifier">
+   <feature id="net.sourceforge.plantuml.feature.source" version="1.2.2.qualifier">
       <category name="net.sourceforge.plantuml.feature.source"/>
    </feature>
-   <feature id="net.sourceforge.plantuml.ecore.feature.source" version="1.2.1.qualifier">
+   <feature id="net.sourceforge.plantuml.ecore.feature.source" version="1.2.2.qualifier">
       <category name="net.sourceforge.plantuml.feature.source"/>
    </feature>
-   <feature id="net.sourceforge.plantuml.uml2.feature.source" version="1.2.1.qualifier">
+   <feature id="net.sourceforge.plantuml.uml2.feature.source" version="1.2.2.qualifier">
       <category name="net.sourceforge.plantuml.feature.source"/>
    </feature>
    <category-def name="net.sourceforge.plantuml.feature" label="PlantUML Eclipse support"/>
