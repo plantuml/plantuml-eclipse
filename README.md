@@ -2,7 +2,7 @@
 
 ![GitHub License](https://img.shields.io/github/license/plantuml/plantuml-eclipse)
 [![PlantUML library release for Eclipse](https://github.com/plantuml/plantuml-eclipse/actions/workflows/release-plantuml-lib.yml/badge.svg?branch=main)](https://github.com/plantuml/plantuml-eclipse/actions/workflows/release-plantuml-lib.yml)
-[![PlantUML4Eclipse CI](https://github.com/plantuml/plantuml-eclipse/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/plantuml/plantuml-eclipse/actions/workflows/ci.yml)
+[![PlantUML4Eclipse CI](https://github.com/plantuml/plantuml-eclipse/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/plantuml/plantuml-eclipse/actions/workflows/ci.yml)
 
 # PlantUML - Generate UML diagrams from files and view them in Eclipse
 
@@ -91,6 +91,13 @@ You'll find all versions in the [releases](https://github.com/plantuml/plantuml-
 Note that the net.sourceforge.plantuml.library plugin's versions are similar to those of the included PlantUML library release versions.
 This plugin's life cycle is strictly coupled with that of the PlantUML library releases.
 
+
+## [1.2.1](https://github.com/plantuml/plantuml-eclipse/releases/tag/1.2.1.202605211549)
+- Update to minimum PlantUML library vers. 1.2026.3
+- Add update sites for resolving dependencies to UML2 and EMF plug-ins
+- Fix multiple UML 2 diagram issues [#3](https://github.com/plantuml/plantuml-eclipse/issues/3), [#4](https://github.com/plantuml/plantuml-eclipse/issues/4), [#7](https://github.com/plantuml/plantuml-eclipse/issues/7), [#8](https://github.com/plantuml/plantuml-eclipse/issues/8)
+  and add a preferences page for UML 2 diagram creation. 
+  Thanks for the [PR](https://github.com/hallvard/plantuml/pull/187) to [@ansgarradermacher](https://github.com/ansgarradermacher).
 
 ## [1.2.0](https://github.com/plantuml/plantuml-eclipse/releases/tag/1.2.0.202511102215)
 - Move git repository from https://github.com/hallvard/plantuml to https://github.com/plantuml/plantuml-eclipse
