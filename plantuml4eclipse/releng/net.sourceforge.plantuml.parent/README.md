@@ -31,7 +31,7 @@ This way, the changes to the update site are published.
 
 ### PlantUML4Eclipse pre-release
 
-- check out git branch `develop`
+- check out git branch `main`
 - update all `pom.xml`, `MANIFEST.MF`, `feature.xml`, etc. to new version, e.g. `1.2.0-SNAPSHOT` or `1.2.0.qualifier`,
   also update dependencies and other version-dependant configurations,
   do this also for the `pom.xml` files in folders `bundles`, `features`, `releng`, and `tests`,
