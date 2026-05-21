@@ -46,7 +46,7 @@ This way, the changes to the update site are published.
   (that builds and runs all non-UI tests)
 - run the plug-ins tests, too (see `net.sourceforge.plantuml.*.tests` and `no.hal.osgi.emf.tests` projects)
 - git add, commit and push
-- update the `README.md` in git repo root folder, e.g. add release notes
+- update the `README.md` in git repo root folder, e.g. add release notes. Surround the new release notes for the unpublished version in an HTML comment.
 - switch to new branch named `release/<version>`
 
 ## Release
