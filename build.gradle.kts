@@ -100,6 +100,30 @@ fun createDirs(directory: File) {
     }
 }
 
+// Configure a Copy task to read composite*.xml files from sourceDir, add a new child entry
+// with the given childLocation, increment the children count, and include the modified files in the copy.
+fun CopySpec.addChildToCompositeXml(sourceDir: String, childLocation: String) {
+    val prefix = "<children size='"
+    val suffix = "'>"
+    val childrenEndTag = "</children>"
+
+    from(sourceDir) {
+        include("composite*.xml")
+        filter { line: String ->
+            if (line.trim().startsWith(prefix) && line.endsWith(suffix)) {
+                val sizeText = line.substring(line.indexOf(prefix) + prefix.length, line.indexOf(suffix))
+                val size = Integer.valueOf(sizeText) + 1
+                line.substring(0, line.indexOf(prefix)) + prefix + size + suffix
+            } else if (line.contains(childrenEndTag)) {
+                val indentation = line.substring(0, line.indexOf("<")) + "\t"
+                indentation + "<child location='$childLocation' />\n" + line
+            } else {
+                line
+            }
+        }
+    }
+}
+
 
 val plantUmlLibRootDir = "plantuml-lib"
 val plantUmlLibPluginName = "net.sourceforge.plantuml.library"
@@ -407,31 +431,11 @@ val updateGhPagesFilesAddLatestPlantUmlLibTask = tasks.register<Copy>("updateGhP
 
     outputs.dir(project.layout.buildDirectory.dir("gh-pages"))
 
-    val prefix = "<children size='"
-    val suffix = "'>"
-    val childrenEndTag = "</children>"
-
-    from("build/composite-repository") {
-        include("composite*.xml")
-        filter { line: String ->
-            if (line.trim().startsWith(prefix) && line.endsWith(suffix)) {
-                val sizeText = line.substring(line.indexOf(prefix) + prefix.length, line.indexOf(suffix))
-                val size = Integer.valueOf(sizeText) + 1
-
-                line.substring(0, line.indexOf(prefix)) + prefix + size + suffix
-            } else if (line.contains(childrenEndTag)) {
-                val indentation = line.substring(0, line.indexOf("<")) + "\t"
-
-                indentation + "<child location='plantuml.lib/$latestPlantUmlLibReleaseVersionSimple' />\n" + line
-            }
-            else line
-        }
-    }
+    addChildToCompositeXml("build/composite-repository", "plantuml.lib/$latestPlantUmlLibReleaseVersionSimple")
     into("build/gh-pages")
     filteringCharset = "UTF-8"
 }
 
-// TODO Somehow avoid redundant code, compare updateGhPagesFilesAddLatestPlantUmlLibTask and updateGhPagesFilesAddPlantUml4ETask
 // update composite-repository/repository/composite*.xml, add current PlantUML4Eclipse version / update site
 // copy composite-repository/repository/*.* and README.md to build/gh-pages
 val updateGhPagesFilesAddPlantUml4ETask = tasks.register<Copy>("updateGhPagesFilesAddPlantUml4Eclipse") {
@@ -441,26 +445,7 @@ val updateGhPagesFilesAddPlantUml4ETask = tasks.register<Copy>("updateGhPagesFil
 
     outputs.dir(project.layout.buildDirectory.dir("gh-pages"))
 
-    val prefix = "<children size='"
-    val suffix = "'>"
-    val childrenEndTag = "</children>"
-
-    from("composite-repository/repository") {
-        include("composite*.xml")
-        filter { line: String ->
-            if (line.trim().startsWith(prefix) && line.endsWith(suffix)) {
-                val sizeText = line.substring(line.indexOf(prefix) + prefix.length, line.indexOf(suffix))
-                val size = Integer.valueOf(sizeText) + 1
-
-                line.substring(0, line.indexOf(prefix)) + prefix + size + suffix
-            } else if (line.contains(childrenEndTag)) {
-                val indentation = line.substring(0, line.indexOf("<")) + "\t"
-
-                indentation + "<child location='plantuml.eclipse/$plantUml4EVersion' />\n" + line
-            }
-            else line
-        }
-    }
+    addChildToCompositeXml("composite-repository/repository", "plantuml.eclipse/$plantUml4EVersion")
     from("composite-repository/repository") {
         include("p2.index")
     }
