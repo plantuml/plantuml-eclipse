@@ -134,6 +134,16 @@ fun Exec.gitCommitToGhPages(commitMessage: String) {
     commandLine = listOf(gitCmd, "-C", "$buildDirectoyPath/gh-pages", "commit", "-m", commitMessage)
 }
 
+// Configure a Task to verify that the given directory exists at execution time, throwing a GradleException
+// with the given error message if it does not.
+fun Task.verifyDirectoryExists(directory: File, errorMessage: String) {
+    doLast {
+        if (!directory.exists()) {
+            throw GradleException(errorMessage)
+        }
+    }
+}
+
 
 val plantUmlLibRootDir = "plantuml-lib"
 val plantUmlLibPluginName = "net.sourceforge.plantuml.library"
@@ -488,13 +498,10 @@ val updateGhPagesContentsAddLatestPlantUmlLibTask = tasks.register("updateGhPage
     dependsOn(updateGhPagesFilesAddLatestPlantUmlLibTask)
     dependsOn(addLatestPlantUmlUpdateSiteToGhPagesTask)
 
-    doLast {
-        val ghPagesUpdateSiteTargetDir = File("build/gh-pages/plantuml.lib", latestPlantUmlLibReleaseVersionSimple)
-        if (!ghPagesUpdateSiteTargetDir.exists()) {
-            throw GradleException("The new PlantUML library version $latestPlantUmlLibReleaseVersionSimple is missing in the build directory." +
-                    " Expected the following directory to exist: $ghPagesUpdateSiteTargetDir.")
-        }
-    }
+    val ghPagesUpdateSiteTargetDir = File("build/gh-pages/plantuml.lib", latestPlantUmlLibReleaseVersionSimple)
+    verifyDirectoryExists(ghPagesUpdateSiteTargetDir,
+        "The new PlantUML library version $latestPlantUmlLibReleaseVersionSimple is missing in the build directory." +
+        " Expected the following directory to exist: $ghPagesUpdateSiteTargetDir.")
 }
 
 // git add everything in build/gh-pages/
@@ -572,7 +579,6 @@ val addPlantUml4EUpdateSiteToGhPagesTask = tasks.register<Copy>("addPlantUml4Ecl
     filteringCharset = "UTF-8"
 }
 
-// TODO Somehow avoid redundant code, compare updateGhPagesContentsAddLatestPlantUmlLibTask and updateGhPagesContentsAddPlantUml4ETask
 // Add new PlantUML4Eclipse update site to GitHub pages in build/gh-pages (call other tasks to do so)
 val updateGhPagesContentsAddPlantUml4ETask = tasks.register("updateGhPagesContentsAddPlantUml4Eclipse") {
     group = "publish"
@@ -580,13 +586,10 @@ val updateGhPagesContentsAddPlantUml4ETask = tasks.register("updateGhPagesConten
     dependsOn(updateGhPagesFilesAddPlantUml4ETask)
     dependsOn(addPlantUml4EUpdateSiteToGhPagesTask)
 
-    doLast {
-        val ghPagesUpdateSiteTargetDir = File("build/gh-pages/plantuml.eclipse", plantUml4EVersion)
-        if (!ghPagesUpdateSiteTargetDir.exists()) {
-            throw GradleException("The new PlantUML4Eclipse version $plantUml4EVersion is missing in the build directory." +
-                    " Expected the following directory to exist: $ghPagesUpdateSiteTargetDir.")
-        }
-    }
+    val ghPagesUpdateSiteTargetDir = File("build/gh-pages/plantuml.eclipse", plantUml4EVersion)
+    verifyDirectoryExists(ghPagesUpdateSiteTargetDir,
+        "The new PlantUML4Eclipse version $plantUml4EVersion is missing in the build directory." +
+        " Expected the following directory to exist: $ghPagesUpdateSiteTargetDir.")
 }
 
 // git add everything in build/gh-pages/
