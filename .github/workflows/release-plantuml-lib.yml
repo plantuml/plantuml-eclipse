@@ -10,8 +10,13 @@ on:
   repository_dispatch:
     types: [plantuml-release]
 
-  # Temporarily allow manual triggering via GitHub UI
+  # Allow manual triggering via GitHub UI, optionally with a specific PlantUML version
   workflow_dispatch:
+    inputs:
+      plantuml_version:
+        description: 'PlantUML version to publish (e.g. 1.2026.5). Leave empty to use latest.'
+        required: false
+        default: ''
 
 jobs:
   info:
@@ -20,14 +25,16 @@ jobs:
       - name: Print Workflow Call Arguments
         run: |
           echo -e "Workflow was triggered with the following arguments\n\
-          PlantUML version: ${{ github.event.client_payload.release }}, \
+          Trigger event: ${{ github.event_name }}, \
+          PlantUML version: ${{ github.event.client_payload.release || github.event.inputs.plantuml_version || '(fetch latest)' }}, \
           snapshot: ${{ github.event.client_payload.snapshot }}, \
           ref: ${{ github.event.client_payload.ref }}, \
           commit: ${{ github.event.client_payload.commit }}"
     
   build:
-    # ignore PlantUML snapshot releases (pre-releases), read snapshot flag from repository_dispatch event's payload
-    if: github.event.client_payload.snapshot == 'false'
+    # ignore PlantUML snapshot releases (pre-releases), read snapshot flag from repository_dispatch event's payload;
+    # always run on workflow_dispatch (snapshot flag is not set in that case)
+    if: github.event.client_payload.snapshot == 'false' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     outputs:
       plantuml_version: ${{ steps.update_site.outputs.plantuml_version }}
@@ -44,12 +51,17 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build latest PlantUML lib update site
+      - name: Build PlantUML lib update site
         id: update_site
         run: |
-          export PLANTUML_VERSION=$(./gradlew -q printPlantUmlLibVersion)
+          VERSION_INPUT="${{ github.event.client_payload.release || github.event.inputs.plantuml_version }}"
+          PLANTUML_VERSION_ARGUMENT=""
+          if [ -n "$VERSION_INPUT" ]; then
+            PLANTUML_VERSION_ARGUMENT="-PplantUmlVersion=$VERSION_INPUT"
+          fi
+          export PLANTUML_VERSION=$(./gradlew -q printPlantUmlLibVersion $PLANTUML_VERSION_ARGUMENT)
           echo "plantuml_version=$PLANTUML_VERSION" >> $GITHUB_OUTPUT
-          ./gradlew updateGhPagesContentsAddLatestPlantUmlLib --no-daemon
+          ./gradlew updateGhPagesContentsAddLatestPlantUmlLib $PLANTUML_VERSION_ARGUMENT --no-daemon
 
       - name: Save artifacts for the git push
         uses: actions/upload-artifact@v4
@@ -88,6 +100,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add --all
-          git commit -m "Add PlantUML lib update site ver. $PLANTUML_VERSION (triggered by $GITHUB_ACTOR)\n\n\
-          See https://github.com/plantuml/plantuml/commit/${{ github.event.client_payload.commit }}"
+          COMMIT="${{ github.event.client_payload.commit }}"
+          COMMIT_INFO=""
+          if [ -n "$COMMIT" ]; then
+            COMMIT_INFO="\n\nSee https://github.com/plantuml/plantuml/commit/$COMMIT"
+          fi
+          git commit -m "Add PlantUML lib update site ver. $PLANTUML_VERSION (triggered by $GITHUB_ACTOR)$COMMIT_INFO"
           git push

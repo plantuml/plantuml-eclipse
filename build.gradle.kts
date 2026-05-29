@@ -161,8 +161,23 @@ val plantUmlLibPluginDir = "$plantUmlLibRootDir/$plantUmlLibPluginName"
 val plantUmlLibFeatureDir = "$plantUmlLibRootDir/$plantUmlLibFeatureName"
 val plantUmlLibRepositoryDir = "$plantUmlLibRootDir/$plantUmlLibRepositoryName"
 val plantUmlLibPluginLibDir = "$plantUmlLibPluginDir/lib"
-val latestPlantUmlLibReleaseVersion =  readLatestPlantUmlLibReleaseVersion()
-val latestPlantUmlLibReleaseVersionSimple = latestPlantUmlLibReleaseVersion.substringAfter("v")
+
+// Prefer explicitly provided version (e.g. -PplantUmlVersion=1.2026.5), fall back to fetching latest from GitHub.
+// latestPlantUmlLibReleaseVersionSimple: simple form without "v" prefix (e.g. 1.2026.5), used everywhere except download URLs.
+// latestPlantUmlLibReleaseVersion: tag name as used in GitHub release download URLs (e.g. v1.2026.5).
+val latestPlantUmlLibReleaseVersionSimple: String
+val latestPlantUmlLibReleaseVersion: String
+
+if (project.hasProperty("plantUmlVersion")) {
+    latestPlantUmlLibReleaseVersionSimple = (project.property("plantUmlVersion") as String).removePrefix("v")
+    // Assumes the release tag has a "v" prefix (current PlantUML convention).
+    // Update if PlantUML changes their tag format.
+    latestPlantUmlLibReleaseVersion = "v$latestPlantUmlLibReleaseVersionSimple"
+} else {
+    // Use the raw tag name from the API — robust against tag format changes.
+    latestPlantUmlLibReleaseVersion = readLatestPlantUmlLibReleaseVersion()
+    latestPlantUmlLibReleaseVersionSimple = latestPlantUmlLibReleaseVersion.removePrefix("v")
+}
 
 val plantUml4ERootDir = "plantuml4eclipse"
 val plantUml4EParentDir = "$plantUml4ERootDir/releng/net.sourceforge.plantuml.parent"
@@ -209,7 +224,7 @@ val downloadPlantUmlLibsTask = tasks.register("downloadPlantUmlLibs") {
 
     doLast {
         println("#################################################################################")
-        println("Using PlantUML library version: $latestPlantUmlLibReleaseVersion")
+        println("Using PlantUML library version: $latestPlantUmlLibReleaseVersionSimple")
         println("#################################################################################")
 
         downloadFile("https://github.com/plantuml/plantuml/releases/download/$latestPlantUmlLibReleaseVersion/plantuml-epl-$latestPlantUmlLibReleaseVersionSimple.jar", "build/lib")
