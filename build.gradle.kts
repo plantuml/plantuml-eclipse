@@ -18,6 +18,10 @@ version = "1.0.0-SNAPSHOT"
 description = "PlantUML composite update site"
 
 
+// ════════════════════════════════════════════════════════════════════════════════
+// Helper functions
+// ════════════════════════════════════════════════════════════════════════════════
+
 fun readPomProperty(propertyName: String, pomFile: File): String? {
     if (propertyName.isBlank()) {
         throw IllegalArgumentException()
@@ -145,6 +149,10 @@ fun Task.verifyDirectoryExists(directory: File, errorMessage: String) {
 }
 
 
+// ════════════════════════════════════════════════════════════════════════════════
+// Configuration
+// ════════════════════════════════════════════════════════════════════════════════
+
 val plantUmlLibRootDir = "plantuml-lib"
 val plantUmlLibPluginName = "net.sourceforge.plantuml.library"
 val plantUmlLibFeatureName = "$plantUmlLibPluginName.feature"
@@ -165,6 +173,25 @@ val buildDirectoyPath = project.layout.buildDirectory.get().toString()
 
 val mvnCmd = if (Os.isFamily(Os.FAMILY_WINDOWS)) { "mvn.cmd" } else { "mvn"}
 val gitCmd = if (Os.isFamily(Os.FAMILY_WINDOWS)) { "git.exe" } else { "git"}
+
+
+// ════════════════════════════════════════════════════════════════════════════════
+// Common tasks (used by PlantUML library and PlantUML4Eclipse tasks)
+// ════════════════════════════════════════════════════════════════════════════════
+
+// git clone gh-pages branch to build/gh-pages
+val cloneGhPagesTask = tasks.register<Exec>("cloneGitHubPages") {
+    group = "publish"
+
+    outputs.dir(project.layout.buildDirectory.dir("gh-pages"))
+
+    commandLine = listOf(gitCmd, "clone", "-b", "gh-pages", "https://github.com/plantuml/plantuml-eclipse.git", "build/gh-pages")
+}
+
+
+// ════════════════════════════════════════════════════════════════════════════════
+// PlantUML library tasks
+// ════════════════════════════════════════════════════════════════════════════════
 
 val setEnvVarPlantUmlLibVersionTask = tasks.register("printPlantUmlLibVersion") {
     group = "plantuml-lib"
@@ -403,15 +430,6 @@ val buildPlantUmlLibUpdateSiteTask = tasks.register<Exec>("buildPlantUmlLibUpdat
     commandLine = listOf(mvnCmd, "--batch-mode", "--update-snapshots", "--errors", "--quiet", "clean", "package")
 }
 
-// git clone gh-pages branch to build/gh-pages
-val cloneGhPagesTask = tasks.register<Exec>("cloneGitHubPages") {
-    group = "publish"
-
-    outputs.dir(project.layout.buildDirectory.dir("gh-pages"))
-
-    commandLine = listOf(gitCmd, "clone", "-b", "gh-pages", "https://github.com/plantuml/plantuml-eclipse.git", "build/gh-pages")
-}
-
 // check if build/gh-pages/plantuml.lib/<latest-PlantUML-lib-version> already exists
 val checkIfPlantUmlLibIsAlreadyPublishedTask = tasks.register("checkIfPlantUmlLibIsAlreadyPublished") {
     group = "publish"
@@ -527,6 +545,11 @@ val gitPushPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitPushPla
     commandLine = listOf(gitCmd, "-C", "$buildDirectoyPath/gh-pages", "push")
 }
 
+
+// ════════════════════════════════════════════════════════════════════════════════
+// PlantUML4Eclipse tasks
+// ════════════════════════════════════════════════════════════════════════════════
+
 // build PlantUML4Eclipse projects (plug-ins, features, and update site / p2 repo) with Maven/Tycho
 val buildPlantUml4EUpdateSiteTask = tasks.register<Exec>("buildPlantUml4EUpdateSite") {
     group = "build"
@@ -607,6 +630,11 @@ val gitCommitPlantUml4EUpdateSiteToGhPagesTask = tasks.register<Exec>("gitCommit
 }
 
 // We did not add a git push gradle task for PlantUml4Eclipse, since we want the changes to be reviewed before pushing them
+
+
+// ════════════════════════════════════════════════════════════════════════════════
+// General task dependencies
+// ════════════════════════════════════════════════════════════════════════════════
 
 tasks.findByName("build")?.dependsOn(
     buildPlantUmlLibUpdateSiteTask,
