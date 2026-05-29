@@ -270,6 +270,61 @@ val updateVersionInParentPomTask = tasks.register<Copy>("updateVersionInPom") {
     filteringCharset = "UTF-8"
 }
 
+// update the list of exported packages in MANIFEST.MF, i.e.
+// scan the downloaded PlantUML JAR and regenerate the Export-Package block in
+// build/eclipse-files/.../MANIFEST.MF (produced by updateVersionsInManifestTask)
+val updateExportedPackagesInManifestTask = tasks.register("updateExportedPackagesInManifest") {
+    group = "plantuml-lib"
+
+    dependsOn(downloadPlantUmlLibsTask)
+    dependsOn(updateVersionsInManifestTask)
+
+    doLast {
+        val jarFile = file("build/lib/plantuml-epl-$latestPlantUmlLibReleaseVersionSimple.jar")
+        val manifestFile = file("build/eclipse-files/$plantUmlLibPluginName/META-INF/MANIFEST.MF")
+
+        val packages = java.util.jar.JarFile(jarFile).use { jar ->
+            jar.entries().asSequence()
+                .filter { !it.isDirectory && it.name.startsWith("net/sourceforge/plantuml/") && it.name.endsWith(".class") }
+                .map { it.name.substringBeforeLast("/").replace("/", ".") }
+                .toSortedSet()
+        }
+
+        if (packages.isEmpty()) {
+            throw GradleException(
+                "No net.sourceforge.plantuml packages found in ${jarFile.name} - aborting release."
+            )
+        }
+
+        val exportPackageBlock = packages
+            .mapIndexed { index, pkg -> if (index == 0) "Export-Package: $pkg," else " $pkg," }
+            .toMutableList()
+            .also { it[it.lastIndex] = it.last().trimEnd(',') }
+            .joinToString("\n")
+
+        val originalLines = manifestFile.readLines(Charsets.UTF_8)
+        val updatedContent = buildString {
+            var inExportPackage = false
+            for (line in originalLines) {
+                when {
+                    line.startsWith("Export-Package:") -> {
+                        inExportPackage = true
+                        appendLine(exportPackageBlock)
+                    }
+                    inExportPackage && line.startsWith(" ") -> { /* skip old continuation lines */ }
+                    else -> {
+                        inExportPackage = false
+                        appendLine(line)
+                    }
+                }
+            }
+        }
+        manifestFile.writeText(updatedContent, Charsets.UTF_8)
+
+        println("Export-Package updated with ${packages.size} packages from ${jarFile.name}.")
+    }
+}
+
 // copy filtered/modified files from build/eclipse-files/ to plantuml-lib/
 val updateVersionsInEclipseProjectsTask = tasks.register<Copy>("updateVersionsInEclipseProjects") {
     group = "plantuml-lib"
@@ -280,6 +335,7 @@ val updateVersionsInEclipseProjectsTask = tasks.register<Copy>("updateVersionsIn
     dependsOn(updateVersionsInClasspathTask)
     dependsOn(updateVersionInFeatureTask)
     dependsOn(updateVersionInParentPomTask)
+    dependsOn(updateExportedPackagesInManifestTask)
 
     from("build/eclipse-files")
     into(plantUmlLibRootDir)
