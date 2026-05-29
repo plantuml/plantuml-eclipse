@@ -636,10 +636,12 @@ val gitCommitPlantUml4EUpdateSiteToGhPagesTask = tasks.register<Exec>("gitCommit
 // General task dependencies
 // ════════════════════════════════════════════════════════════════════════════════
 
-tasks.findByName("build")?.dependsOn(
-    buildPlantUmlLibUpdateSiteTask,
-    buildPlantUml4EUpdateSiteTask
-)
+tasks.named("build") {
+    dependsOn(
+        buildPlantUmlLibUpdateSiteTask,
+        buildPlantUml4EUpdateSiteTask
+    )
+}
 
 val mvnCleanPlantUmlLibTask = tasks.register<Exec>("mvnCleanPlantUmlLib") {
     group = "build"
