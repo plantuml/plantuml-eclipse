@@ -124,6 +124,16 @@ fun CopySpec.addChildToCompositeXml(sourceDir: String, childLocation: String) {
     }
 }
 
+// Configure an Exec task to stage all changes in build/gh-pages with `git add --all`.
+fun Exec.gitAddAllToGhPages() {
+    commandLine = listOf(gitCmd, "-C", "$buildDirectoyPath/gh-pages", "add", "--all")
+}
+
+// Configure an Exec task to commit all staged changes in build/gh-pages with the given commit message.
+fun Exec.gitCommitToGhPages(commitMessage: String) {
+    commandLine = listOf(gitCmd, "-C", "$buildDirectoyPath/gh-pages", "commit", "-m", commitMessage)
+}
+
 
 val plantUmlLibRootDir = "plantuml-lib"
 val plantUmlLibPluginName = "net.sourceforge.plantuml.library"
@@ -490,19 +500,15 @@ val updateGhPagesContentsAddLatestPlantUmlLibTask = tasks.register("updateGhPage
 // git add everything in build/gh-pages/
 val gitAddPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitAddPlantUmlLibUpdateSiteToGhPages") {
     group = "publish"
-
     dependsOn(updateGhPagesContentsAddLatestPlantUmlLibTask)
-
-    commandLine = listOf(gitCmd, "-C", "$buildDirectoyPath/gh-pages", "add", "--all")
+    gitAddAllToGhPages()
 }
 
 // git commit changed files for new PlantUML lib update site
 val gitCommitPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitCommitPlantUmlLibUpdateSiteToGhPages") {
     group = "publish"
-
     dependsOn(gitAddPlantUmlLibUpdateSiteToGhPagesTask)
-
-    commandLine = listOf(gitCmd, "-C", "$buildDirectoyPath/gh-pages", "commit", "-m", "Add new PlantUML lib update site version $latestPlantUmlLibReleaseVersionSimple")
+    gitCommitToGhPages("Add new PlantUML lib update site version $latestPlantUmlLibReleaseVersionSimple")
 }
 
 // git push commit with new PlantUML lib update site
@@ -583,24 +589,18 @@ val updateGhPagesContentsAddPlantUml4ETask = tasks.register("updateGhPagesConten
     }
 }
 
-// TODO Somehow avoid redundant code, compare gitAddPlantUmlLibUpdateSiteToGhPagesTask and gitAddPlantUml4EUpdateSiteToGhPagesTask
 // git add everything in build/gh-pages/
 val gitAddPlantUml4EUpdateSiteToGhPagesTask = tasks.register<Exec>("gitAddPlantUml4EclipseUpdateSiteToGhPages") {
     group = "publish"
-
     dependsOn(updateGhPagesContentsAddPlantUml4ETask)
-
-    commandLine = listOf(gitCmd, "-C", "$buildDirectoyPath/gh-pages", "add", "--all")
+    gitAddAllToGhPages()
 }
 
-// TODO Somehow avoid redundant code, compare gitCommitPlantUmlLibUpdateSiteToGhPagesTask and gitCommitPlantUml4EUpdateSiteToGhPagesTask
 // git commit changed files for new PlantUML4Eclipse update site
 val gitCommitPlantUml4EUpdateSiteToGhPagesTask = tasks.register<Exec>("gitCommitPlantUml4EclipseUpdateSiteToGhPages") {
     group = "publish"
-
     dependsOn(gitAddPlantUml4EUpdateSiteToGhPagesTask)
-
-    commandLine = listOf(gitCmd, "-C", "$buildDirectoyPath/gh-pages", "commit", "-m", "New PlantUML4Eclipse release: $plantUml4EVersion")
+    gitCommitToGhPages("New PlantUML4Eclipse release: $plantUml4EVersion")
 }
 
 // We did not add a git push gradle task for PlantUml4Eclipse, since we want the changes to be reviewed before pushing them
