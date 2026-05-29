@@ -185,6 +185,11 @@ val plantUml4ERepositoryDir = "$plantUml4ERootDir/releng/net.sourceforge.plantum
 val plantUml4EVersion = readCurrentPlantUML4EVersionFromPom()
 
 val buildDirectoyPath = project.layout.buildDirectory.get().toString()
+val buildDir          = "build"
+val ghPagesDir        = "$buildDir/gh-pages"
+val libDir            = "$buildDir/lib"
+val eclipseFilesDir   = "$buildDir/eclipse-files"
+val compositeRepoDir  = "$buildDir/composite-repository"
 
 val mvnCmd = if (Os.isFamily(Os.FAMILY_WINDOWS)) { "mvn.cmd" } else { "mvn"}
 val gitCmd = if (Os.isFamily(Os.FAMILY_WINDOWS)) { "git.exe" } else { "git"}
@@ -200,7 +205,7 @@ val cloneGhPagesTask = tasks.register<Exec>("cloneGitHubPages") {
 
     outputs.dir(project.layout.buildDirectory.dir("gh-pages"))
 
-    commandLine = listOf(gitCmd, "clone", "-b", "gh-pages", "https://github.com/plantuml/plantuml-eclipse.git", "build/gh-pages")
+    commandLine = listOf(gitCmd, "clone", "-b", "gh-pages", "https://github.com/plantuml/plantuml-eclipse.git", ghPagesDir)
 }
 
 
@@ -227,8 +232,8 @@ val downloadPlantUmlLibsTask = tasks.register("downloadPlantUmlLibs") {
         println("Using PlantUML library version: $plantUmlLibReleaseVersionSimple")
         println("#################################################################################")
 
-        downloadFile("https://github.com/plantuml/plantuml/releases/download/$plantUmlLibReleaseVersion/plantuml-epl-$plantUmlLibReleaseVersionSimple.jar", "build/lib")
-        downloadFile("https://github.com/plantuml/plantuml/releases/download/$plantUmlLibReleaseVersion/plantuml-epl-$plantUmlLibReleaseVersionSimple-sources.jar", "build/lib")
+        downloadFile("https://github.com/plantuml/plantuml/releases/download/$plantUmlLibReleaseVersion/plantuml-epl-$plantUmlLibReleaseVersionSimple.jar", libDir)
+        downloadFile("https://github.com/plantuml/plantuml/releases/download/$plantUmlLibReleaseVersion/plantuml-epl-$plantUmlLibReleaseVersionSimple-sources.jar", libDir)
     }
 }
 
@@ -248,7 +253,7 @@ val copyLibsTask = tasks.register<Copy>("copyLibsToEclipsePlugin") {
 
     inputs.dir(project.layout.buildDirectory.dir("lib"))
 
-    from("build/lib")
+    from(libDir)
     into(plantUmlLibPluginLibDir)
     include("*.jar")
 }
@@ -272,7 +277,7 @@ val updateVersionsInManifestTask = tasks.register<Copy>("updateVersionsInManifes
             else line
         }
     }
-    into("build/eclipse-files/$plantUmlLibPluginName/META-INF")
+    into("$eclipseFilesDir/$plantUmlLibPluginName/META-INF")
     filteringCharset = "UTF-8"
 }
 
@@ -309,7 +314,7 @@ val updateVersionsInClasspathTask = tasks.register<Copy>("updateVersionsInClassp
             else line
         }
     }
-    into("build/eclipse-files/$plantUmlLibPluginName")
+    into("$eclipseFilesDir/$plantUmlLibPluginName")
     filteringCharset = "UTF-8"
 }
 
@@ -329,7 +334,7 @@ val updateVersionInFeatureTask = tasks.register<Copy>("updateVersionInFeature") 
             else line
         }
     }
-    into("build/eclipse-files/$plantUmlLibFeatureName")
+    into("$eclipseFilesDir/$plantUmlLibFeatureName")
     filteringCharset = "UTF-8"
 }
 
@@ -352,7 +357,7 @@ val updateVersionInParentPomTask = tasks.register<Copy>("updateVersionInPom") {
             else line
         }
     }
-    into("build/eclipse-files")
+    into(eclipseFilesDir)
     filteringCharset = "UTF-8"
 }
 
@@ -366,8 +371,8 @@ val updateExportedPackagesInManifestTask = tasks.register("updateExportedPackage
     dependsOn(updateVersionsInManifestTask)
 
     doLast {
-        val jarFile = file("build/lib/plantuml-epl-$plantUmlLibReleaseVersionSimple.jar")
-        val manifestFile = file("build/eclipse-files/$plantUmlLibPluginName/META-INF/MANIFEST.MF")
+        val jarFile = file("$libDir/plantuml-epl-$plantUmlLibReleaseVersionSimple.jar")
+        val manifestFile = file("$eclipseFilesDir/$plantUmlLibPluginName/META-INF/MANIFEST.MF")
 
         val packages = java.util.jar.JarFile(jarFile).use { jar ->
             jar.entries().asSequence()
@@ -423,7 +428,7 @@ val updateVersionsInEclipseProjectsTask = tasks.register<Copy>("updateVersionsIn
     dependsOn(updateVersionInParentPomTask)
     dependsOn(updateExportedPackagesInManifestTask)
 
-    from("build/eclipse-files")
+    from(eclipseFilesDir)
     into(plantUmlLibRootDir)
     filteringCharset = "UTF-8"
 }
@@ -452,7 +457,7 @@ val checkIfPlantUmlLibIsAlreadyPublishedTask = tasks.register("checkIfPlantUmlLi
     dependsOn(cloneGhPagesTask)
 
     doLast {
-        val ghPagesUpdateSiteTargetDir = File("build/gh-pages/plantuml.lib", plantUmlLibReleaseVersionSimple)
+        val ghPagesUpdateSiteTargetDir = File("$ghPagesDir/plantuml.lib", plantUmlLibReleaseVersionSimple)
         if (ghPagesUpdateSiteTargetDir.exists()) {
             throw GradleException("The PlantUML library version $plantUmlLibReleaseVersionSimple has already been" +
                     " published. The files were found in directory ${ghPagesUpdateSiteTargetDir}.")
@@ -468,10 +473,10 @@ val copyGhPagesFilesForModificationForPlantUmlLibReleaseTask = tasks.register<Co
 
     outputs.dir(project.layout.buildDirectory.dir("composite-repository"))
 
-    from("build/gh-pages") {
+    from(ghPagesDir) {
         include("composite*.xml")
     }
-    into("build/composite-repository")
+    into(compositeRepoDir)
     filteringCharset = "UTF-8"
 }
 
@@ -484,8 +489,8 @@ val updateGhPagesFilesAddLatestPlantUmlLibTask = tasks.register<Copy>("updateGhP
 
     outputs.dir(project.layout.buildDirectory.dir("gh-pages"))
 
-    addChildToCompositeXml("build/composite-repository", "plantuml.lib/$plantUmlLibReleaseVersionSimple")
-    into("build/gh-pages")
+    addChildToCompositeXml(compositeRepoDir, "plantuml.lib/$plantUmlLibReleaseVersionSimple")
+    into(ghPagesDir)
     filteringCharset = "UTF-8"
 }
 
@@ -505,7 +510,7 @@ val updateGhPagesFilesAddPlantUml4ETask = tasks.register<Copy>("updateGhPagesFil
     from(".") {
         include("README.md")
     }
-    into("build/gh-pages")
+    into(ghPagesDir)
     filteringCharset = "UTF-8"
 }
 
@@ -520,7 +525,7 @@ val addLatestPlantUmlUpdateSiteToGhPagesTask = tasks.register<Copy>("addLatestPl
     outputs.dir(project.layout.buildDirectory.dir("gh-pages/plantuml.lib"))
 
     from("$plantUmlLibRepositoryDir/target/repository")
-    into("build/gh-pages/plantuml.lib/$plantUmlLibReleaseVersionSimple")
+    into("$ghPagesDir/plantuml.lib/$plantUmlLibReleaseVersionSimple")
     filteringCharset = "UTF-8"
 }
 
@@ -531,7 +536,7 @@ val updateGhPagesContentsAddLatestPlantUmlLibTask = tasks.register("updateGhPage
     dependsOn(updateGhPagesFilesAddLatestPlantUmlLibTask)
     dependsOn(addLatestPlantUmlUpdateSiteToGhPagesTask)
 
-    val ghPagesUpdateSiteTargetDir = File("build/gh-pages/plantuml.lib", plantUmlLibReleaseVersionSimple)
+    val ghPagesUpdateSiteTargetDir = File("$ghPagesDir/plantuml.lib", plantUmlLibReleaseVersionSimple)
     verifyDirectoryExists(ghPagesUpdateSiteTargetDir,
         "The new PlantUML library version $plantUmlLibReleaseVersionSimple is missing in the build directory." +
         " Expected the following directory to exist: $ghPagesUpdateSiteTargetDir.")
@@ -592,7 +597,7 @@ val checkIfPlantUml4EUpdateSiteAlreadyExistsTask = tasks.register("checkIfPlantU
     dependsOn(cloneGhPagesTask)
 
     doLast {
-        val ghPagesUpdateSiteTargetDir = File("build/gh-pages/plantuml.eclipse", plantUml4EVersion)
+        val ghPagesUpdateSiteTargetDir = File("$ghPagesDir/plantuml.eclipse", plantUml4EVersion)
         if (ghPagesUpdateSiteTargetDir.exists()) {
             throw GradleException("Target update site directory already exists: $ghPagesUpdateSiteTargetDir")
         }
@@ -610,7 +615,7 @@ val addPlantUml4EUpdateSiteToGhPagesTask = tasks.register<Copy>("addPlantUml4Ecl
 
     outputs.dir(project.layout.buildDirectory.dir("gh-pages"))
 
-    val targetDirPath = "build/gh-pages/plantuml.eclipse/$plantUml4EVersion"
+    val targetDirPath = "$ghPagesDir/plantuml.eclipse/$plantUml4EVersion"
 
     from("$plantUml4ERepositoryDir/target/repository")
     into(targetDirPath)
@@ -624,7 +629,7 @@ val updateGhPagesContentsAddPlantUml4ETask = tasks.register("updateGhPagesConten
     dependsOn(updateGhPagesFilesAddPlantUml4ETask)
     dependsOn(addPlantUml4EUpdateSiteToGhPagesTask)
 
-    val ghPagesUpdateSiteTargetDir = File("build/gh-pages/plantuml.eclipse", plantUml4EVersion)
+    val ghPagesUpdateSiteTargetDir = File("$ghPagesDir/plantuml.eclipse", plantUml4EVersion)
     verifyDirectoryExists(ghPagesUpdateSiteTargetDir,
         "The new PlantUML4Eclipse version $plantUml4EVersion is missing in the build directory." +
         " Expected the following directory to exist: $ghPagesUpdateSiteTargetDir.")
