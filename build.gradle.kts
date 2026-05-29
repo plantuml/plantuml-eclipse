@@ -163,21 +163,19 @@ val plantUmlLibRepositoryDir = "$plantUmlLibRootDir/$plantUmlLibRepositoryName"
 val plantUmlLibPluginLibDir = "$plantUmlLibPluginDir/lib"
 
 // Prefer explicitly provided version (e.g. -PplantUmlVersion=1.2026.5), fall back to fetching latest from GitHub.
-// plantUmlLibReleaseVersionSimple: simple form without "v" prefix (e.g. 1.2026.5), used everywhere except download URLs.
 // plantUmlLibReleaseVersion: tag name as used in GitHub release download URLs (e.g. v1.2026.5).
-val plantUmlLibReleaseVersionSimple: String
-val plantUmlLibReleaseVersion: String
-
-if (project.hasProperty("plantUmlVersion")) {
-    plantUmlLibReleaseVersionSimple = (project.property("plantUmlVersion") as String).removePrefix("v")
+// plantUmlLibReleaseVersionSimple: simple form without "v" prefix (e.g. 1.2026.5), used everywhere except download URLs.
+val plantUmlLibReleaseVersion: String = if (project.hasProperty("plantUmlVersion")) {
+    // User provides simple form (e.g. 1.2026.5); reconstruct tag form with "v" prefix for download URLs.
     // Assumes the release tag has a "v" prefix (current PlantUML convention).
     // Update if PlantUML changes their tag format.
-    plantUmlLibReleaseVersion = "v$plantUmlLibReleaseVersionSimple"
+    val version = project.property("plantUmlVersion") as String
+    if (version.startsWith("v")) version else "v$version"
 } else {
     // Use the raw tag name from the API — robust against tag format changes.
-    plantUmlLibReleaseVersion = readLatestPlantUmlLibReleaseVersion()
-    plantUmlLibReleaseVersionSimple = plantUmlLibReleaseVersion.removePrefix("v")
+    readLatestPlantUmlLibReleaseVersion()
 }
+val plantUmlLibReleaseVersionSimple = plantUmlLibReleaseVersion.removePrefix("v")
 
 val plantUml4ERootDir = "plantuml4eclipse"
 val plantUml4EParentDir = "$plantUml4ERootDir/releng/net.sourceforge.plantuml.parent"
