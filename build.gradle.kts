@@ -399,6 +399,7 @@ val copyGhPagesFilesForModificationForPlantUmlLibReleaseTask = tasks.register<Co
 }
 
 // update composite*.xml: add new PlantUML lib version / update site, copy the files to build/gh-pages
+// Do not update README.md and p2.index . These will be updated only when PlantUML4eclipse is released.
 val updateGhPagesFilesAddLatestPlantUmlLibTask = tasks.register<Copy>("updateGhPagesFilesAddLatestPlantUmlLib") {
     group = "publish"
 
@@ -459,6 +460,12 @@ val updateGhPagesFilesAddPlantUml4ETask = tasks.register<Copy>("updateGhPagesFil
             }
             else line
         }
+    }
+    from("composite-repository/repository") {
+        include("p2.index")
+    }
+    from(".") {
+        include("README.md")
     }
     into("build/gh-pages")
     filteringCharset = "UTF-8"
