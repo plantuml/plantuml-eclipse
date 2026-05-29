@@ -641,4 +641,18 @@ tasks.findByName("build")?.dependsOn(
     buildPlantUml4EUpdateSiteTask
 )
 
-// TODO call mvn clean on PlantUML lib and PlantUML4Eclipse projects when gradle task clean is called, similar for build task
+val mvnCleanPlantUmlLibTask = tasks.register<Exec>("mvnCleanPlantUmlLib") {
+    group = "build"
+    workingDir = file(plantUmlLibRootDir).absoluteFile
+    commandLine = listOf(mvnCmd, "--batch-mode", "--quiet", "clean")
+}
+
+val mvnCleanPlantUml4ETask = tasks.register<Exec>("mvnCleanPlantUml4Eclipse") {
+    group = "build"
+    workingDir = file(plantUml4EParentDir).absoluteFile
+    commandLine = listOf(mvnCmd, "--batch-mode", "--quiet", "clean")
+}
+
+tasks.named("clean") {
+    dependsOn(mvnCleanPlantUmlLibTask, mvnCleanPlantUml4ETask)
+}
