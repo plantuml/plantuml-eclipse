@@ -163,20 +163,20 @@ val plantUmlLibRepositoryDir = "$plantUmlLibRootDir/$plantUmlLibRepositoryName"
 val plantUmlLibPluginLibDir = "$plantUmlLibPluginDir/lib"
 
 // Prefer explicitly provided version (e.g. -PplantUmlVersion=1.2026.5), fall back to fetching latest from GitHub.
-// latestPlantUmlLibReleaseVersionSimple: simple form without "v" prefix (e.g. 1.2026.5), used everywhere except download URLs.
-// latestPlantUmlLibReleaseVersion: tag name as used in GitHub release download URLs (e.g. v1.2026.5).
-val latestPlantUmlLibReleaseVersionSimple: String
-val latestPlantUmlLibReleaseVersion: String
+// plantUmlLibReleaseVersionSimple: simple form without "v" prefix (e.g. 1.2026.5), used everywhere except download URLs.
+// plantUmlLibReleaseVersion: tag name as used in GitHub release download URLs (e.g. v1.2026.5).
+val plantUmlLibReleaseVersionSimple: String
+val plantUmlLibReleaseVersion: String
 
 if (project.hasProperty("plantUmlVersion")) {
-    latestPlantUmlLibReleaseVersionSimple = (project.property("plantUmlVersion") as String).removePrefix("v")
+    plantUmlLibReleaseVersionSimple = (project.property("plantUmlVersion") as String).removePrefix("v")
     // Assumes the release tag has a "v" prefix (current PlantUML convention).
     // Update if PlantUML changes their tag format.
-    latestPlantUmlLibReleaseVersion = "v$latestPlantUmlLibReleaseVersionSimple"
+    plantUmlLibReleaseVersion = "v$plantUmlLibReleaseVersionSimple"
 } else {
     // Use the raw tag name from the API — robust against tag format changes.
-    latestPlantUmlLibReleaseVersion = readLatestPlantUmlLibReleaseVersion()
-    latestPlantUmlLibReleaseVersionSimple = latestPlantUmlLibReleaseVersion.removePrefix("v")
+    plantUmlLibReleaseVersion = readLatestPlantUmlLibReleaseVersion()
+    plantUmlLibReleaseVersionSimple = plantUmlLibReleaseVersion.removePrefix("v")
 }
 
 val plantUml4ERootDir = "plantuml4eclipse"
@@ -212,7 +212,7 @@ val setEnvVarPlantUmlLibVersionTask = tasks.register("printPlantUmlLibVersion") 
     group = "plantuml-lib"
 
     doLast {
-        println(latestPlantUmlLibReleaseVersionSimple)
+        println(plantUmlLibReleaseVersionSimple)
     }
 }
 
@@ -224,11 +224,11 @@ val downloadPlantUmlLibsTask = tasks.register("downloadPlantUmlLibs") {
 
     doLast {
         println("#################################################################################")
-        println("Using PlantUML library version: $latestPlantUmlLibReleaseVersionSimple")
+        println("Using PlantUML library version: $plantUmlLibReleaseVersionSimple")
         println("#################################################################################")
 
-        downloadFile("https://github.com/plantuml/plantuml/releases/download/$latestPlantUmlLibReleaseVersion/plantuml-epl-$latestPlantUmlLibReleaseVersionSimple.jar", "build/lib")
-        downloadFile("https://github.com/plantuml/plantuml/releases/download/$latestPlantUmlLibReleaseVersion/plantuml-epl-$latestPlantUmlLibReleaseVersionSimple-sources.jar", "build/lib")
+        downloadFile("https://github.com/plantuml/plantuml/releases/download/$plantUmlLibReleaseVersion/plantuml-epl-$plantUmlLibReleaseVersionSimple.jar", "build/lib")
+        downloadFile("https://github.com/plantuml/plantuml/releases/download/$plantUmlLibReleaseVersion/plantuml-epl-$plantUmlLibReleaseVersionSimple-sources.jar", "build/lib")
     }
 }
 
@@ -264,10 +264,10 @@ val updateVersionsInManifestTask = tasks.register<Copy>("updateVersionsInManifes
         include("MANIFEST.MF")
         filter { line: String ->
             if (line.startsWith("Bundle-Version:")) {
-                "Bundle-Version: $latestPlantUmlLibReleaseVersionSimple.qualifier"
+                "Bundle-Version: $plantUmlLibReleaseVersionSimple.qualifier"
             }
             else if (line.startsWith("Bundle-ClassPath: lib/plantuml-epl-")) {
-                "Bundle-ClassPath: lib/plantuml-epl-$latestPlantUmlLibReleaseVersionSimple.jar"
+                "Bundle-ClassPath: lib/plantuml-epl-$plantUmlLibReleaseVersionSimple.jar"
             }
             else line
         }
@@ -291,7 +291,7 @@ val updateVersionsInClasspathTask = tasks.register<Copy>("updateVersionsInClassp
             if (line.contains(linePrefix, false)) {
                 val start = line.indexOf(linePrefix) + linePrefix.length
                 val end = line.indexOf(".jar\"")
-                line.substring(0, start) + latestPlantUmlLibReleaseVersionSimple + line.substring(end)
+                line.substring(0, start) + plantUmlLibReleaseVersionSimple + line.substring(end)
             }
             else line
         }
@@ -301,10 +301,10 @@ val updateVersionsInClasspathTask = tasks.register<Copy>("updateVersionsInClassp
         include("build.properties")
         filter { line: String ->
             if (line.startsWith("bin.includes = lib/plantuml-epl-")) {
-                "bin.includes = lib/plantuml-epl-$latestPlantUmlLibReleaseVersionSimple.jar,\\"
+                "bin.includes = lib/plantuml-epl-$plantUmlLibReleaseVersionSimple.jar,\\"
             }
             else if (line.startsWith("src.includes = lib/plantuml-epl-")) {
-                "src.includes = lib/plantuml-epl-$latestPlantUmlLibReleaseVersionSimple-sources.jar,\\"
+                "src.includes = lib/plantuml-epl-$plantUmlLibReleaseVersionSimple-sources.jar,\\"
             }
             else line
         }
@@ -324,7 +324,7 @@ val updateVersionInFeatureTask = tasks.register<Copy>("updateVersionInFeature") 
         include("feature.xml")
         filter { line: String ->
             if (line.trim().startsWith("version=\"") && line.endsWith(".qualifier\"")) {
-                line.substring(0, line.indexOf("\"") + 1) + latestPlantUmlLibReleaseVersionSimple + line.substring(line.indexOf(".qualifier"))
+                line.substring(0, line.indexOf("\"") + 1) + plantUmlLibReleaseVersionSimple + line.substring(line.indexOf(".qualifier"))
             }
             else line
         }
@@ -347,7 +347,7 @@ val updateVersionInParentPomTask = tasks.register<Copy>("updateVersionInPom") {
         include("pom.xml")
         filter { line: String ->
             if (line.trim().startsWith(startTag) && line.endsWith(endTag)) {
-                line.substring(0, line.indexOf(startTag) + startTag.length) + latestPlantUmlLibReleaseVersionSimple + line.substring(line.indexOf(endTag))
+                line.substring(0, line.indexOf(startTag) + startTag.length) + plantUmlLibReleaseVersionSimple + line.substring(line.indexOf(endTag))
             }
             else line
         }
@@ -366,7 +366,7 @@ val updateExportedPackagesInManifestTask = tasks.register("updateExportedPackage
     dependsOn(updateVersionsInManifestTask)
 
     doLast {
-        val jarFile = file("build/lib/plantuml-epl-$latestPlantUmlLibReleaseVersionSimple.jar")
+        val jarFile = file("build/lib/plantuml-epl-$plantUmlLibReleaseVersionSimple.jar")
         val manifestFile = file("build/eclipse-files/$plantUmlLibPluginName/META-INF/MANIFEST.MF")
 
         val packages = java.util.jar.JarFile(jarFile).use { jar ->
@@ -452,9 +452,9 @@ val checkIfPlantUmlLibIsAlreadyPublishedTask = tasks.register("checkIfPlantUmlLi
     dependsOn(cloneGhPagesTask)
 
     doLast {
-        val ghPagesUpdateSiteTargetDir = File("build/gh-pages/plantuml.lib", latestPlantUmlLibReleaseVersionSimple)
+        val ghPagesUpdateSiteTargetDir = File("build/gh-pages/plantuml.lib", plantUmlLibReleaseVersionSimple)
         if (ghPagesUpdateSiteTargetDir.exists()) {
-            throw GradleException("The PlantUML library version $latestPlantUmlLibReleaseVersionSimple has already been" +
+            throw GradleException("The PlantUML library version $plantUmlLibReleaseVersionSimple has already been" +
                     " published. The files were found in directory ${ghPagesUpdateSiteTargetDir}.")
         }
     }
@@ -484,7 +484,7 @@ val updateGhPagesFilesAddLatestPlantUmlLibTask = tasks.register<Copy>("updateGhP
 
     outputs.dir(project.layout.buildDirectory.dir("gh-pages"))
 
-    addChildToCompositeXml("build/composite-repository", "plantuml.lib/$latestPlantUmlLibReleaseVersionSimple")
+    addChildToCompositeXml("build/composite-repository", "plantuml.lib/$plantUmlLibReleaseVersionSimple")
     into("build/gh-pages")
     filteringCharset = "UTF-8"
 }
@@ -520,7 +520,7 @@ val addLatestPlantUmlUpdateSiteToGhPagesTask = tasks.register<Copy>("addLatestPl
     outputs.dir(project.layout.buildDirectory.dir("gh-pages/plantuml.lib"))
 
     from("$plantUmlLibRepositoryDir/target/repository")
-    into("build/gh-pages/plantuml.lib/$latestPlantUmlLibReleaseVersionSimple")
+    into("build/gh-pages/plantuml.lib/$plantUmlLibReleaseVersionSimple")
     filteringCharset = "UTF-8"
 }
 
@@ -531,9 +531,9 @@ val updateGhPagesContentsAddLatestPlantUmlLibTask = tasks.register("updateGhPage
     dependsOn(updateGhPagesFilesAddLatestPlantUmlLibTask)
     dependsOn(addLatestPlantUmlUpdateSiteToGhPagesTask)
 
-    val ghPagesUpdateSiteTargetDir = File("build/gh-pages/plantuml.lib", latestPlantUmlLibReleaseVersionSimple)
+    val ghPagesUpdateSiteTargetDir = File("build/gh-pages/plantuml.lib", plantUmlLibReleaseVersionSimple)
     verifyDirectoryExists(ghPagesUpdateSiteTargetDir,
-        "The new PlantUML library version $latestPlantUmlLibReleaseVersionSimple is missing in the build directory." +
+        "The new PlantUML library version $plantUmlLibReleaseVersionSimple is missing in the build directory." +
         " Expected the following directory to exist: $ghPagesUpdateSiteTargetDir.")
 }
 
@@ -548,7 +548,7 @@ val gitAddPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitAddPlant
 val gitCommitPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitCommitPlantUmlLibUpdateSiteToGhPages") {
     group = "publish"
     dependsOn(gitAddPlantUmlLibUpdateSiteToGhPagesTask)
-    gitCommitToGhPages("Add new PlantUML lib update site version $latestPlantUmlLibReleaseVersionSimple")
+    gitCommitToGhPages("Add new PlantUML lib update site version $plantUmlLibReleaseVersionSimple")
 }
 
 // git push commit with new PlantUML lib update site
