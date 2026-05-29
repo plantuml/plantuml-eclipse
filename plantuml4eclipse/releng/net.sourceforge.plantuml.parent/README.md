@@ -6,7 +6,8 @@ Parent Maven module for building and releasing new PlantUML Eclipse plug-in vers
 
 There two options for building the PlantUML library projects for Eclipse:
 - In the directory `plantuml-lib` run `mvn clean package`
-- In the git repo root directory run `./gradlew buildPlantUmlLibUpdateSite` (but this will call the Maven/tycho build anayway) 
+- In the git repo root directory run `./gradlew buildPlantUmlLibUpdateSite` (this will call the Maven/tycho build, but also check for latest PlantUML version or use a given version number)
+  or call `./gradlew buildPlantUmlLibUpdateSite -PplantUmlVersion=1.2026.5` to explicitly use a certain PlantUML version
 
 ## Build procedure (PlantUML4Eclipse only)
 
