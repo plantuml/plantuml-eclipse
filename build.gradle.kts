@@ -223,6 +223,7 @@ val setEnvVarPlantUmlLibVersionTask = tasks.register("printPlantUmlLibVersion") 
 val downloadPlantUmlLibsTask = tasks.register("downloadPlantUmlLibs") {
     group = "plantuml-lib"
 
+    inputs.property("plantUmlVersion", plantUmlLibReleaseVersionSimple)
     outputs.dir(project.layout.buildDirectory.dir("lib"))
 
     doLast {
@@ -261,6 +262,7 @@ val copyLibsTask = tasks.register<Copy>("copyLibsToEclipsePlugin") {
 val updateVersionsInManifestTask = tasks.register<Copy>("updateVersionsInManifest") {
     group = "plantuml-lib"
 
+    inputs.property("plantUmlVersion", plantUmlLibReleaseVersionSimple)
     outputs.dir(project.layout.buildDirectory.dir("eclipse-files"))
 
     from("$plantUmlLibPluginDir/META-INF") {
@@ -284,6 +286,7 @@ val updateVersionsInManifestTask = tasks.register<Copy>("updateVersionsInManifes
 val updateVersionsInClasspathTask = tasks.register<Copy>("updateVersionsInClasspath") {
     group = "plantuml-lib"
 
+    inputs.property("plantUmlVersion", plantUmlLibReleaseVersionSimple)
     outputs.dir(project.layout.buildDirectory.dir("eclipse-files"))
 
     val linePrefix = "<classpathentry exported=\"true\" kind=\"lib\" path=\"lib/plantuml-epl-"
@@ -321,6 +324,7 @@ val updateVersionsInClasspathTask = tasks.register<Copy>("updateVersionsInClassp
 val updateVersionInFeatureTask = tasks.register<Copy>("updateVersionInFeature") {
     group = "plantuml-lib"
 
+    inputs.property("plantUmlVersion", plantUmlLibReleaseVersionSimple)
     outputs.dir(project.layout.buildDirectory.dir("eclipse-files"))
 
     from(plantUmlLibFeatureDir) {
@@ -341,6 +345,7 @@ val updateVersionInFeatureTask = tasks.register<Copy>("updateVersionInFeature") 
 val updateVersionInParentPomTask = tasks.register<Copy>("updateVersionInPom") {
     group = "plantuml-lib"
 
+    inputs.property("plantUmlVersion", plantUmlLibReleaseVersionSimple)
     outputs.dir(project.layout.buildDirectory.dir("eclipse-files"))
 
     val startTag = "<plantuml-lib-version>"
@@ -367,6 +372,10 @@ val updateExportedPackagesInManifestTask = tasks.register("updateExportedPackage
 
     dependsOn(downloadPlantUmlLibsTask)
     dependsOn(updateVersionsInManifestTask)
+
+    inputs.property("plantUmlVersion", plantUmlLibReleaseVersionSimple)
+    inputs.file("$libDir/plantuml-epl-$plantUmlLibReleaseVersionSimple.jar")
+    outputs.file("$eclipseFilesDir/$plantUmlLibPluginName/META-INF/MANIFEST.MF")
 
     doLast {
         val jarFile = file("$libDir/plantuml-epl-$plantUmlLibReleaseVersionSimple.jar")
@@ -437,11 +446,11 @@ val buildPlantUmlLibUpdateSiteTask = tasks.register<Exec>("buildPlantUmlLibUpdat
 
     dependsOn(copyLibsTask)
     dependsOn(updateVersionsInEclipseProjectsTask)
-	
-	// Work-around to force this task to run everytime
-	outputs.upToDateWhen { false }
 
-    outputs.dir(project.layout.projectDirectory.dir(plantUmlLibRootDir))
+    inputs.files(fileTree(plantUmlLibRootDir).exclude("**/target/**"))
+    inputs.property("plantUmlVersion", plantUmlLibReleaseVersionSimple)
+
+    outputs.dir("$plantUmlLibRepositoryDir/target")
 
     workingDir = file(plantUmlLibRootDir).absoluteFile
 
@@ -572,10 +581,10 @@ val gitPushPlantUmlLibUpdateSiteToGhPagesTask = tasks.register<Exec>("gitPushPla
 val buildPlantUml4EUpdateSiteTask = tasks.register<Exec>("buildPlantUml4EUpdateSite") {
     group = "build"
 
-    // Work-around to force this task to run everytime
-    outputs.upToDateWhen { false }
+    inputs.files(fileTree(plantUml4ERootDir).exclude("**/target/**"))
+    inputs.property("plantUml4EVersion", plantUml4EVersion)
 
-    outputs.dir(project.layout.projectDirectory.dir(plantUml4ERootDir))
+    outputs.dir("$plantUml4ERepositoryDir/target")
 
     workingDir = file(plantUml4EParentDir).absoluteFile
 
