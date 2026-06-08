@@ -182,12 +182,17 @@ val plantUml4EParentDir = "$plantUml4ERootDir/releng/net.sourceforge.plantuml.pa
 val plantUml4ERepositoryDir = "$plantUml4ERootDir/releng/net.sourceforge.plantuml.repository"
 val plantUml4EVersion = readCurrentPlantUML4EVersionFromPom()
 
+val compositeRepositoryDir     = "composite-repository/repository"
+
 val buildDirectoyPath = project.layout.buildDirectory.get().toString()
-val buildDir          = "build"
-val ghPagesDir        = "$buildDir/gh-pages"
-val libDir            = "$buildDir/lib"
-val eclipseFilesDir   = "$buildDir/eclipse-files"
-val compositeRepoDir  = "$buildDir/composite-repository"
+val buildDir                        = "build"
+val ghPagesDir                      = "$buildDir/gh-pages"
+val libDir                          = "$buildDir/lib"
+val eclipseFilesDir                 = "$buildDir/eclipse-files"
+val compositeRepoGhPages            = "composite-repository-gh-pages"
+val compositeRepoMainBranch         = "composite-repository-main"
+val compositeRepoGhPagesBuildDir    = "$buildDir/$compositeRepoGhPages"
+val compositeRepoMainBranchBuildDir = "$buildDir/$compositeRepoMainBranch"
 
 val mvnCmd = if (Os.isFamily(Os.FAMILY_WINDOWS)) { "mvn.cmd" } else { "mvn"}
 val gitCmd = if (Os.isFamily(Os.FAMILY_WINDOWS)) { "git.exe" } else { "git"}
@@ -440,6 +445,42 @@ val updateVersionsInEclipseProjectsTask = tasks.register<Copy>("updateVersionsIn
     filteringCharset = "UTF-8"
 }
 
+// copy composite-repository/repository/composite*.xml to a temp folder for modification in the next step
+val copyMainBranchCompositeRepositoryForModificationTask = tasks.register<Copy>("copyMainBranchCompositeRepositoryForModification") {
+    group = "publish"
+
+    outputs.dir(project.layout.buildDirectory.dir(compositeRepoMainBranch))
+
+    from(compositeRepositoryDir) {
+        include("composite*.xml")
+    }
+    into(compositeRepoMainBranchBuildDir)
+    filteringCharset = "UTF-8"
+}
+
+// Update composite-repository/repository/composite*.xml in the main branch to include the new PlantUML lib version.
+// Reads the files from a temp copy (to avoid the Gradle same-directory Copy task issue), applies the child entry
+// addition, and writes back to composite-repository/repository/, similar to updateGhPagesFilesAddLatestPlantUmlLib.
+// Developer changes already present in main branch are preserved; no conflict with gh-pages content can occur.
+val updateCompositeRepositoryForPlantUmlLibReleaseTask = tasks.register<Copy>("updateCompositeRepositoryForPlantUmlLibRelease") {
+    group = "publish"
+    description = "Add the PlantUML lib $plantUmlLibReleaseVersionSimple entry to composite-repository/repository/composite*.xml in the main branch."
+
+    dependsOn(copyMainBranchCompositeRepositoryForModificationTask)
+
+    // Skip if the entry is already present to avoid adding it twice on repeated runs.
+    onlyIf {
+        file("$compositeRepositoryDir/compositeArtifacts.xml")
+            .readText(Charsets.UTF_8)
+            .contains("location='plantuml.lib/$plantUmlLibReleaseVersionSimple'")
+            .not()
+    }
+
+    addChildToCompositeXml(compositeRepoMainBranchBuildDir, "plantuml.lib/$plantUmlLibReleaseVersionSimple")
+    into(compositeRepositoryDir)
+    filteringCharset = "UTF-8"
+}
+
 // build PlantUML lib projects (plug-in, feature, and update site / p2 repo) with Maven/Tycho
 val buildPlantUmlLibUpdateSiteTask = tasks.register<Exec>("buildPlantUmlLibUpdateSite") {
     group = "build"
@@ -478,12 +519,12 @@ val copyGhPagesFilesForModificationForPlantUmlLibReleaseTask = tasks.register<Co
 
     dependsOn(cloneGhPagesTask)
 
-    outputs.dir(project.layout.buildDirectory.dir("composite-repository"))
+    outputs.dir(project.layout.buildDirectory.dir(compositeRepoGhPages))
 
     from(ghPagesDir) {
         include("composite*.xml")
     }
-    into(compositeRepoDir)
+    into(compositeRepoGhPagesBuildDir)
     filteringCharset = "UTF-8"
 }
 
@@ -496,7 +537,7 @@ val updateGhPagesFilesAddLatestPlantUmlLibTask = tasks.register<Copy>("updateGhP
 
     outputs.dir(project.layout.buildDirectory.dir("gh-pages"))
 
-    addChildToCompositeXml(compositeRepoDir, "plantuml.lib/$plantUmlLibReleaseVersionSimple")
+    addChildToCompositeXml(compositeRepoGhPagesBuildDir, "plantuml.lib/$plantUmlLibReleaseVersionSimple")
     into(ghPagesDir)
     filteringCharset = "UTF-8"
 }
@@ -510,8 +551,8 @@ val updateGhPagesFilesAddPlantUml4ETask = tasks.register<Copy>("updateGhPagesFil
 
     outputs.dir(project.layout.buildDirectory.dir("gh-pages"))
 
-    addChildToCompositeXml("composite-repository/repository", "plantuml.eclipse/$plantUml4EVersion")
-    from("composite-repository/repository") {
+    addChildToCompositeXml(compositeRepositoryDir, "plantuml.eclipse/$plantUml4EVersion")
+    from(compositeRepositoryDir) {
         include("p2.index")
     }
     from(".") {

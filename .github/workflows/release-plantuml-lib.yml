@@ -63,6 +63,19 @@ jobs:
           echo "plantuml_version=$PLANTUML_VERSION" >> $GITHUB_OUTPUT
           ./gradlew updateGhPagesContentsAddLatestPlantUmlLib $PLANTUML_VERSION_ARGUMENT --no-daemon
 
+      - name: Update PlantUML lib code in main branch, update to new PlantUML version
+        env:
+          PLANTUML_VERSION: ${{ steps.update_site.outputs.plantuml_version }}
+        run: |
+          ./gradlew updateCompositeRepositoryForPlantUmlLibRelease -PplantUmlVersion=$PLANTUML_VERSION --no-daemon
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add plantuml-lib/
+          git add composite-repository/repository/
+          # Skip commit if the version was already present in the XML (idempotent re-run).
+          git diff --staged --quiet || git commit -m "Update code and add PlantUML lib $PLANTUML_VERSION to composite update site"
+          git push
+
       - name: Save artifacts for the git push
         uses: actions/upload-artifact@v4
         env:
