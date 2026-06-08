@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: PlantUML library plug-in
 Bundle-SymbolicName: net.sourceforge.plantuml.library
 Automatic-Module-Name: net.sourceforge.plantuml.library
-Bundle-Version: 1.2026.3.qualifier
+Bundle-Version: 1.2026.4.qualifier
 Export-Package: net.sourceforge.plantuml,
  net.sourceforge.plantuml.abel,
  net.sourceforge.plantuml.activitydiagram,
@@ -121,10 +121,9 @@ Export-Package: net.sourceforge.plantuml,
  net.sourceforge.plantuml.objectdiagram,
  net.sourceforge.plantuml.objectdiagram.command,
  net.sourceforge.plantuml.openiconic,
- net.sourceforge.plantuml.openiconic.data,
+ net.sourceforge.plantuml.openpdf,
  net.sourceforge.plantuml.packetdiag,
  net.sourceforge.plantuml.packetdiag.command,
- net.sourceforge.plantuml.pdf,
  net.sourceforge.plantuml.picoweb,
  net.sourceforge.plantuml.plasma,
  net.sourceforge.plantuml.png,
@@ -209,4 +208,4 @@ Export-Package: net.sourceforge.plantuml,
 Bundle-Vendor: PlantUML Team
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: lib/plantuml-epl-1.2026.3.jar
+Bundle-ClassPath: lib/plantuml-epl-1.2026.4.jar
