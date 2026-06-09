@@ -28,6 +28,10 @@ That worklfow builds a new version of the `net.sourceforge.plantuml.library` plu
 After building the Eclipse projects, the workflow adds the new version to the composite update site (see `composite-repository`)
 and commits the changes to this repository's GitHub pages (git branch *gh-pages*).
 This way, the changes to the update site are published.
+The workflow also commits the changes to the main branch (changes in plantuml-lib projects as well as updates in the composite update site), keeping potential changes in the main branch untouched.
+
+In case of some failure in the release procedure, developers can fix the content in the main branch or in the gh-pages branch and manually trigger the release workflow `.github/workflows/release-plantuml-lib.yml`
+for a certain PlantUML release version, e.g. for `1.2026.5`, using the GitHub GUI.
 
 
 ### PlantUML4Eclipse pre-release
